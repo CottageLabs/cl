@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if current_user.is_super %}
+<p><a class="btn btn-danger" href="/sitemap/refresh">refresh sitemap</a></p>
+{% endif %}
+
+    {% if public %}
+        {% include 'sitemap/sitemap_public.html' %}
+    {% else %}
+        {% include 'sitemap/sitemap_private.html' %}
+    {% endif %}
+
+{% endblock %}

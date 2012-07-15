@@ -1,4 +1,4 @@
-import json, UserDict, requests, uuid
+import os, json, UserDict, requests, uuid
 from datetime import datetime
 from werkzeug import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
@@ -27,8 +27,24 @@ def initialise():
         su.set_password(firstsu)
         su.save()
         print 'superuser account named - ' + firstsu + ' created. default password matches username. Change it.'
+    if not os.path.exists('media'):
+        os.makedirs('media')
+        print 'created empty media directory. If you are using dropbox syncing, ensure this folder (and the content folder if desired) are symlinked into your dropbox tracked folder'
+    if not os.path.exists('content'):
+        os.makedirs('content')
+        print 'created empty content directory. If you intend to sync this with a git repo, you should recreate it using git.'
     try:
         sitemap = json.load(open('cl/templates/sitemap/sitemap.json'))
+        out = open('cl/templates/sitemap/sitenav.html')
+        out.close()
+        out = open('cl/templates/sitemap/sitenav_overview.html')
+        out.close()
+        out = open('cl/templates/sitemap/sitenav_public.html')
+        out.close()
+        out = open('cl/templates/sitemap/sitemap_private.html')
+        out.close()
+        out = open('cl/templates/sitemap/sitemap_public.html')
+        out.close()
     except:
         out = open('cl/templates/sitemap/sitemap.json','w')
         out.write('{}')

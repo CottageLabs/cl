@@ -163,7 +163,7 @@ def generate_sitemap_public_html(sitemap=False):
                                 if kid['__META__']['listed'] and kid['__META__']['access'] == 'public':
                                     sn += '<li><h4><a href="' + kid['__META__']['url'] + '">' + kid['__META__']['section'] + '</a></h4></li>\n'
                         sn += '</ul>\n'
-                    if child['__META__']['listed'] and child['__META__']['access'] == 'public' or len(child.key()) > 1:
+                    if child['__META__']['listed'] and child['__META__']['access'] == 'public' or len(child.keys()) > 1:
                         sn += '</li>\n'
             sn += '</ul>\n'
             sn += '</li>\n'
