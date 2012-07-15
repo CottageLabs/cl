@@ -35,7 +35,17 @@ def initialise():
         out.close()
         out = open('cl/templates/sitemap/sitenav.html','w')
         out.close()
-        print ("created default emtpy sitemap.json and sitenav.html")
+        out = open('cl/templates/sitemap/sitenav_overview.html','w')
+        out.close()
+        out = open('cl/templates/sitemap/sitenav_public.html','w')
+        out.close()
+        out = open('cl/templates/sitemap/sitemap.html','w')
+        out.close()
+        out = open('cl/templates/sitemap/sitemap_private.html','w')
+        out.close()
+        out = open('cl/templates/sitemap/sitemap_public.html','w')
+        out.close()
+        print ("created default emtpy sitemaps")
 
 
 def get_user():
