@@ -1,0 +1,9 @@
+*.pyc
+*.egg-info/*
+.*.swp
+media/*
+gallery/*
+src*
+.DS_Store
+.Python
+app.cfg
