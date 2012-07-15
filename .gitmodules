@@ -1,0 +1,6 @@
+[submodule "cl/static/vendor/facetview"]
+	path = cl/static/vendor/facetview
+	url = git://github.com/okfn/facetview.git
+[submodule "cl/static/vendor/jtedit"]
+	path = cl/static/vendor/jtedit
+	url = git://github.com/CottageLabs/jtedit.git
