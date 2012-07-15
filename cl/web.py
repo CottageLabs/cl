@@ -102,6 +102,7 @@ def query(path='Record'):
 # pass through requests for sharejs
 # purpose being that running this locally will avoid issues for the js xsrf.
 # but this routing could redirect to any sharejs server
+# (or could call sharejs server direct from page and get rid of this altogether)
 @app.route('/socket/<path:path>')
 @app.route('/socket/')
 def socket():
@@ -122,6 +123,12 @@ def default(path=''):
     if ident == '___': ident += 'index'
     comments = False
     rec = cl.dao.Record.pull(ident)
+    
+    # TODO: this catch is here just to test for old URLs from old site.
+    # THIS SHOULD BE REMOVED EVENTUALLY, AND NOT USED ANYWHERE ELSE
+    if not rec and len(ident.split('___')) == 2:
+        ident = '___news' + ident
+        rec = cl.dao.Record.pull(ident)
 
     if request.method == 'GET':
         if util.request_wants_json():
