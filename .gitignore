@@ -7,5 +7,9 @@ src*
 .DS_Store
 .Python
 app.cfg
+templates/sitemap/sitemap.json
+templates/sitemap/sitemap_private.html
+templates/sitemap/sitemap_public.html
 templates/sitemap/sitenav.html
-templates/sitemap/*_*.html
+templates/sitemap/sitenav_overview.html
+templates/sitemap/sitenav_public.html
