@@ -8,5 +8,5 @@ src*
 .Python
 app.cfg
 cl/templates/sitemap/*.json
+cl/templates/sitemap/sitenav.html
 cl/templates/sitemap/*_*.html
-
