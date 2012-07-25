@@ -95,8 +95,10 @@
                 success: function(data) {
                     var g = ''
                     for (var f in data) {
-                        if ( true /*f.split('.')[-1] in ['png','jpg','jpeg','gif']*/ ) {
-                            g += '<a rel="gallery" class="span2 thumbnail" href="/media/'
+                        var p = data[f].split('.')
+                        var pp = p[p.length - 1]
+                        if ( pp =='png' || pp == 'jpg' || pp == 'jpeg' || pp == 'gif' ) {
+                            g += '<a rel="gallery" _target="blank" class="span2 thumbnail" href="/media/'
                             g += data[f] + '"><img src="/media/' + data[f] + '" /></a>'
                         } else {
                             g += '<div class="span2 thumbnail"><h3><a _target="blank" href="/media/'

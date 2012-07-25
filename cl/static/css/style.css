@@ -111,10 +111,10 @@ body > .container{
     padding-top:5px;
 }
 #tagcloud p a{
-    font-size:1.3em;
+    font-size:1em;
     line-height:1.1em;
     color:#c9d2d4;
-    padding-right:20px;
+    padding-right:10px;
 }
 
 #editoptions{

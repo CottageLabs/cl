@@ -31,7 +31,18 @@ JSITE_OPTIONS = {
         "result_display": [
             [
                 {
-                    "field": "content"
+                    "pre": '<h4><a href="',
+                    "field": "url",
+                    "post": '">'
+                },
+                {
+                    "field": "url",
+                    "post": "</a></h4>"
+                }
+            ],
+            [
+                {
+                    "field": "excerpt"
                 }
             ]
         ],

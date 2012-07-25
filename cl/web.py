@@ -89,6 +89,7 @@ def query(path='Record'):
             else:
                 abort(404)
     else:
+        # TODO: add check for anonymous user, filter out private records
         if request.method == "POST":
             qs = request.json
         else:
@@ -129,6 +130,8 @@ def default(path=''):
     if not rec and len(ident.split('___')) == 2:
         ident = '___news' + ident
         rec = cl.dao.Record.pull(ident)
+        if rec:
+            return redirect(rec['url'])
 
     if request.method == 'GET':
         if util.request_wants_json():
