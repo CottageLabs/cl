@@ -62,10 +62,17 @@ def page_not_found(e):
 # catch mailer requests and send them on
 @app.route('/contact', methods=['GET','POST'])
 def mailer():
-    pass
-    # TODO: this is unfinished. it should grab the content from the POST
-    # and mail it to the contact address that should be specified in the default_settings or app.cfg
-    
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        # TODO: this is unfinished. it should grab the content from the POST
+        # and mail it to the contact address that should be specified in the default_settings or app.cfg
+        try:
+            util.send_mail(['us <us@cottagelabs.com>'],request.values.get('email','us <us@cottagelabs.com>'),'cottagelabs.com website enquiry',request.values.get('message',''))
+            return ''
+        except:
+            return 500
+
 
 # pass queries direct to index. POST only for receipt of complex query objects
 @app.route('/query/<path:path>', methods=['GET','POST'])
