@@ -8,9 +8,11 @@
 <script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
 <script src="/static/vendor/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
 
+{% if not current_user.is_anonymous() %}
 <div id="uploadsection" class="hero-unit well" style="height:100px;">
 <p style="color:#aaa;">Drag and drop here to upload new files</p>
 </div>
+{% endif %}
 
 <p>
     <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">slideshow</button>
@@ -18,8 +20,6 @@
     <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">close gallery</button>
     <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">manual upload</button>
 </p>
-
-<p style="color:#ccc;">Drag and drop choices onto page text area or media display</p>
 
 <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">{{ files|safe }}</div>
 

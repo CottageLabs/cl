@@ -223,7 +223,7 @@ def generate_sitenav_html(sitemap=False):
                     if child['__META__']['listed'] and child['__META__']['access'] == 'public':
                         sn += '<li><a href="' + child['__META__']['url'] + '">' + child['__META__']['section'] + '</a>\n'
                     else:
-                        sn += '<li><a class="label" style="color:#000;" href="' + child['__META__']['url'] + '">' + child['__META__']['section'] + '</a>\n'
+                        sn += '<li><a style="background-color:#c9d2d4;color:#000;" href="' + child['__META__']['url'] + '">' + child['__META__']['section'] + '</a>\n'
                     if len(child.keys()) > 1:
                         sn += '<ul style="list-style-type:none;margin-left:10px;">\n'
                         for k,kid in child.items():
@@ -231,7 +231,7 @@ def generate_sitenav_html(sitemap=False):
                                 if kid['__META__']['listed'] and kid['__META__']['access'] == 'public':
                                     sn += '<li><a href="' + kid['__META__']['url'] + '">> ' + kid['__META__']['section'] + '</a></li>\n'
                                 else:
-                                    sn += '<li><a class="label" style="color:#000;" href="' + kid['__META__']['url'] + '">> ' + kid['__META__']['section'] + '</a></li>\n'
+                                    sn += '<li><a style="background-color:#c9d2d4;color:#000;" href="' + kid['__META__']['url'] + '">> ' + kid['__META__']['section'] + '</a></li>\n'
                         sn += '</ul>\n'
                     sn += '</li>\n'
             sn += '</ul>\n'
@@ -239,7 +239,7 @@ def generate_sitenav_html(sitemap=False):
         elif menu['__META__'].get('listed',False) and menu['__META__'].get('access','public') == 'public':
             sn += '<li><a href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a></li>\n'
         else:
-            sn += '<li><a class="label" style="color:#000;" href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a></li>\n'
+            sn += '<li><a style="background-color:#c9d2d4;color:#000;" href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a></li>\n'
 
     out = open('cl/templates/sitemap/sitenav.html','w')
     out.write(sn)
@@ -248,15 +248,11 @@ def generate_sitenav_html(sitemap=False):
 def generate_sitenav_overview_html(sitemap=False):
     if not sitemap:
         sitemap = json.load(open('cl/templates/sitemap/sitemap.json'))
-    #sn = '<ul style="list-style-type:none;">\n'
-    #sn += '<li><a href="/sitemap">site map</a></li>'
     sn = '<a href="/sitemap">site map</a><br />'
     for key,menu in sitemap.items():
         if menu['__META__'].get('listed',False) and menu['__META__'].get('access','public') == 'public':
-            #sn += '<li><a href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a></li>\n'
             sn += '<a href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a> | '
     sn = sn.rstrip('| ')
-    #sn += '</ul>'
 
     out = open('cl/templates/sitemap/sitenav_overview.html','w')
     out.write(sn)

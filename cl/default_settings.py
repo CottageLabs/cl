@@ -1,18 +1,25 @@
-SECRET_KEY = 'default-key'
+SECRET_KEY = "default-key"
 
-# service and super user account
+# contact info
+ADMIN_NAME = "us"
+ADMIN_EMAIL = "us@cottagelabs.com"
+
+# service info
 SERVICE_NAME = "Cottage Labs"
-SUPER_USER = ["test"]
+SERVICE_TAGLINE = ""
 HOST = "0.0.0.0"
 DEBUG = True
 PORT = 5004
+
+# list of superuser account names
+SUPER_USER = ["test"]
 
 # elasticsearch settings
 ELASTIC_SEARCH_HOST = "127.0.0.1:9200"
 ELASTIC_SEARCH_DB = "cl"
 
 # location of media storage folder
-MEDIA_FOLDER = 'media'
+MEDIA_FOLDER = "media"
 
 # jsite settings
 JSITE_OPTIONS = {
@@ -36,7 +43,7 @@ JSITE_OPTIONS = {
                     "post": '">'
                 },
                 {
-                    "field": "url",
+                    "field": "title",
                     "post": "</a></h4>"
                 }
             ],

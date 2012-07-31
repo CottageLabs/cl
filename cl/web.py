@@ -1,4 +1,4 @@
-import json
+import json, requests
 from flask import Flask, jsonify, json, request, redirect, abort, make_response
 from flask import render_template, flash
 from flask.views import View, MethodView
@@ -65,13 +65,19 @@ def mailer():
     if request.method == 'GET':
         pass
     elif request.method == 'POST':
-        # TODO: this is unfinished. it should grab the content from the POST
-        # and mail it to the contact address that should be specified in the default_settings or app.cfg
         try:
-            util.send_mail(['us <us@cottagelabs.com>'],request.values.get('email','us <us@cottagelabs.com>'),'cottagelabs.com website enquiry',request.values.get('message',''))
-            return ''
+            if request.values.get('message',False):
+                util.send_mail(
+                    [app.config['ADMIN_NAME'] + ' <' + app.config['ADMIN_EMAIL'] + '>'],
+                    request.values.get('email',app.config['ADMIN_NAME'] + ' <' + app.config['ADMIN_EMAIL'] + '>'),
+                    'website enquiry',
+                    request.values['message']
+                )
+                return ''
+            else:
+                abort(500)
         except:
-            return 500
+            abort(500)
 
 
 # pass queries direct to index. POST only for receipt of complex query objects
@@ -96,7 +102,8 @@ def query(path='Record'):
             else:
                 abort(404)
     else:
-        # TODO: add check for anonymous user, filter out private records
+        # TODO: add check for anonymous user
+        # if so, add AND access:public AND listed:true to search params
         if request.method == "POST":
             qs = request.json
         else:
@@ -106,17 +113,6 @@ def query(path='Record'):
     return resp
         
         
-# TODO: THIS IS UNFINISHED
-# pass through requests for sharejs
-# purpose being that running this locally will avoid issues for the js xsrf.
-# but this routing could redirect to any sharejs server
-# (or could call sharejs server direct from page and get rid of this altogether)
-@app.route('/socket/<path:path>')
-@app.route('/socket/')
-def socket():
-    pass
-
-
 # this is a catch-all that allows us to present everything as a search
 @app.route('/', methods=['GET','POST','DELETE'])
 @app.route('/<path:path>', methods=['GET','POST','DELETE'])
@@ -127,7 +123,7 @@ def default(path=''):
     else:
         jsite['loggedin'] = True
 
-    ident = '___' + path.replace('/', '___')
+    ident = '___' + path.rstrip('/').replace('/', '___')
     if ident == '___': ident += 'index'
     comments = False
     rec = cl.dao.Record.pull(ident)
@@ -139,6 +135,8 @@ def default(path=''):
         rec = cl.dao.Record.pull(ident)
         if rec:
             return redirect(rec['url'])
+    if not rec and path.startswith('author'):
+        return redirect( path.replace('author','people') )
 
     if request.method == 'GET':
         if util.request_wants_json():
@@ -148,40 +146,65 @@ def default(path=''):
             resp.mimetype = "application/json"
             return resp
 
-        content = ""
+        content = '<div class="span12">'
+
         if rec and not jsite['jspagecontent']:
 
-            if rec.data.get('access','') == 'private' and current_user.is_anonymous():
+            if not rec.data.get('accessible',False) and current_user.is_anonymous():
                 abort(401)
 
+            if jsite['collaborative']:
+                c = requests.get('http://pads.cottagelabs.com/p/' + rec.id + '/export/txt')
+                rec.data['content'] = c.text
             content += markdown.markdown( rec.data.get('content','') )
+
             if rec.data.get('embed', False):
-                content += '<div class="span12">'
                 # check for dropbox and repo embeds too - consider having auth
                 # TODO: change this to being a direct call for the content, then process and output
                 if not rec.data['embed'].find('/pub?') and not rec.data['embed'].find('docs.google.com'):
                     content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + rec.data['embed'] + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
                 else:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '&amp;embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
-                content += '</div>'
             
-            if rec.data.get('search',{}).get('hidden',False):
-                jsite['facetview']['initialsearch'] = False
-            else:
-                jsite['facetview']['initialsearch'] = True
-                        
+#            if rec.data.get('search',{}).get('hidden',False):
+#                jsite['facetview']['initialsearch'] = False
+#            else:
+#                jsite['facetview']['initialsearch'] = True
+            if rec.data.get('search',{}).get('options',False):
+                jsite['facetview'].update(rec.data['search']['options'])
+            if rec.data['search']['format'] == 'list':
+                jsite['facetview']['searchwrap_start'] = '<table id="facetview_results" class="table table-bordered table-striped table-condensed">'
+                jsite['facetview']['searchwrap_end'] = '</table>'
+                jsite['facetview']['resultwrap_start'] = '<tr><td>'
+                jsite['facetview']['resultwrap_end'] = '</td></tr>'
+                jsite['facetview']['result_display'] = [
+                    [
+                        {
+                            "pre": '<h4><a href="',
+                            "field": "url",
+                            "post": '">'
+                        },
+                        {
+                            "field": "title",
+                            "post": "</a></h4>"
+                        }
+                    ]
+                ]
+
             jsite['data'] = rec.data
 
         elif rec:
             jsite['data'] = rec.data
 
         else:
-            # add some sort of search for alternative content if not logged in
+            # TODO: trigger a search for alternative content if not logged in
             jsite['data'] = False
             if current_user.is_anonymous():
                 abort(404)
-                
-        return render_template('index.html', content=content, jsite_options=json.dumps(jsite))
+        
+        content += '</div>'
+        
+        return render_template('index.html', content=content, title=rec.data['title'], jsite_options=json.dumps(jsite))
 
     elif request.method == 'POST':
         if rec:

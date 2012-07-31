@@ -32,28 +32,13 @@
         var makepage = function() {
             var singleedit = function(event) {
                 event.preventDefault()
-                if ( options.data['mode'] == 'viewable' ) {
-                    var onlyyou = '<div class="alert alert-info"> \
-                        <button class="close" data-dismiss="alert">x</button> \
-                        <p>You are editing this page, but the page edit mode is still set to <strong>viewable</strong>. \
-                        If you want this page to be displayed as <strong>editable</strong> by default, change the edit option above. \
-                        If you want it to appear editable to logged in users but remain only viewable to non-logged in users, change \
-                        the edit option to <strong>login to edit</strong></p></div>'
-                    $('.alert-messages').prepend(onlyyou)
-                } else if ( options.data['mode'] == 'logineditable' ) {
-                    var onlyyou = '<div class="alert alert-info"> \
-                        <button class="close" data-dismiss="alert">x</button> \
-                        <p>You are editing this page, but the page mode is still set to <strong>edit with login</strong>. \
-                        Any logged in user will see the page as editable by default, but an unlogged user will not. \
-                        If you want this page to be displayed as <strong>editable</strong> for anyone by default, change the edit option above to <strong>editable</strong>. \
-                        (and make sure the access level is set to public).</p></div>'
-                    $('.alert-messages').prepend(onlyyou)
-                }
+                $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>')
+                $('.edit_page').parent().remove()
                 editpage()
             }
             $('.edit_page').bind('click',singleedit)
             $('#facetview').facetview(options.facetview)
-            if ( options.data && options.data['mode'] != 'editable' && options.data['mode'] != 'logineditable') {
+            if ( options.data && !options.data['editable'] ) {
                 viewpage()
             } else if ( options.editable ) {
                 if ( !options.data && options.loggedin ) {
@@ -62,37 +47,33 @@
                         <p><strong>There is no page here yet - create one.</strong></p> \
                         <p><strong>NOTE</strong>: creating a page does not list it in the site navigation. However, once created, you can add it using the <strong>list</strong> option above.</p> \
                         <p><strong>PLUS</strong>: a page is editable by default, which means it is displayed to anyone that can access it as editable (although only logged in users have access to the page setting buttons). Use the <strong>edit</strong> option if you want to change this to appearing as only viewable to non-logged in users whilst remaining as editable to those that are logged in, or select viewable to default to viewable for anyone (in this case, logged in users can still access the edit version from the <strong>options</strong> menu).</p> \
-                        <p><strong>ALSO</strong>: pages are public by default, whether editable or not; even though they may not be listed on the navigation, anyone with the URL can access them. Once you have created your page, you can change the page to <strong>private</strong> if necessary, in which case only logged in users will be able to view it.</div>'
-                    options.collaborative ? nothere += '<p>You can also share this page with others to collaboratively edit online.</p>' : ''
+                        <p><strong>ALSO</strong>: pages are public by default, whether editable or not; even though they may not be listed on the navigation, anyone with the URL can access them. Once you have created your page, you can change the page to <strong>private</strong> if necessary, in which case only logged in users will be able to view it.</p>'
+                    options.collaborative ? nothere += '<p>You can also share this page with others to collaboratively edit online.</p></div>' : nothere += '</div>'
                     $('.alert-messages').prepend(nothere)
                     var tid = window.location.pathname.replace(/\//g,'___')
                     tid == '___' ? tid += 'index' : ""
                     options.data = {
                         'id': tid,
                         'url': window.location.pathname,
+                        'title': window.location.pathname,
+                        'content': '',
                         'comments': false,
                         'embed': false,
-                        'content': '',
-                        'listed': false, // false, true
-                        'access': 'public', // public, private
-                        'mode': 'editable', // editable, logineditable, viewable
+                        'listed': false,
+                        'access': true,
+                        'editable': true,
                         'tags': [],
                         'search': {
                             'format':'panels',  // panels, list
-                            'hidden': true,     // true, false
-                            'position':'top',   // top, right
-                            'options': {}       // like facetview options
-                        },
-                        'media': {
                             'hidden': true,
-                            'position': 'top',  // top, right
-                            'content': []       // list of media file urls
+                            'position':'top',   // top, bottom, left, right
+                            'options': {}       // like facetview options
                         }
                     }
                     $('.edit_page').parent().next().remove()
                     $('.edit_page').parent().remove()
                     editpage()
-                } else if ( options.data && ( options.data['mode'] == 'editable' || ( options.data['mode'] == 'logineditable' ) && options.loggedin ) ) {
+                } else if ( options.data && options.data['editable'] && options.loggedin ) {
                     $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>')
                     $('.edit_page').parent().remove()
                     editpage()
@@ -131,16 +112,21 @@
                 $('#article').prepend(content)
             }
             
-            if ( record["search"] == "list" ) {
-                // move search to the right, and alter style
+            if ( record["search"]["position"] == "right" ) {
                 $('#facetview').appendTo('#article')
-                $('#facetview').removeClass('row-fluid').addClass('span4')
-                $('#article > .span12').addClass('span8').removeClass('span12')
+                $('#facetview').removeClass('row-fluid').addClass('span3')
+                $('#article > .span12').addClass('span9').removeClass('span12')
+            } else if ( record["search"]["position"] == "left" ) {
+                $('#facetview').prependTo('#article')
+                $('#facetview').removeClass('row-fluid').addClass('span3')
+                $('#article > .span12').addClass('span9').removeClass('span12')
+            } else if ( record["search"]["position"] == "bottom" ) {
+                $('#facetview').insertAfter('#article')
             }
             record['search']['hidden'] ? $('#facetview').hide() : ""
             
             // show disqus
-            if ( record["comments"] == "on" && options.comments ) {
+            if ( record["comments"] && options.comments ) {
                 var disqus = '<div id="comments" class="container"><div class="comments"><div class="row-fluid" id="disqus_thread"></div></div></div> \
                     <script type="text/javascript"> \
                     var disqus_shortname = "' + options.comments + '"; \
@@ -185,178 +171,130 @@
 		        }
 		    }
 
-            if ( options.loggedin ) {
-                // provide embedded gallery options
-                var galleryopts = '<div id="galleryopts" class="row-fluid"><div class="hero-unit">'
-                galleryopts += 'gallery options here - embed gallery on page, choose which to show, add from link or upload</div></div>'
-                for (var item in record['media']['content'] ) {
-                    var thing = '<img class="img thumbnail" src="' + item + '" />'
-                    $('#gallery > .hero-unit').append(thing)
-                }
-                $('#article').after(galleryopts)
-                record['media']['hidden'] ? $('#galleryopts').hide() : ""
-
-                // provide the search panel options
-                var searchopts = '<div id="searchopts" class="row-fluid"><div class="hero-unit">search options here - top,bottom,left,right,hidden,style,filters,resultsize</div></div>'
-                $('#article').after(searchopts)
-                record['search']['hidden'] ? $('#searchopts').hide() : ""
-
-            }
-                        
             // update with any values already present in record
-            // if collaborative edit is on, get the content from the sharejs socket rather than the record
+            // if collaborative edit is on, get the content from etherpad
             if ( options.collaborative ) {
-                // get page content from sharejs socket server
-                // add a check for difference between share data and es data...
-                var elem = document.getElementById("form_content")
-                sharejs.open('hello', 'text', options.collaborative, function(error, doc) {
-	                if (error) {
-		                console.log(error)
-	                } else {
-		                elem.disabled = false
-		                doc.attach_textarea(elem)
-	                }
+                $('#form_content').unbind()
+                $('#form_content').pad({
+                  'padId'             : record.id,
+                  'host'              : 'http://pads.cottagelabs.com',
+                  'baseUrl'           : '/p/',
+                  'showControls'      : true,
+                  'showChat'          : true,
+                  'showLineNumbers'   : true,
+                  'userName'          : 'unnamed',
+                  'useMonospaceFont'  : false,
+                  'noColors'          : false,
+                  'hideQRCode'        : false,
+                  'height'            : 400,
+                  'border'            : 0,
+                  'borderStyle'       : 'solid'
                 })
+                $('.content').css({'padding':0})
+                $('#article').css({'margin-bottom':'-20px'})
+                $('.alert').css({'margin-bottom':0})
             } else {
                 $('#form_content').val(record['content'])
             }
-            options.loggedin ? editoptions() : ""
-            $('.content').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+            if ( options.loggedin ) {
+                editoptions(record)
+                $('#jtedit_space').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+                //$('#metaopts').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+            } else {
+                $('.content').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+            }
         }
 
 
         // EDIT OPTION BUTTON FUNCTIONS
-        var editoptions = function() {
-            $('#editoptions').show()
-            var editopts = '<div class="btn-group" style="float:left;"><button class="btn btn-small mode_page">editable</button><button class="btn btn-small mode_page">login to edit</button><button class="btn btn-small mode_page">viewable</button></div>'
+        var editoptions = function(record) {
+        
+            // metadata options
+            var metaopts = '<div id="metaopts" class="row-fluid"><div class="hero-unit clearfix"><button class="pagesettings close">x</button>'
+            metaopts += '<div class="span5"><h2>access settings</h2>'
+            metaopts += '<p><input type="checkbox" class="page_options access_page" /> anyone can access this page without login</p>'
+            metaopts += '<p><input type="checkbox" class="page_options mode_page" /> display as editable by default, to anyone that can view it</p>'
+            metaopts += '<p><input type="checkbox" class="page_options nav_page" /> list this page in public nav menu and search results</p>'
+            metaopts += '<h2><br />page comments</h2><p><input type="checkbox" class="page_options page_comments" /> enable comments on this page</p>'
+            metaopts += '<h2><br />raw metadata</h2><p>Edit the raw metadata record of this page, then save changes to it if required.</p><div id="jtedit_space"></div>'
+            metaopts += '</div>'
+            metaopts += '<div class="span5"><h2>search display settings</h2>'
+            metaopts += '<p>when showing results, display on \
+                <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
+                <option value="left">left</option><option value="right">right</option></select> of the page</p> \
+                <p><input type="checkbox" class="page_options hide_search" /> hide the search result panel until the search bar is used</p> \
+                <p><input type="checkbox" class="page_options list_search" /> simplify search results to a list of result title links</p> \
+                <p>show <input type="text" class="span1 page_options search_howmany" value="9" /> results per search result set</p> \
+                <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p> \
+                <p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
+                <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
+                <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
+                //<p>sort search results by <select class="span1 page_options search_sort"><option>date</option></select></p>'
+            //metaopts += '<h2><br />custom css</h2><p>provide option for custom css injection</p>'
+            metaopts += '</div>'
+            metaopts += '</div></div>'
+            $('#article').before(metaopts)
+            $('#metaopts').hide()
 
-            if ( window.location.pathname != '/' ) {
-                editopts += '<div class="btn-group" style="float:left;"><button class="btn btn-small access_page">public</button><button class="btn btn-small access_page">private</button></div>'
-                editopts += '<div class="btn-group" style="float:left;"><button class="btn btn-small nav_page">unlisted</button><button class="btn btn-small nav_page">listed</button></div>'
-            }
-            editopts += '<div class="btn-group" style="float:left;"><button class="btn btn-small init_search">show search</button><button class="btn btn-small init_search">hide search</button></div>'
-            editopts += '<div class="btn-group" style="float:left;"><button class="btn btn-small page_comments">comments off</button><button class="btn btn-small page_comments">comments on</button></div>'
-            editopts += '<button class="btn btn-small page_media" style="margin-left:5px;">media <span class="caret"></span></button>'
-            editopts += '<button class="btn btn-small page_meta" style="margin-left:5px;">meta <span class="caret"></span></button>'
-
-            $('#editoptions').append(editopts)
-            if ( options.data['mode'] == 'editable' ) {
-                $('.mode_page').eq(0).addClass('btn-info').addClass('active')
-            } else if ( options.data['mode'] == 'logineditable' ) {
-                $('.mode_page').eq(1).addClass('btn-info').addClass('active')
-            } else {
-                $('.mode_page').eq(2).addClass('btn-info').addClass('active')
-            }
-            options.data['access'] == 'public' ? $('.access_page').eq(0).addClass('btn-info').addClass('active') : $('.access_page').eq(1).addClass('btn-info').addClass('active')
-            !options.data['comments'] ? $('.page_comments').eq(0).addClass('btn-info').addClass('active') : $('.page_comments').eq(1).addClass('btn-info').addClass('active')
-            !options.data['search']['hidden'] ? $('.init_search').eq(0).addClass('btn-info').addClass('active') : $('.init_search').eq(1).addClass('btn-info').addClass('active')
-            options.data['listed'] ? $('.nav_page').eq(1).addClass('btn-info').addClass('active') : $('.nav_page').eq(0).addClass('btn-info').addClass('active')
-
-            options.collaborative ? $('#form_content').unbind() : ""
-            $('#editoptions').append('<div style="clear:both;height:0;"></div>')
-            
-            var edits = function(event) {
+            //$('.jtedit_deleteit').parent().before('<li><a class="pagesettings" href="">edit page settings</a></li><li><a class="pagemedia" href="">embed media</a></li>')
+            $('#mainnavlist').append('<li><a class="pagesettings" href="">settings</a></li><li><a class="pagemedia" href="">media</a></li>')
+            var showopts = function(event) {
                 event.preventDefault()
-                $('.alert').remove()
-                var record = $.parseJSON($('#jtedit_json').val())
-                var refresh = false
-                if ( $(this).hasClass('mode_page') ) {
-                    if ($(this).html() == 'editable') {
-                        record['mode'] = 'editable'
-                        $('.mode_page').removeClass('btn-info').removeClass('active')
-                        $('.mode_page').eq(0).addClass('btn-info').addClass('active')
-                    } else if ( $(this).html() == 'login to edit' ) {
-                        record['mode'] = 'logineditable'
-                        $('.mode_page').removeClass('btn-info').removeClass('active')
-                        $('.mode_page').eq(1).addClass('btn-info').addClass('active')
-                    } else {
-                        record['mode'] = 'viewable'
-                        $('.mode_page').removeClass('btn-info').removeClass('active')
-                        $('.mode_page').eq(2).addClass('btn-info').addClass('active')
-                        refresh = true
-                    }
-                }
-                if ( $(this).hasClass('page_comments') ) {
-                    if ($(this).html() == 'comments off') {
-                        record['comments'] = false
-                        $('.page_comments').eq(0).addClass('btn-info').addClass('active')
-                        $('.page_comments').eq(1).removeClass('btn-info').removeClass('active')
-                    } else {
-                        record['comments'] = true
-                        $('.page_comments').eq(0).removeClass('btn-info').removeClass('active')
-                        $('.page_comments').eq(1).addClass('btn-info').addClass('active')
-                    }
-                }
-                if ( $(this).hasClass('init_search') ) {
-                    if ($(this).html() == 'show search') {
-                        record['search']['hidden'] = false
-                        $('.init_search').eq(0).addClass('btn-info').addClass('active')
-                        $('.init_search').eq(1).removeClass('btn-info').removeClass('active')
-                        $('#searchopts').show()
-                    } else {
-                        record['search']['hidden'] = true
-                        $('.init_search').eq(0).removeClass('btn-info').removeClass('active')
-                        $('.init_search').eq(1).addClass('btn-info').addClass('active')
-                        $('#searchopts').hide()
-                        var searchy = '<div class="alert alert-info"> \
-                            <button class="close" data-dismiss="alert">x</button> \
-                            <p>Search set to <strong>hidden</strong>. \
-                            When this page is loaded, search results will not be visible; however when the search bar is used, the search results will come into view.</p> \
-                            <p>Other search options are available, set to visible to view the search pane and edit the options there if desired. Those options \
-                            will take effect whenever the search results panel becomes visible.</p></div>'
-                        $('.alert-messages').prepend(searchy)
-                    }
-                }
-                if ( $(this).hasClass('access_page') ) {
-                    if ($(this).html() == 'public') {
-                        record['access'] = 'public'
-                        $('.access_page').eq(0).addClass('btn-info').addClass('active')
-                        $('.access_page').eq(1).removeClass('btn-info').removeClass('active')
-                    } else {
-                        record['access'] = 'private'
-                        $('.access_page').eq(0).removeClass('btn-info').removeClass('active')
-                        $('.access_page').eq(1).addClass('btn-info').addClass('active')
-                        var onlyyou = '<div class="alert alert-info"> \
-                            <button class="close" data-dismiss="alert">x</button> \
-                            <p>Page mode changed to <strong>private</strong>. \
-                            Only logged in users will be able to acces it, regardless of edit mode.</p></div>'
-                        $('.alert-messages').prepend(onlyyou)
-                    }
-                    update_sitemap(record)
-                }
-                if ( $(this).hasClass('nav_page') ) {
-                    if ($(this).html() == 'unlisted') {
-                        record['listed'] = false
-                        $('.nav_page').eq(0).addClass('btn-info').addClass('active')
-                        $('.nav_page').eq(1).removeClass('btn-info').removeClass('active')
-                    } else {
-                        record['listed'] = true
-                        $('.nav_page').eq(0).removeClass('btn-info').removeClass('active')
-                        $('.nav_page').eq(1).addClass('btn-info').addClass('active')
-                    }
-                    update_sitemap(record)
-                }
-                $('#jtedit_json').val(JSON.stringify(record,"","    "))
-                $.fn.jtedit.saveit(refresh)
+                $('#metaopts').toggle()
             }
-            $('.mode_page').bind('click',edits)
-            $('.access_page').bind('click',edits)
-            $('.page_comments').bind('click',edits)
-            $('.init_search').bind('click',edits)
-            $('.nav_page').bind('click',edits)
-            
             var showmedia = function(event) {
                 event.preventDefault()
-                $('#galleryopts').show()
-                $('body').media_gallery()
+                !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
             }
-            var pagemeta = function(event) {
-                event.preventDefault()
-                alert('for now just shows jtedit box. should perhaps be customised via jtedit instead')
-                $('#jtedit_json').toggle()
+            $('.pagemedia').bind('click',showmedia)
+            $('.pagesettings').bind('click',showopts)
+            
+            options.data['editable'] ? $('.mode_page').attr('checked',true) : ""
+            options.data['accessible'] ? $('.access_page').attr('checked',true) : ""
+            options.data['visible'] ? $('.nav_page').attr('checked',true) : ""
+            options.data['comments'] ? $('.page_comments').attr('checked',true) : ""
+            options.data['search']['hidden'] ? $('.hide_search').attr('checked',true) : ""
+            options.data['search']['format'] == 'list' ? $('.list_search').attr('checked',true) : ""
+            if (options.data['search']['options']['paging']) {
+                options.data['search']['options']['paging']['size'] ? $('.search_howmany').val(options.data['search']['options']['paging']['size']) : ""
             }
-            $('.page_media').bind('click',showmedia)
-            $('.page_meta').bind('click',pagemeta)
+            options.data['search']['options']['q'] ? $('.search_default').val(options.data['search']['options']['q']) : ""
+            options.data['search']['position'] ? $('.search_position').val(options.data['search']['position']) : ""
+            options.data['tags'] ? $('.page_tags').val(options.data['tags']) : ""
+
+            var edits = function(event) {
+                var record = $.parseJSON($('#jtedit_json').val())
+                if ( $(this).hasClass('mode_page') ) {
+                    $(this).attr('checked') == 'checked' ? record['editable'] = true : record['editable'] = false
+                } else if ( $(this).hasClass('page_comments') ) {
+                    $(this).attr('checked') == 'checked' ? record['comments'] = true : record['comments'] = false
+                } else if ( $(this).hasClass('access_page') ) {
+                    $(this).attr('checked') == 'checked' ? record['accessible'] = true : record['accessible'] = false
+                    update_sitemap(record)
+                } else if ( $(this).hasClass('nav_page') ) {
+                    $(this).attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false
+                    update_sitemap(record)
+                } else if ( $(this).hasClass('hide_search') ) {
+                    $(this).attr('checked') == 'checked' ? record['search']['hidden'] = true : record['search']['hidden'] = false
+                } else if ( $(this).hasClass('list_search') ) {
+                    $(this).attr('checked') ? record['search']['format'] = 'list' : record['search']['format'] = 'panels'
+                } else if ( $(this).hasClass('search_position') ) {
+                    record['search']['position'] = $(this).val()
+                } else if ( $(this).hasClass('search_howmany') ) {
+                    record['search']['options']['paging'] = {'from':0,'size':$(this).val() }
+                } else if ( $(this).hasClass('search_default') ) {
+                    record['search']['options']['q'] = $(this).val()
+                } else if ( $(this).hasClass('page_tags') ) {
+                    var tags = $(this).val().split(',')
+                    record['tags'] = []
+                    for ( var item in tags ) {
+                        record['tags'].push($.trim(tags[item]))
+                    }
+                }
+                $('#jtedit_json').val(JSON.stringify(record,"","    "))
+                $.fn.jtedit.saveit()
+            }
+            $('.page_options').bind('change',edits)
         }
         
         var update_sitemap = function(record) {
@@ -462,7 +400,17 @@
         }
         var searchvis = function() {
             if ( !$('#facetview').is(':visible') ) {
+                $('#close_facetview').remove()
+                $('#facetview').prepend('<button id="close_facetview" class="close">close</button>')
+                $('#close_facetview').css({'margin-right':'5px'})
+                $('#close_facetview').unbind()
+                var closefv = function(event) {
+                    event.preventDefault()
+                    $('#facetview').hide()
+                }
+                $('#close_facetview').bind('click',closefv)
                 $('#facetview').show()
+                $('#navsearch').trigger('keyup')
             }
         }
 
@@ -477,6 +425,8 @@
             var fromtop = $('#topnav').offset().top + 40
             $(window).scroll(function() {
 		        if ( $(window).scrollTop() > fromtop && $('#topnav').hasClass('navbar-in-page') ) {
+                    $('#topstrap').css({height:options.bannerheight})
+                    $('#tagcloud').css({height:'0px'})
                     $('#topnav').removeClass('navbar-in-page')
                     $('#topnav').addClass('navbar-fixed-top')
                     $('#mainnavlist').parent().addClass('navbar-top-pad')

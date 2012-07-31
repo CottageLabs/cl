@@ -29,9 +29,10 @@
     </div> \
     <p><button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">slideshow</button> \
         <button id="toggle-fullscreen" class="btn" data-toggle="button">fullscreen</button> \
-        <button id="close-gallery" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">close gallery</button> \
-        <button id="manual-upload" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">manual upload</button></p> \
-    <p style="color:#ccc;">Drag and drop choices onto page text area or media display</p> \
+        <button id="close-gallery" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">close gallery</button>'
+        //<button id="manual-upload" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">manual upload</button></p>
+    //<p style="color:#ccc;">Drag and drop choices onto page text area or media display</p> 
+    gallery += '</p> \
     <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery"></div> \
     <div id="modal-gallery" class="modal modal-gallery hide fade"> \
         <div class="modal-header"> \
