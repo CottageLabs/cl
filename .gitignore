@@ -2,6 +2,8 @@
 *.egg-info/*
 .*.swp
 media/*
+build/*
+dist/*
 gallery/*
 src*
 .DS_Store

@@ -27,7 +27,7 @@ JSITE_OPTIONS = {
     "recordurl": "/query/record/",
     "savetourl": "",
     "datatype": "json",
-    "collaborative": False,
+    "collaborative": True,
     "facetview": {
         "search_url": "/query/record/_search?",
         "datatype": "json",

@@ -204,7 +204,7 @@ def default(path=''):
         
         content += '</div>'
         
-        return render_template('index.html', content=content, title=rec.data['title'], jsite_options=json.dumps(jsite))
+        return render_template('index.html', content=content, title=rec.data.get('title',''), jsite_options=json.dumps(jsite))
 
     elif request.method == 'POST':
         if rec:

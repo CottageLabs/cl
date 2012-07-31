@@ -59,7 +59,7 @@
                         'content': '',
                         'comments': false,
                         'embed': false,
-                        'listed': false,
+                        'visible': false,
                         'access': true,
                         'editable': true,
                         'tags': [],
@@ -299,8 +299,9 @@
         
         var update_sitemap = function(record) {
             var info = {
-                'listed': record['listed'],
-                'access': record['access'],
+                'visible': record['visible'],
+                'accessible': record['accessible'],
+                'title': record['title'],
                 'url': window.location.pathname
             }
             var url = '/sitemap' + window.location.pathname
