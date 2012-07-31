@@ -113,13 +113,15 @@
             }
             
             if ( record["search"]["position"] == "right" ) {
+                var moved = '<div class="span9">' + $('#article').html() + '</div>'
+                $('#article').html(moved)
                 $('#facetview').appendTo('#article')
                 $('#facetview').removeClass('row-fluid').addClass('span3')
-                $('#article > .span12').addClass('span9').removeClass('span12')
             } else if ( record["search"]["position"] == "left" ) {
+                var moved = '<div class="span9">' + $('#article').html() + '</div>'
+                $('#article').html(moved)
                 $('#facetview').prependTo('#article')
                 $('#facetview').removeClass('row-fluid').addClass('span3')
-                $('#article > .span12').addClass('span9').removeClass('span12')
             } else if ( record["search"]["position"] == "bottom" ) {
                 $('#facetview').insertAfter('#article')
             }

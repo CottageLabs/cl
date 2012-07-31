@@ -66,7 +66,7 @@ def mailer():
         pass
     elif request.method == 'POST':
         try:
-            if request.values.get('message',False):
+            if request.values.get('message',False) and not request.values.get('not',False):
                 util.send_mail(
                     [app.config['ADMIN_NAME'] + ' <' + app.config['ADMIN_EMAIL'] + '>'],
                     request.values.get('email',app.config['ADMIN_NAME'] + ' <' + app.config['ADMIN_EMAIL'] + '>'),
@@ -146,7 +146,7 @@ def default(path=''):
             resp.mimetype = "application/json"
             return resp
 
-        content = '<div class="span12">'
+        content = ''
 
         if rec and not jsite['jspagecontent']:
 
@@ -166,10 +166,10 @@ def default(path=''):
                 else:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '&amp;embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
-#            if rec.data.get('search',{}).get('hidden',False):
-#                jsite['facetview']['initialsearch'] = False
-#            else:
-#                jsite['facetview']['initialsearch'] = True
+            if rec.data.get('search',{}).get('hidden',False):
+                jsite['facetview']['initialsearch'] = False
+            else:
+                jsite['facetview']['initialsearch'] = True
             if rec.data.get('search',{}).get('options',False):
                 jsite['facetview'].update(rec.data['search']['options'])
             if rec.data['search']['format'] == 'list':
@@ -201,8 +201,6 @@ def default(path=''):
             jsite['data'] = False
             if current_user.is_anonymous():
                 abort(404)
-        
-        content += '</div>'
         
         return render_template('index.html', content=content, title=rec.data.get('title',''), jsite_options=json.dumps(jsite))
 
