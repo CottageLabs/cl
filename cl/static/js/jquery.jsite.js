@@ -213,7 +213,7 @@
         var editoptions = function(record) {
         
             // metadata options
-            var metaopts = '<div id="metaopts" class="row-fluid"><div class="hero-unit clearfix"><button class="pagesettings close">x</button>'
+            var metaopts = '<div id="metaopts" class="hero-unit clearfix"><button class="pagesettings close">x</button>'
             metaopts += '<div class="span5"><h2>access settings</h2>'
             metaopts += '<p><input type="checkbox" class="page_options access_page" /> anyone can access this page without login</p>'
             metaopts += '<p><input type="checkbox" class="page_options mode_page" /> display as editable by default, to anyone that can view it</p>'
@@ -235,7 +235,7 @@
                 //<p>sort search results by <select class="span1 page_options search_sort"><option>date</option></select></p>'
             //metaopts += '<h2><br />custom css</h2><p>provide option for custom css injection</p>'
             metaopts += '</div>'
-            metaopts += '</div></div>'
+            metaopts += '</div>'
             $('#article').before(metaopts)
             $('#metaopts').hide()
 
