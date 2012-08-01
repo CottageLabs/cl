@@ -387,11 +387,11 @@
                 avatar_size: 48,
                 count: 5,
                 join_text: "auto",
-                auto_join_text_default: "we said,",
-                auto_join_text_ed: "we",
-                auto_join_text_ing: "we were",
-                auto_join_text_reply: "we replied",
-                auto_join_text_url: "we read ",
+                auto_join_text_default: "",
+                auto_join_text_ed: "",
+                auto_join_text_ing: "",
+                auto_join_text_reply: "",
+                auto_join_text_url: "",
                 loading_text: "loading tweets..."
             })
         }
