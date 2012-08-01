@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if current_user.is_super %}
+{% if not current_user.is_anonymous() %}
 <p><a class="btn btn-danger" href="/sitemap/refresh">refresh sitemap</a></p>
 {% endif %}
 
