@@ -116,14 +116,15 @@
                 var moved = '<div class="span9">' + $('#article').html() + '</div>'
                 $('#article').html(moved)
                 $('#facetview').appendTo('#article')
-                $('#facetview').removeClass('row-fluid').addClass('span3')
+                $('#facetview').removeClass('row-fluid').addClass('span3').addClass('onright')
             } else if ( record["search"]["position"] == "left" ) {
                 var moved = '<div class="span9">' + $('#article').html() + '</div>'
                 $('#article').html(moved)
                 $('#facetview').prependTo('#article')
-                $('#facetview').removeClass('row-fluid').addClass('span3')
+                $('#facetview').removeClass('row-fluid').addClass('span3').addClass('onleft')
             } else if ( record["search"]["position"] == "bottom" ) {
                 $('#facetview').insertAfter('#article')
+                $('#facetview').addClass('onbottom')
             }
             record['search']['hidden'] ? $('#facetview').hide() : ""
             
@@ -178,7 +179,7 @@
             if ( options.collaborative ) {
                 $('#form_content').unbind()
                 $('#form_content').pad({
-                  'padId'             : record.id,
+                  'padId'             : record.id.substring(0,50),
                   'host'              : 'http://pads.cottagelabs.com',
                   'baseUrl'           : '/p/',
                   'showControls'      : true,
@@ -402,16 +403,18 @@
             $(this).select()
         }
         var searchvis = function() {
-            if ( !$('#facetview').is(':visible') ) {
+            if ( !$('#facetview').is(':visible') || $('#facetview').hasClass('onbottom') || ( $('#facetview').hasClass('onright') && $(window).width() <= 767 ) ) {
                 $('#close_facetview').remove()
-                $('#facetview').prepend('<button id="close_facetview" class="close">close</button>')
-                $('#close_facetview').css({'margin-right':'5px'})
+                $('#facetview').prepend('<button id="close_facetview" class="close">close search results</button>')
+                $('#close_facetview').css({'margin':'5px'})
                 $('#close_facetview').unbind()
                 var closefv = function(event) {
                     event.preventDefault()
                     $('#facetview').hide()
                 }
                 $('#close_facetview').bind('click',closefv)
+                $('#facetview').insertBefore('#article')
+                $('#facetview').removeClass('span3').removeClass('onbottom').removeClass('onright').addClass('row-fluid')                
                 $('#facetview').show()
                 $('#navsearch').trigger('keyup')
             }
@@ -423,6 +426,25 @@
 
 
         return this.each(function() {
+            
+            // track changes to screen size and pull nav search to the right when necessary
+            var screens = function () {
+                alert("HI")
+                var width = screen.width
+                if ( width <= 767 ) {
+                    $('#searchnavholder').removeClass('pull-right')
+                    alert("HI")
+                } else if ( !$('#searchnavholder').hasClass('pull-right') ) {
+                    $('#searchnavholder').addClass('pull-right')
+                }
+                setInterval(function () {
+                    if (screen.width !== width) {
+                        width = screen.width
+                        $(window).trigger('resolutionchange')
+                    }
+                }, 50)
+            }
+            $(window).bind('resolutionchange',screens)
             
             // make the topnav sticky on scroll
             var fromtop = $('#topnav').offset().top + 40
@@ -452,8 +474,8 @@
             $('#new_page').bind('click',newpage)
 
             // bind search display
-            $('#navsearch').bind('focus',searchvis)
-            $('#navsearch').bind('mouseup',selectall)
+            $('.facetview_searchbox').bind('focus',searchvis)
+            $('.facetview_searchbox').bind('mouseup',selectall)
 
             // setup the tag cloud functionality
             options.tagkey ? buildtagcloud() : false

@@ -14,7 +14,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>cottage labs{% if title %} | {{ title }}{% endif %}</title>
 
@@ -26,6 +26,7 @@
 
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/bootstrap/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/tweet/jquery.tweet.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/facetview/css/facetview.css" />
     <!--<link rel="stylesheet" type="text/css" media="all" href="/static/vendor/facetview/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.css" />-->
@@ -78,42 +79,53 @@
 
 <div id="main" class="container"> 
 
-    <div id="topstrap" class="page-header">
+    <div id="topstrap" class="page-header hidden-phone hidden-tablet">
         <h1><a href="/" style="color:#333;">cottage labs</a>
-            <small><br />we don't sell products, we trade our skills<br />we do open source software development</small>
+            <small><br />we don't sell products, we trade our skills<br />&nbsp;<!--we do open source software development--></small>
         </h1>
     </div>
     
     <div id="topnav" class="navbar navbar-in-page">
         <div class="navbar-inner">
             <div class="container">
-                <div id="tagcloud">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div id="tagcloud" class="hidden-phone">
                     <p></p>
                 </div>
-                <ul id="mainnavlist" class="nav">
-                    {% if current_user.is_anonymous() %}
-                    {% include 'sitemap/sitenav_public.html' %}
-                    <li><a href="{{url_for('account.login')}}">login</a></li>
-                    {% else %}
-                    {% include 'sitemap/sitenav.html' %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>options</strong> <b class="caret"></b></a>
-                        <ul id="admin_options" class="dropdown-menu">
-                            <li><a id="new_page" href="">create a new page</a></li>
-                            <li class="divider"></li>
-                            <li><a class="edit_page" href="">edit this page</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/media">manage media</a></li>
-                            <li><a href="/sitemap">manage site map</a></li>
-                            {% if current_user.is_super %}<li><a href="/account">manage users</a></li>{% endif %}
-                            <li class="divider"></li>
-                            <li><a href="/account/{{ current_user.id }}">my account</a></li>
-                            <li><a href="/account/logout">logout</a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                </ul>
-                <ul class="nav pull-right" style="margin-right:30px;">
+                <div class="nav-collapse">
+                    <ul id="mainnavlist" class="nav">
+                        {% if current_user.is_anonymous() %}
+                        {% include 'sitemap/sitenav_public.html' %}
+                        <li><a href="{{url_for('account.login')}}">login</a></li>
+                        {% else %}
+                        {% include 'sitemap/sitenav.html' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>options</strong> <b class="caret"></b></a>
+                            <ul id="admin_options" class="dropdown-menu">
+                                <li><a id="new_page" href="">create a new page</a></li>
+                                <li class="divider"></li>
+                                <li><a class="edit_page" href="">edit this page</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/media">manage media</a></li>
+                                <li><a href="/sitemap">manage site map</a></li>
+                                {% if current_user.is_super %}<li><a href="/account">manage users</a></li>{% endif %}
+                                <li class="divider"></li>
+                                <li><a href="/account/{{ current_user.id }}">my account</a></li>
+                                <li><a href="/account/logout">logout</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="hidden-desktop" style="color:#c9d2d4;font-weight:bold;">
+                Cottage Labs &nbsp;
+                <input class="facetview_searchbox" style="margin-top:8px;" type="text" name="q" placeholder="search everything" />
+                </div>
+                <ul id="searchnavholder" class="nav pull-right visible-desktop" style="margin-right:30px;">
                     <li><img class="notify_loading" src="/static/loading.gif" /></li>
                     <li>
                         <form class="navbar-search" id="topsearch" name="topsearch" action="" method="GET">

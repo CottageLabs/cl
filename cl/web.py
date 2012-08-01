@@ -102,12 +102,33 @@ def query(path='Record'):
             else:
                 abort(404)
     else:
-        # TODO: add check for anonymous user
-        # if so, add AND access:public AND listed:true to search params
         if request.method == "POST":
             qs = request.json
+            if current_user.is_anonymous():
+                # TODO: add filter to the query, similar to bools in facetview:
+                '''            for (var item in options.predefined_filters) {
+                !bool ? bool = {'must': [] } : ""
+                var obj = {'term': {}}
+                obj['term'][ item ] = options.predefined_filters[item]
+                bool['must'].push(obj)
+            }
+            if (bool) {
+                $(options.searchbox_class).val() != ""
+                    ? bool['must'].push( {'query_string': { 'query': $(options.searchbox_class).val() } } )
+                    : ""
+                qs['query'] = {'bool': bool}
+            } else {
+                $(options.searchbox_class).val() != ""
+                    ? qs['query'] = {'query_string': { 'query': $(options.searchbox_class).val() } }
+                    : qs['query'] = {'match_all': {}}
+            }'''
+
+                pass
         else:
             qs = request.query_string
+            # TODO: need to check for source url param and if so append into it
+            #if current_user.is_anonymous():
+            #    qs += ' AND accessible:true AND visible:true'
         resp = make_response( json.dumps(klass().query(qs=qs)) )
     resp.mimetype = "application/json"
     return resp
@@ -154,7 +175,7 @@ def default(path=''):
                 abort(401)
 
             if jsite['collaborative']:
-                c = requests.get('http://pads.cottagelabs.com/p/' + rec.id + '/export/txt')
+                c = requests.get('http://pads.cottagelabs.com/p/' + rec.id[0:50] + '/export/txt')
                 rec.data['content'] = c.text
             content += markdown.markdown( rec.data.get('content','') )
 
@@ -202,7 +223,10 @@ def default(path=''):
             if current_user.is_anonymous():
                 abort(404)
         
-        return render_template('index.html', content=content, title=rec.data.get('title',''), jsite_options=json.dumps(jsite))
+        title = ''
+        if rec: title = rec.data.get('title','')
+        
+        return render_template('index.html', content=content, title=title, jsite_options=json.dumps(jsite))
 
     elif request.method == 'POST':
         if rec:

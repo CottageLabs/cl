@@ -44,7 +44,8 @@ def medias(path=''):
     # TODO: this should be a setting on the nginx server
     if request.method == 'GET':
         loc = mediadir + '/' + path
-        if app.config['DEBUG'] and os.path.isfile(loc):
+        #if app.config['DEBUG'] and os.path.isfile(loc):
+        if os.path.isfile(loc):
             response = make_response(open(loc).read())
             response.headers["Content-type"] = "image"
             return response
