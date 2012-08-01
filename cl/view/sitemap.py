@@ -88,7 +88,7 @@ def update(path=''):
 
 @blueprint.route('/refresh')
 def refresh():
-    if not current_user.is_anonymous():
+    if current_user.is_anonymous():
         abort(401)
     out = open('cl/templates/sitemap/sitemap.json','w')
     out.write('{}')
