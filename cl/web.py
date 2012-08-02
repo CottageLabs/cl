@@ -152,8 +152,7 @@ def default(path=''):
     # TODO: this catch is here just to test for old URLs from old site.
     # THIS SHOULD BE REMOVED EVENTUALLY, AND NOT USED ANYWHERE ELSE
     if not rec and len(ident.split('___')) == 2:
-        ident = '___news' + ident
-        rec = cl.dao.Record.pull(ident)
+        rec = cl.dao.Record.pull('___news' + ident)
         if rec:
             return redirect(rec['url'])
     if not rec and path.startswith('author'):
