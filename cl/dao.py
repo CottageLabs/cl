@@ -161,7 +161,11 @@ class DomainObject(UserDict.IterableUserDict):
             r = requests.post(cls.target() + '_search', data=json.dumps(qs))
         else:
             r = requests.get(cls.target() + '_search?' + qs)
-        return r.json
+        try:
+            res = r.json
+        except:
+            res = {}
+        return res
 
     def accessed(self):
         if 'access' not in self.data:

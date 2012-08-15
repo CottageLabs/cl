@@ -1,9 +1,8 @@
-import json, requests
+import json, requests, urllib2, markdown
 from flask import Flask, jsonify, json, request, redirect, abort, make_response
 from flask import render_template, flash
 from flask.views import View, MethodView
 from flask.ext.login import login_user, current_user
-import markdown
 import cl.dao
 import cl.util as util
 from cl.core import app, login_manager
@@ -102,33 +101,16 @@ def query(path='Record'):
             else:
                 abort(404)
     else:
+        qs = request.query_string
         if request.method == "POST":
-            qs = request.json
-            if current_user.is_anonymous():
-                # TODO: add filter to the query, similar to bools in facetview:
-                '''            for (var item in options.predefined_filters) {
-                !bool ? bool = {'must': [] } : ""
-                var obj = {'term': {}}
-                obj['term'][ item ] = options.predefined_filters[item]
-                bool['must'].push(obj)
-            }
-            if (bool) {
-                $(options.searchbox_class).val() != ""
-                    ? bool['must'].push( {'query_string': { 'query': $(options.searchbox_class).val() } } )
-                    : ""
-                qs['query'] = {'bool': bool}
-            } else {
-                $(options.searchbox_class).val() != ""
-                    ? qs['query'] = {'query_string': { 'query': $(options.searchbox_class).val() } }
-                    : qs['query'] = {'match_all': {}}
-            }'''
-
-                pass
-        else:
-            qs = request.query_string
-            # TODO: need to check for source url param and if so append into it
-            #if current_user.is_anonymous():
-            #    qs += ' AND accessible:true AND visible:true'
+            if request.json:
+                qs = request.json
+            else:
+                qs = dict(request.form).keys()[-1]
+        elif 'source' in request.values:
+            qs = json.loads(urllib2.unquote(request.values['source']))
+        if current_user.is_anonymous():
+            pass # add bool must visible:true and public:true
         resp = make_response( json.dumps(klass().query(qs=qs)) )
     resp.mimetype = "application/json"
     return resp
