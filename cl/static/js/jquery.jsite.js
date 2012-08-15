@@ -447,7 +447,7 @@
             $(window).bind('resolutionchange',screens)
             
             // make the topnav sticky on scroll
-            var fromtop = $('#topnav').offset().top + 40
+            var fromtop = $('#topnav').offset().top
             $(window).scroll(function() {
 		        if ( $(window).scrollTop() > fromtop && $('#topnav').hasClass('navbar-in-page') ) {
                     $('#topstrap').css({height:options.bannerheight})
@@ -455,11 +455,13 @@
                     $('#topnav').removeClass('navbar-in-page')
                     $('#topnav').addClass('navbar-fixed-top')
                     $('#mainnavlist').parent().addClass('navbar-top-pad')
+                    $('body').css({'padding-top':'40px'})
                 }
                 if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
                     $('#topnav').removeClass('navbar-fixed-top')
                     $('#mainnavlist').parent().removeClass('navbar-top-pad')
                     $('#topnav').addClass('navbar-in-page')
+                    $('body').css({'padding-top':'0px'})
                 }
             })
 
