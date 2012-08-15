@@ -2,7 +2,7 @@ This is the Cottage Labs website
 
 It includes submodules, so after cloning you should:
 
-cd bar
+cd cl
 
 git submodule update --init
 
