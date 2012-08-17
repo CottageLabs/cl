@@ -1,4 +1,4 @@
-import json, requests, urllib2, markdown
+import json, requests, urllib, urllib2, markdown
 from flask import Flask, jsonify, json, request, redirect, abort, make_response
 from flask import render_template, flash
 from flask.views import View, MethodView
@@ -90,14 +90,17 @@ def query(path='Record'):
     klass = getattr(cl.dao, subpath[0].capitalize() + subpath[1:] )
     
     if len(pathparts) > 1 and pathparts[1] == '_mapping':
-        resp = make_response( json.dumps(klass().mapping()) )
+        resp = make_response( json.dumps(klass().query(endpoint='_mapping')) )
     elif len(pathparts) == 2 and pathparts[1] not in ['_mapping','_search']:
         if request.method == 'POST':
             abort(401)
         else:
             rec = klass().pull(pathparts[1])
             if rec:
-                resp = make_response( rec.json )
+                if ( not app.config['ANONYMOUS_SEARCH_FILTER'] ) or ( app.config['ANONYMOUS_SEARCH_FILTER'] and rec['visible'] and rec['accessible'] ):
+                    resp = make_response( rec.json )
+                else:
+                    abort(401)
             else:
                 abort(404)
     else:
@@ -109,9 +112,15 @@ def query(path='Record'):
                 qs = dict(request.form).keys()[-1]
         elif 'source' in request.values:
             qs = json.loads(urllib2.unquote(request.values['source']))
-        if current_user.is_anonymous():
-            pass # add bool must visible:true and public:true
-        resp = make_response( json.dumps(klass().query(qs=qs)) )
+        if app.config['ANONYMOUS_SEARCH_FILTER'] and current_user.is_anonymous():
+            terms = {'visible':True,'accessible':True}
+        else:
+            terms = ''
+        # add default sort order by created date
+        # TODO: should perhaps actually remove this and make it a config and page setting
+        if 'sort' not in qs:
+            qs['sort'] = {"created_date" + app.config['FACET_FIELD'] : {"order":"desc"}}
+        resp = make_response( json.dumps(klass().query(q=qs, terms=terms)) )
     resp.mimetype = "application/json"
     return resp
         
@@ -161,12 +170,10 @@ def default(path=''):
             content += markdown.markdown( rec.data.get('content','') )
 
             if rec.data.get('embed', False):
-                # check for dropbox and repo embeds too - consider having auth
-                # TODO: change this to being a direct call for the content, then process and output
-                if not rec.data['embed'].find('/pub?') and not rec.data['embed'].find('docs.google.com'):
-                    content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + rec.data['embed'] + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
+                if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
+                    content += '<iframe id="embedded" src="' + rec.data['embed'] + '" width="100%" height="1000" style="border:none;"></iframe>'
                 else:
-                    content += '<iframe id="embedded" src="' + rec.data['embed'] + '&amp;embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
+                    content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + urllib.quote_plus(rec.data['embed']) + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
             if rec.data.get('search',{}).get('hidden',False):
                 jsite['facetview']['initialsearch'] = False

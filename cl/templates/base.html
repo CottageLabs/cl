@@ -75,7 +75,7 @@
 
 </head>
 
-<body>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
 
 <div id="main" class="container"> 
 
@@ -98,11 +98,10 @@
                 </div>
                 <div class="nav-collapse">
                     <ul id="mainnavlist" class="nav">
+                        {% include 'sitemap/sitenav.html' %}
                         {% if current_user.is_anonymous() %}
-                        {% include 'sitemap/sitenav_public.html' %}
                         <li><a href="{{url_for('account.login')}}">login</a></li>
                         {% else %}
-                        {% include 'sitemap/sitenav.html' %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>options</strong> <b class="caret"></b></a>
                             <ul id="admin_options" class="dropdown-menu">
@@ -137,6 +136,34 @@
             </div>
         </div>
     </div>
+
+    <!--<div class="subnav">
+        <ul class="nav nav-pills">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Buttons <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#buttonGroups">Button groups</a></li>
+                    <li><a href="#buttonDropdowns">Button dropdowns</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Navigation <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#navs">Nav, tabs, pills</a></li>
+                <li><a href="#navbar">Navbar</a></li>
+                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+                <li><a href="#pagination">Pagination</a></li>
+            </ul>
+            </li>
+            <li><a href="#labels">Labels</a></li>
+            <li><a href="#badges">Badges</a></li>
+            <li><a href="#typography">Typography</a></li>
+            <li><a href="#thumbnails">Thumbnails</a></li>
+            <li><a href="#alerts">Alerts</a></li>
+            <li><a href="#progress">Progress bars</a></li>
+            <li><a href="#misc">Miscellaneous</a></li>
+        </ul>
+    </div>-->
 
     <div class="content">
 
@@ -188,11 +215,13 @@
             <span class='st_linkedin_large' displayText='LinkedIn'></span>
             <span class='st_email_large' displayText='Email'></span>
 
-            <hr class="light" />
+            <hr class="embossed" />
 
-            {% include 'sitemap/sitenav_overview.html' %}
-
-            <hr class="light" />
+            <ul class="nav nav-list">
+            {% include 'sitemap/sitenav.html' %}
+            </ul>
+            
+            <hr class="embossed" />
 
             <p>We don't sell products, we trade our skills</p>
             <p>Cottage Labs does open source software development, consultancy, reporting and analysis for the higher education and research community</p>

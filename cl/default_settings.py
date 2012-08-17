@@ -21,6 +21,9 @@ ELASTIC_SEARCH_DB = "cl"
 # location of media storage folder
 MEDIA_FOLDER = "media"
 
+# if this is true, anonymous users only see visible and accessible pages in query results
+ANONYMOUS_SEARCH_FILTER = True
+
 # jsite settings
 JSITE_OPTIONS = {
     "searchurl": "/query/record/_search?",
@@ -51,6 +54,16 @@ JSITE_OPTIONS = {
                 {
                     "field": "excerpt"
                 }
+            ],
+            [
+                {
+                    "pre": "by ",
+                    "field": "author"
+                },
+                {
+                    "pre": " on ",
+                    "field": "created_date"
+                }
             ]
         ],
         "searchwrap_start": '<div id="facetview_results" class="clearfix">',
@@ -78,27 +91,6 @@ FACET_FIELD = ".exact"
 MAPPINGS = {
     "record" : {
         "record" : {
-            "date_detection" : False,
-            "dynamic_templates" : [
-                {
-                    "default" : {
-                        "match" : "*",
-                        "match_mapping_type": "string",
-                        "mapping" : {
-                            "type" : "multi_field",
-                            "fields" : {
-                                "{name}" : {"type" : "{dynamic_type}", "index" : "analyzed", "store" : "no"},
-                                "exact" : {"type" : "{dynamic_type}", "index" : "not_analyzed", "store" : "yes"}
-                            }
-                        }
-                    }
-                }
-            ]
-        }
-    },
-    "collection" : {
-        "collection" : {
-            "date_detection" : False,
             "dynamic_templates" : [
                 {
                     "default" : {

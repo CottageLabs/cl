@@ -37,10 +37,6 @@ def initialise():
         sitemap = json.load(open('cl/templates/sitemap/sitemap.json'))
         out = open('cl/templates/sitemap/sitenav.html')
         out.close()
-        out = open('cl/templates/sitemap/sitenav_overview.html')
-        out.close()
-        out = open('cl/templates/sitemap/sitenav_public.html')
-        out.close()
         out = open('cl/templates/sitemap/sitemap_private.html')
         out.close()
         out = open('cl/templates/sitemap/sitemap_public.html')
@@ -50,10 +46,6 @@ def initialise():
         out.write('{}')
         out.close()
         out = open('cl/templates/sitemap/sitenav.html','w')
-        out.close()
-        out = open('cl/templates/sitemap/sitenav_overview.html','w')
-        out.close()
-        out = open('cl/templates/sitemap/sitenav_public.html','w')
         out.close()
         out = open('cl/templates/sitemap/sitemap_private.html','w')
         out.close()
@@ -135,15 +127,10 @@ class DomainObject(UserDict.IterableUserDict):
             return None
 
     @classmethod
-    def mapping(cls):
-        r = requests.get(cls.target() + '_mapping')
-        return r.json
-        
-    @classmethod
     def keys(cls,mapping=False,prefix=''):
         # return a sorted list of all the keys in the index
         if not mapping:
-            mapping = cls.mapping()[cls.__type__]['properties']
+            mapping = cls.query(endpoint='_mapping')[cls.__type__]['properties']
         keys = []
         for item in mapping:
             if mapping[item].has_key('fields'):
@@ -156,11 +143,52 @@ class DomainObject(UserDict.IterableUserDict):
         return keys
         
     @classmethod
-    def query(cls, qs='q=*'):
-        if isinstance(qs,dict):
-            r = requests.post(cls.target() + '_search', data=json.dumps(qs))
+    def query(cls, recid='', endpoint='_search', q='', terms=None, facets=None, **kwargs):
+        '''Perform a query on backend.
+
+        :param recid: needed if endpoint is about a record, e.g. mlt
+        :param endpoint: default is _search, but could be _mapping, _mlt, _flt etc.
+        :param q: maps to query_string parameter if string, or query dict if dict.
+        :param terms: dictionary of terms to filter on. values should be lists. 
+        :param facets: dict of facets to return from the query.
+        :param kwargs: any keyword args as per
+            http://www.elasticsearch.org/guide/reference/api/search/uri-request.html
+        '''
+        if recid and not recid.endswith('/'): recid += '/'
+        if isinstance(q,dict):
+            query = q
+        elif q:
+            query = {'query': {'query_string': { 'query': q }}}
+        else: 
+            query = {'query': {'match_all': {}}}
+
+        if facets:
+            if 'facets' not in query:
+                query['facets'] = {}
+            for item in facet_fields:
+                query['facets'][item['key']] = {"terms":item}
+
+        if terms:
+            boolean = {'must': [] }
+            for term in terms:
+                if not isinstance(terms[term],list): terms[term] = [terms[term]]
+                for val in terms[term]:
+                    obj = {'term': {}}
+                    obj['term'][ term ] = val
+                    boolean['must'].append(obj)
+            if q and not isinstance(q,dict):
+                boolean['must'].append( {'query_string': { 'query': q } } )
+            elif q and 'query' in q:
+                boolean['must'].append( query['query'] )
+            query['query'] = {'bool': boolean}
+
+        for k,v in kwargs.items():
+            query[k] = v
+
+        if endpoint in ['_mapping']:
+            r = requests.get(cls.target() + recid + endpoint)
         else:
-            r = requests.get(cls.target() + '_search?' + qs)
+            r = requests.post(cls.target() + recid + endpoint, data=json.dumps(query))
         return r.json
 
     def accessed(self):
