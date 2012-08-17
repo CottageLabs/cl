@@ -221,17 +221,19 @@
             metaopts += '<h2><br />page comments</h2><p><input type="checkbox" class="page_options page_comments" /> enable comments on this page</p>'
             metaopts += '<h2><br />raw metadata</h2><p>Edit the raw metadata record of this page, then save changes to it if required.</p><div id="jtedit_space"></div>'
             metaopts += '</div>'
-            metaopts += '<div class="span5"><h2>search display settings</h2>'
+            metaopts += '<div class="span5"><h2>page info</h2>'
+            metaopts += '<p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
+                        <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
+                        <p>brief summary: <textarea class="span32 jtedit_value jtedit_excerpt"></textarea></p> \
+                        <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
+            metaopts += '<h2>search display settings</h2>'
             metaopts += '<p>when showing results, display on \
                 <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
                 <option value="left">left</option><option value="right">right</option></select> of the page</p> \
                 <p><input type="checkbox" class="page_options hide_search" /> hide the search result panel until the search bar is used</p> \
                 <p><input type="checkbox" class="page_options list_search" /> simplify search results to a list of result title links</p> \
                 <p>show <input type="text" class="span1 page_options search_howmany" value="9" /> results per search result set</p> \
-                <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p> \
-                <p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
-                <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
-                <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
+                <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p>'
                 //<p>sort search results by <select class="span1 page_options search_sort"><option>date</option></select></p>'
             //metaopts += '<h2><br />custom css</h2><p>provide option for custom css injection</p>'
             metaopts += '</div>'
