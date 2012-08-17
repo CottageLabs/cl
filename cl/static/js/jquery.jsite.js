@@ -152,27 +152,23 @@
             $('#facetview').hide()
             $('#article').html("")
                                     
-            if ( record['embed'] ) {
-                // show embed options
-            } else {
-                var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"><textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."></textarea></div></div>'
-                $('#article').append(editor)
+            var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"><textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."></textarea></div></div>'
+            $('#article').append(editor)
 
-                if ( options.richtextedit ) {
-		            $('textarea.tinymce').tinymce({
-			            script_url : '/static/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js',
-			            theme : "advanced",
-			            plugins : "autolink,lists,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,fullscreen,noneditable,nonbreaking,xhtmlxtras,advlist",
-			            theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,styleprops",
-			            theme_advanced_buttons2 : "undo,redo,|,cut,copy,paste,|,search,replace,|,hr,link,unlink,anchor,image,charmap,media,table,|,insertlayer,moveforward,movebackward,absolute,|,cleanup,code,help,visualaid,fullscreen",
-			            theme_advanced_toolbar_location : "top",
-			            theme_advanced_toolbar_align : "left",
-			            theme_advanced_statusbar_location : "bottom",
-			            theme_advanced_resizing : true,
+            if ( options.richtextedit ) {
+	            $('textarea.tinymce').tinymce({
+		            script_url : '/static/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js',
+		            theme : "advanced",
+		            plugins : "autolink,lists,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,fullscreen,noneditable,nonbreaking,xhtmlxtras,advlist",
+		            theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,styleprops",
+		            theme_advanced_buttons2 : "undo,redo,|,cut,copy,paste,|,search,replace,|,hr,link,unlink,anchor,image,charmap,media,table,|,insertlayer,moveforward,movebackward,absolute,|,cleanup,code,help,visualaid,fullscreen",
+		            theme_advanced_toolbar_location : "top",
+		            theme_advanced_toolbar_align : "left",
+		            theme_advanced_statusbar_location : "bottom",
+		            theme_advanced_resizing : true,
 
-		            })
-		        }
-		    }
+	            })
+	        }
 
             // update with any values already present in record
             // if collaborative edit is on, get the content from etherpad
@@ -199,10 +195,10 @@
             } else {
                 $('#form_content').val(record['content'])
             }
+
             if ( options.loggedin ) {
                 editoptions(record)
                 $('#jtedit_space').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
-                //$('#metaopts').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
             } else {
                 $('.content').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
             }
@@ -212,12 +208,14 @@
         // EDIT OPTION BUTTON FUNCTIONS
         var editoptions = function(record) {
         
-            // metadata options
+            // create page settings options panel
             var metaopts = '<div id="metaopts" class="hero-unit clearfix"><button class="pagesettings close">x</button>'
             metaopts += '<div class="span5"><h2>access settings</h2>'
             metaopts += '<p><input type="checkbox" class="page_options access_page" /> anyone can access this page without login</p>'
             metaopts += '<p><input type="checkbox" class="page_options mode_page" /> display as editable by default, to anyone that can view it</p>'
             metaopts += '<p><input type="checkbox" class="page_options nav_page" /> list this page in public nav menu and search results</p>'
+            metaopts += '<h2><br />embed content</h2><p>file URL: '
+            metaopts += '<input type="text" class="span4 page_options jtedit_value jtedit_embed" /></p>'
             metaopts += '<h2><br />page comments</h2><p><input type="checkbox" class="page_options page_comments" /> enable comments on this page</p>'
             metaopts += '<h2><br />raw metadata</h2><p>Edit the raw metadata record of this page, then save changes to it if required.</p><div id="jtedit_space"></div>'
             metaopts += '</div>'
@@ -229,17 +227,19 @@
                 <p><input type="checkbox" class="page_options list_search" /> simplify search results to a list of result title links</p> \
                 <p>show <input type="text" class="span1 page_options search_howmany" value="9" /> results per search result set</p> \
                 <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p> \
+                <p>sort search results by <select class="span2 page_options search_sort"> \
+                    <option value=""></option> \
+                    <option value="created_desc">descending created date</option> \
+                    <option value="created_asc">ascending created date</option> \
+                </select></p> \
                 <p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
                 <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
                 <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
-                //<p>sort search results by <select class="span1 page_options search_sort"><option>date</option></select></p>'
-            //metaopts += '<h2><br />custom css</h2><p>provide option for custom css injection</p>'
             metaopts += '</div>'
             metaopts += '</div>'
             $('#article').before(metaopts)
             $('#metaopts').hide()
 
-            //$('.jtedit_deleteit').parent().before('<li><a class="pagesettings" href="">edit page settings</a></li><li><a class="pagemedia" href="">embed media</a></li>')
             $('#mainnavlist').append('<li><a class="pagesettings" href="">settings</a></li><li><a class="pagemedia" href="">media</a></li>')
             var showopts = function(event) {
                 event.preventDefault()
@@ -252,6 +252,7 @@
             $('.pagemedia').bind('click',showmedia)
             $('.pagesettings').bind('click',showopts)
             
+            // set pre-existing values into page settings
             options.data['editable'] ? $('.mode_page').attr('checked',true) : ""
             options.data['accessible'] ? $('.access_page').attr('checked',true) : ""
             options.data['visible'] ? $('.nav_page').attr('checked',true) : ""
@@ -261,10 +262,18 @@
             if (options.data['search']['options']['paging']) {
                 options.data['search']['options']['paging']['size'] ? $('.search_howmany').val(options.data['search']['options']['paging']['size']) : ""
             }
+            if (options.data['search']['options']['sort']) {            
+                if ( options.data['search']['options']['sort']['created_date.exact']['order'] == 'desc' ) {
+                    $('.search_sort').val('created_desc')
+                } else {
+                    $('.search_sort').val('created_asc')
+                }
+            }
             options.data['search']['options']['q'] ? $('.search_default').val(options.data['search']['options']['q']) : ""
             options.data['search']['position'] ? $('.search_position').val(options.data['search']['position']) : ""
             options.data['tags'] ? $('.page_tags').val(options.data['tags']) : ""
 
+            // handle changes to page settings
             var edits = function(event) {
                 var record = $.parseJSON($('#jtedit_json').val())
                 if ( $(this).hasClass('mode_page') ) {
@@ -292,6 +301,14 @@
                     record['tags'] = []
                     for ( var item in tags ) {
                         record['tags'].push($.trim(tags[item]))
+                    }
+                } else if ( $(this).hasClass('search_sort') ) {
+                    if ( $(this).val() == "created_desc" ) {
+                        record['search']['options']['sort'] = {'created_date.exact': {'order': 'desc'}}
+                    } else if ( $(this).val() == "created_asc" ) {
+                        record['search']['options']['sort'] = {'created_date.exact': {'order': 'asc'}}
+                    } else if ( 'sort' in record['search']['options'] ) {
+                         delete record['search']['options']['sort']
                     }
                 }
                 $('#jtedit_json').val(JSON.stringify(record,"","    "))

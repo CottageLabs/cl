@@ -118,8 +118,8 @@ def query(path='Record'):
             terms = ''
         # add default sort order by created date
         # TODO: should perhaps actually remove this and make it a config and page setting
-        if 'sort' not in qs:
-            qs['sort'] = {"created_date" + app.config['FACET_FIELD'] : {"order":"desc"}}
+        if 'sort' not in qs and app.config['SEARCH_SORT']:
+            qs['sort'] = {app.config['SEARCH_SORT'].rstrip(app.config['FACET_FIELD']) + app.config['FACET_FIELD'] : {"order":app.config.get('SEARCH_SORT_ORDER','asc')}}
         resp = make_response( json.dumps(klass().query(q=qs, terms=terms)) )
     resp.mimetype = "application/json"
     return resp

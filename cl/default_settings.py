@@ -21,8 +21,11 @@ ELASTIC_SEARCH_DB = "cl"
 # location of media storage folder
 MEDIA_FOLDER = "media"
 
-# if this is true, anonymous users only see visible and accessible pages in query results
+# if search filter is true, anonymous users only see visible and accessible pages in query results
+# if search sort and order are set, all queries from /query will return with default search unless one is provided
 ANONYMOUS_SEARCH_FILTER = True
+SEARCH_SORT = ''
+SEARCH_SORT_ORDER = ''
 
 # jsite settings
 JSITE_OPTIONS = {
