@@ -93,7 +93,7 @@ def refresh():
     out = open('cl/templates/sitemap/sitemap.json','w')
     out.write('{}')
     out.close()
-    records = cl.dao.Record.query(qs='q=*&size=1000000')
+    records = cl.dao.Record.query(size=1000000)
     for record in [rec['_source'] for rec in records['hits']['hits']]:
         request.json = record
         update(path=record['url'])

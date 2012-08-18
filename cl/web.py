@@ -137,6 +137,7 @@ def default(path=''):
 
     ident = '___' + path.rstrip('/').replace('/', '___')
     if ident == '___': ident += 'index'
+    if ident.endswith('.json'): ident = ident.replace('.json','')
     comments = False
     rec = cl.dao.Record.pull(ident)
     
@@ -169,6 +170,9 @@ def default(path=''):
                 rec.data['content'] = c.text
             content += markdown.markdown( rec.data.get('content','') )
 
+            if not rec.data['embed'] or rec.data['embed'] == 'false':
+                rec.data['embed'] = ""
+
             if rec.data.get('embed', False):
                 if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '" width="100%" height="1000" style="border:none;"></iframe>'
@@ -186,6 +190,7 @@ def default(path=''):
                 jsite['facetview']['searchwrap_end'] = '</table>'
                 jsite['facetview']['resultwrap_start'] = '<tr><td>'
                 jsite['facetview']['resultwrap_end'] = '</td></tr>'
+            if rec.data['search'].get('onlytitles',False):
                 jsite['facetview']['result_display'] = [
                     [
                         {
