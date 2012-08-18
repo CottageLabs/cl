@@ -158,6 +158,7 @@
             var record = options.data
         
             $('#facetview').hide()
+            $('#topstrap').hide()
             $('#article').html("")
                                     
             var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"><textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."></textarea></div></div>'
@@ -182,7 +183,12 @@
             // if collaborative edit is on, get the content from etherpad
             if ( options.collaborative ) {
                 $('#form_content').unbind()
-                $('#form_content').pad({
+                $('#form_content').hide()
+                $('#article').hide()
+                var collab_edit = '<div class="container"><div id="collab_edit" class="content"></div></div>'
+                $('#main').after(collab_edit)
+                $('#collab_edit').css({'padding':0})
+                $('#collab_edit').pad({
                   'padId'             : record.id.substring(0,50),
                   'host'              : 'http://pads.cottagelabs.com',
                   'baseUrl'           : '/p/',
@@ -193,13 +199,10 @@
                   'useMonospaceFont'  : false,
                   'noColors'          : false,
                   'hideQRCode'        : false,
-                  'height'            : 400,
-                  'border'            : 0,
+                  'height'            : 800,
+                  //'border'            : 0,
                   'borderStyle'       : 'solid'
                 })
-                $('.content').css({'padding':0})
-                $('#article').css({'margin-bottom':'-20px'})
-                $('.alert').css({'margin-bottom':0})
             } else {
                 $('#form_content').val(record['content'])
             }
@@ -224,7 +227,7 @@
             
             // create page settings options panel
             var metaopts = '\
-                <div id="metaopts" class="row-fluid" style="background:#eee; padding: 5px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px"> \
+                <div id="metaopts" class="row-fluid" style="background:#eee; padding: 5px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin-bottom:10px;"> \
                     <div class="row-fluid"> \
                         <div class="span8"><h2>page settings</h2></div> \
                         <div class="span4"><button class="pagesettings close">x</button></div> \
@@ -366,7 +369,8 @@
             
             $('#jtedit_space').jtedit({'data':options.data, 
                                         'makeform': false, 
-                                        /*'actionbuttons': false, 'jsonbutton': false,*/ 
+                                        'actionbuttons': false,
+                                        /*'jsonbutton': false,*/ 
                                         'delmsg':"", 
                                         'savemsg':"", 
                                         "saveonupdate":true, 
