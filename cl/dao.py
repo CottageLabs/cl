@@ -192,9 +192,9 @@ class DomainObject(UserDict.IterableUserDict):
         return r.json
 
     def accessed(self):
-        if 'access' not in self.data:
-            self.data['access'] = []
-        self.data['access'].insert(0, { 'user':get_user(), 'date':datetime.now().strftime("%Y-%m-%d %H%M") } )        
+        if 'last_access' not in self.data:
+            self.data['last_access'] = []
+        self.data['last_access'].insert(0, { 'user':get_user(), 'date':datetime.now().strftime("%Y-%m-%d %H%M") } )        
         r = requests.put(self.target() + self.data['id'], data=json.dumps(self.data))
 
     def delete(self):        

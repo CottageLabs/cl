@@ -23,9 +23,11 @@ MEDIA_FOLDER = "media"
 
 # if search filter is true, anonymous users only see visible and accessible pages in query results
 # if search sort and order are set, all queries from /query will return with default search unless one is provided
+# placeholder image can be used in search result displays
 ANONYMOUS_SEARCH_FILTER = True
 SEARCH_SORT = ''
 SEARCH_SORT_ORDER = ''
+PLACEHOLDER_IMAGE = '/static/placeholder.png'
 
 # jsite settings
 JSITE_OPTIONS = {
@@ -41,7 +43,15 @@ JSITE_OPTIONS = {
         "searchbox_class": '.facetview_searchbox',
         "embedded_search": False,
         "initialsearch": True,
+        "display_images": False,
         "result_display": [
+            [
+                {
+                    "pre": '<img class="thumbnail" style="float:left; width:100px; margin:0 5px 10px 0; max-height:150px;" src="',
+                    "field": 'image',
+                    "post": '" />'
+                }
+            ],
             [
                 {
                     "pre": '<h4><a href="',

@@ -60,8 +60,10 @@
                         'comments': false,
                         'embed': '',
                         'visible': false,
-                        'access': true,
+                        'accessible': true,
                         'editable': true,
+                        'image': '',
+                        'excerpt': '',
                         'tags': [],
                         'search': {
                             'format':'panels',  // panels, list
@@ -222,8 +224,9 @@
             metaopts += '<div class="span5"><h2>page info</h2>'
             metaopts += '<p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
                         <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
-                        <p>brief summary: <textarea class="span32 jtedit_value jtedit_excerpt"></textarea></p> \
-                        <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
+                        <p>brief summary: <textarea class="span3 jtedit_value jtedit_excerpt"></textarea></p> \
+                        <p>tags: <input type="text" class="span3 page_options page_tags" /></p> \
+                        <p>featured image: <input type="text" class="span3 jtedit_value jtedit_image" /></p>'
             metaopts += '<h2>search display settings</h2>'
             metaopts += '<p>when showing results, display on \
                 <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
@@ -367,6 +370,14 @@
             $('#navsearch').val(options.tagkey+':'+tag)
             $('#navsearch').trigger('keyup')
         }
+        /*var showtags = function(data) {
+            var tags = []
+            for (var term in data.facets.tagterm.terms) {
+                var val = data.facets.tagterm.terms[term]["term"]
+                tags.push({'label':val,'value':'tags:'+val})
+            }
+            $('.facetview_searchbox').autocomplete({source:tags, minLength:0})
+        }*/
         var showtags = function(data) {
             for (var term in data.facets.tagterm.terms) {
                 var val = data.facets.tagterm.terms[term]["term"]
@@ -494,7 +505,7 @@
             // bind the twitter display if twitter account provided
             options.twitter ? tweets() : false
             
-            // get going. for now it is assumed that the record is provided in the options. but could pull from a source, similar to jtedit
+            // get going
             makepage()
 
         })

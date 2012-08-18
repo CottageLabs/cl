@@ -1,4 +1,4 @@
-import json, requests, urllib, urllib2, markdown
+import re, json, requests, urllib, urllib2, markdown
 from flask import Flask, jsonify, json, request, redirect, abort, make_response
 from flask import render_template, flash
 from flask.views import View, MethodView
@@ -160,25 +160,42 @@ def default(path=''):
 
         content = ''
 
+        # build the content unless it is being done by the js (unlikely)
         if rec and not jsite['jspagecontent']:
 
             if not rec.data.get('accessible',False) and current_user.is_anonymous():
                 abort(401)
 
-            if jsite['collaborative']:
+            # update content from collaborative pad
+            if jsite['collaborative'] and not rec.get('decoupled',False):
                 c = requests.get('http://pads.cottagelabs.com/p/' + rec.id[0:50] + '/export/txt')
                 rec.data['content'] = c.text
+                rec.save()
             content += markdown.markdown( rec.data.get('content','') )
 
+            # make sure there is a featured image
+            if rec.data.get('image',app.config['PLACEHOLDER_IMAGE']) == app.config['PLACEHOLDER_IMAGE']:
+                regex = r'(http:\/\/\S+?\.(jpg|png|gif|jpeg))'
+                res = re.findall(regex, rec.data['content'])
+                if res:
+                    rec.data['image'] = res[0]
+                else:
+                    rec.data['image'] = app.config['PLACEHOLDER_IMAGE']
+                rec.save()
+
+            # this is a temporary catch from index errors - to be removed
             if not rec.data['embed'] or rec.data['embed'] == 'false':
                 rec.data['embed'] = ""
+                rec.save()
 
+            # embed any file set as to be embedded
             if rec.data.get('embed', False):
                 if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '" width="100%" height="1000" style="border:none;"></iframe>'
                 else:
                     content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + urllib.quote_plus(rec.data['embed']) + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
+            # setup search display
             if rec.data.get('search',{}).get('hidden',False):
                 jsite['facetview']['initialsearch'] = False
             else:
@@ -204,8 +221,10 @@ def default(path=''):
                         }
                     ]
                 ]
-
+            
+            # as the page is not being built by js, remove the content to save load
             jsite['data'] = rec.data
+            del jsite['data']['content']
 
         elif rec:
             jsite['data'] = rec.data
@@ -218,12 +237,15 @@ def default(path=''):
         
         title = ''
         if rec: title = rec.data.get('title','')
+
+        # track the access of this record
+        rec.accessed()
         
         return render_template('index.html', content=content, title=title, jsite_options=json.dumps(jsite))
 
     elif request.method == 'POST':
         if rec:
-            if rec.data.get('access','') == 'private' and current_user.is_anonymous():
+            if not rec.data.get('accessible',False) and current_user.is_anonymous():
                 abort(401)
             else:
                 rec.data = request.json
