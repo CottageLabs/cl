@@ -58,7 +58,7 @@
                         'title': window.location.pathname,
                         'content': '',
                         'comments': false,
-                        'embed': false,
+                        'embed': '',
                         'visible': false,
                         'access': true,
                         'editable': true,
@@ -415,12 +415,15 @@
             })
         }
 
-
-        // attach a selectall to the search bar, and ensure search is visible on search
-        var selectall = function(event) {
-            event.preventDefault()
-            $(this).select()
+        // scroll to anchors with offset
+        var scroller = function(event) {
+            if ( $(this).attr('href').length > 1 && $(this).attr('href').substring(0,1) == '#' ) {
+                event.preventDefault()
+                $('html,body').animate({scrollTop: $('a[name=' + $(this).attr('href').replace('#','') +  ']').offset().top - 50}, 10)
+            }
         }
+
+        // display search area whenever required, if not already available
         var searchvis = function() {
             if ( !$('#facetview').is(':visible') || $('#facetview').hasClass('onbottom') || ( $('#facetview').hasClass('onright') && $(window).width() <= 767 ) ) {
                 $('#close_facetview').remove()
@@ -445,26 +448,7 @@
 
 
         return this.each(function() {
-            
-            // track changes to screen size and pull nav search to the right when necessary
-            var screens = function () {
-                alert("HI")
-                var width = screen.width
-                if ( width <= 767 ) {
-                    $('#searchnavholder').removeClass('pull-right')
-                    alert("HI")
-                } else if ( !$('#searchnavholder').hasClass('pull-right') ) {
-                    $('#searchnavholder').addClass('pull-right')
-                }
-                setInterval(function () {
-                    if (screen.width !== width) {
-                        width = screen.width
-                        $(window).trigger('resolutionchange')
-                    }
-                }, 50)
-            }
-            $(window).bind('resolutionchange',screens)
-            
+                        
             // make the topnav sticky on scroll
             var fromtop = $('#topnav').offset().top
             $(window).scroll(function() {
@@ -496,7 +480,9 @@
 
             // bind search display
             $('.facetview_searchbox').bind('focus',searchvis)
-            $('.facetview_searchbox').bind('mouseup',selectall)
+
+            // bind anchor scroller offset fix
+            $('a').bind('click',scroller)
 
             // setup the tag cloud functionality
             options.tagkey ? buildtagcloud() : false

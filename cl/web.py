@@ -169,6 +169,9 @@ def default(path=''):
                 rec.data['content'] = c.text
             content += markdown.markdown( rec.data.get('content','') )
 
+            if not rec.data['embed'] or rec.data['embed'] == 'false':
+                rec.data['embed'] = ""
+
             if rec.data.get('embed', False):
                 if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '" width="100%" height="1000" style="border:none;"></iframe>'
