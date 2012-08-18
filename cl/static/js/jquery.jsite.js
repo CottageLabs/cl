@@ -36,7 +36,13 @@
                 $('.edit_page').parent().remove()
                 editpage()
             }
+            var pagesettingsedit = function(event) {
+                event.preventDefault()
+                editoptions()
+                $('#jtedit_space').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+            }
             $('.edit_page').bind('click',singleedit)
+            $('.edit_page_settings').bind('click',pagesettingsedit)
             $('#facetview').facetview(options.facetview)
             if ( options.data && !options.data['editable'] ) {
                 viewpage()
@@ -208,6 +214,13 @@
         // EDIT OPTION BUTTON FUNCTIONS
         var editoptions = function(record) {
         
+            // ensure that record is set
+            var passed_record = true
+            if (!record) {
+                record = options.data
+                passed_record = false
+            }
+        
             // create page settings options panel
             var metaopts = '<div id="metaopts" class="hero-unit clearfix"><button class="pagesettings close">x</button>'
             metaopts += '<div class="span5"><h2>access settings</h2>'
@@ -222,7 +235,7 @@
             metaopts += '<div class="span5"><h2>page info</h2>'
             metaopts += '<p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
                         <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
-                        <p>brief summary: <textarea class="span32 jtedit_value jtedit_excerpt"></textarea></p> \
+                        <p>brief summary: <textarea class="span3 jtedit_value jtedit_excerpt"></textarea></p> \
                         <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
             metaopts += '<h2>search display settings</h2>'
             metaopts += '<p>when showing results, display on \
@@ -241,19 +254,30 @@
             metaopts += '</div>'
             metaopts += '</div>'
             $('#article').before(metaopts)
-            $('#metaopts').hide()
 
-            $('#mainnavlist').append('<li><a class="pagesettings" href="">settings</a></li><li><a class="pagemedia" href="">media</a></li>')
-            var showopts = function(event) {
-                event.preventDefault()
-                $('#metaopts').toggle()
+            if (passed_record)
+            {
+                $('#metaopts').hide()
+                $('#mainnavlist').append('<li><a class="pagesettings" href="">settings</a></li><li><a class="pagemedia" href="">media</a></li>')
+                var showopts = function(event) {
+                    event.preventDefault()
+                    $('#metaopts').toggle()
+                }
+                var showmedia = function(event) {
+                    event.preventDefault()
+                    !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
+                }
+                $('.pagemedia').bind('click',showmedia)
+                $('.pagesettings').bind('click',showopts)
             }
-            var showmedia = function(event) {
-                event.preventDefault()
-                !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
+            else
+            {
+                var removeopts = function(event) {
+                    event.preventDefault()
+                    $('#metaopts').detach()
+                }
+                $('.pagesettings').bind('click',removeopts)
             }
-            $('.pagemedia').bind('click',showmedia)
-            $('.pagesettings').bind('click',showopts)
             
             // set pre-existing values into page settings
             options.data['editable'] ? $('.mode_page').attr('checked',true) : ""
