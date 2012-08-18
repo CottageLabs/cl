@@ -134,7 +134,7 @@
                 $('#facetview').insertAfter('#article')
                 $('#facetview').addClass('onbottom')
             }
-            record['search']['hidden'] ? $('#facetview').hide() : ""
+            record['search']['hidden'] && $.fn.facetview.options.q.length == 0 ? $('#facetview').hide() : ""
             
             // show disqus
             if ( record["comments"] && options.comments ) {

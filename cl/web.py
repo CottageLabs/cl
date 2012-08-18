@@ -200,10 +200,6 @@ def default(path=''):
                     content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + urllib.quote_plus(rec.data['embed']) + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
             # setup search display
-            if rec.data.get('search',{}).get('hidden',False):
-                jsite['facetview']['initialsearch'] = False
-            else:
-                jsite['facetview']['initialsearch'] = True
             if rec.data.get('search',{}).get('options',False):
                 jsite['facetview'].update(rec.data['search']['options'])
             if rec.data['search']['format'] == 'list':
@@ -240,10 +236,8 @@ def default(path=''):
                 abort(404)
         
         title = ''
-        if rec: title = rec.data.get('title','')
-
-        # track the access of this record
-        rec.accessed()
+        if rec:
+            title = rec.data.get('title','')
         
         return render_template('index.html', content=content, title=title, jsite_options=json.dumps(jsite))
 
