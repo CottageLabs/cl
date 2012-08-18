@@ -137,6 +137,7 @@ def default(path=''):
 
     ident = '___' + path.rstrip('/').replace('/', '___')
     if ident == '___': ident += 'index'
+    if ident.endswith('.json'): ident = ident.replace('.json','')
     comments = False
     rec = cl.dao.Record.pull(ident)
     
@@ -189,6 +190,7 @@ def default(path=''):
                 jsite['facetview']['searchwrap_end'] = '</table>'
                 jsite['facetview']['resultwrap_start'] = '<tr><td>'
                 jsite['facetview']['resultwrap_end'] = '</td></tr>'
+            if rec.data['search'].get('onlytitles',False):
                 jsite['facetview']['result_display'] = [
                     [
                         {

@@ -229,7 +229,8 @@
                 <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
                 <option value="left">left</option><option value="right">right</option></select> of the page</p> \
                 <p><input type="checkbox" class="page_options hide_search" /> hide the search result panel until the search bar is used</p> \
-                <p><input type="checkbox" class="page_options list_search" /> simplify search results to a list of result title links</p> \
+                <p><input type="checkbox" class="page_options list_search" /> display search results as list instead of panels</p> \
+                <p><input type="checkbox" class="page_options list_search_titles" /> and only show titles in list views</p> \
                 <p>show <input type="text" class="span1 page_options search_howmany" value="9" /> results per search result set</p> \
                 <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p> \
                 <p>sort search results by <select class="span2 page_options search_sort"> \
@@ -261,6 +262,7 @@
             options.data['comments'] ? $('.page_comments').attr('checked',true) : ""
             options.data['search']['hidden'] ? $('.hide_search').attr('checked',true) : ""
             options.data['search']['format'] == 'list' ? $('.list_search').attr('checked',true) : ""
+            options.data['search']['onlytitles'] ? $('.list_search_titles').attr('checked',true) : ""
             if (options.data['search']['options']['paging']) {
                 options.data['search']['options']['paging']['size'] ? $('.search_howmany').val(options.data['search']['options']['paging']['size']) : ""
             }
@@ -292,6 +294,8 @@
                     $(this).attr('checked') == 'checked' ? record['search']['hidden'] = true : record['search']['hidden'] = false
                 } else if ( $(this).hasClass('list_search') ) {
                     $(this).attr('checked') ? record['search']['format'] = 'list' : record['search']['format'] = 'panels'
+                } else if ( $(this).hasClass('list_search_titles') ) {
+                    $(this).attr('checked') ? record['search']['onlytitles'] = true : record['search']['onlytitles'] = false
                 } else if ( $(this).hasClass('search_position') ) {
                     record['search']['position'] = $(this).val()
                 } else if ( $(this).hasClass('search_howmany') ) {
