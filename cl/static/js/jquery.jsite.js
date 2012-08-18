@@ -222,7 +222,33 @@
             }
         
             // create page settings options panel
-            var metaopts = '<div id="metaopts" class="hero-unit clearfix"><button class="pagesettings close">x</button>'
+            
+            var settings = '\
+                <div id="metaopts" class="row-fluid"> \
+                    <div class="row-fluid"> \
+                        <div class="span8"><h2>Page Settings</h2></div> \
+                        <div class="span4"><button class="pagesettings close">x</button></div> \
+                    </div> \
+                    <div class="row-fluid"> \
+                        <div class="span6" id="page_info"> \
+                            <h3>page info</h3> \
+                            <div class="row-fluid"><div class="span3"><strong>navigation title:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_title" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
+                        </div> \
+                        <div class="span6" id="access_settings"> \
+                            <h3>access settings</h3> \
+                            <input type="checkbox" class="page_options access_page" /> <strong>anyone can access</strong> this page without login <br> \
+                            <input type="checkbox" class="page_options mode_page" /> <strong>editable by default</strong>, to anyone that can view it <br> \
+                            <input type="checkbox" class="page_options nav_page" /> <strong>list this page</strong> in public nav menu and search results <br> \
+                        </div> \
+                    </div> \
+                    <div id="jtedit_space"></div> \
+                </div> \
+            '
+            
+            var metaopts = '<div id="metaopts" class="clearfix"><button class="pagesettings close">x</button>'
             metaopts += '<div class="span5"><h2>access settings</h2>'
             metaopts += '<p><input type="checkbox" class="page_options access_page" /> anyone can access this page without login</p>'
             metaopts += '<p><input type="checkbox" class="page_options mode_page" /> display as editable by default, to anyone that can view it</p>'
@@ -232,11 +258,6 @@
             metaopts += '<h2><br />page comments</h2><p><input type="checkbox" class="page_options page_comments" /> enable comments on this page</p>'
             metaopts += '<h2><br />raw metadata</h2><p>Edit the raw metadata record of this page, then save changes to it if required.</p><div id="jtedit_space"></div>'
             metaopts += '</div>'
-            metaopts += '<div class="span5"><h2>page info</h2>'
-            metaopts += '<p>author: <input type="text" class="span2 jtedit_value jtedit_author" /></p> \
-                        <p>title: <input type="text" class="span3 jtedit_value jtedit_title" /></p> \
-                        <p>brief summary: <textarea class="span3 jtedit_value jtedit_excerpt"></textarea></p> \
-                        <p>tags: <input type="text" class="span3 page_options page_tags" /></p>'
             metaopts += '<h2>search display settings</h2>'
             metaopts += '<p>when showing results, display on \
                 <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
@@ -253,7 +274,8 @@
                 </select></p>'
             metaopts += '</div>'
             metaopts += '</div>'
-            $('#article').before(metaopts)
+            
+            $('#article').before(settings)
 
             if (passed_record)
             {
