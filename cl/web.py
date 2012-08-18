@@ -104,22 +104,26 @@ def query(path='Record'):
             else:
                 abort(404)
     else:
-        qs = request.query_string
         if request.method == "POST":
             if request.json:
                 qs = request.json
             else:
                 qs = dict(request.form).keys()[-1]
+        elif 'q' in request.values:
+            qs = {'query': {'query_string': { 'query': request.values['q'] }}}
         elif 'source' in request.values:
             qs = json.loads(urllib2.unquote(request.values['source']))
+        else: 
+            qs = {'query': {'match_all': {}}}
+        for item in request.values:
+            if item not in ['q','source']:
+                qs[item] = request.values[item]
+        if 'sort' not in qs and app.config['SEARCH_SORT']:
+            qs['sort'] = {app.config['SEARCH_SORT'].rstrip(app.config['FACET_FIELD']) + app.config['FACET_FIELD'] : {"order":app.config.get('SEARCH_SORT_ORDER','asc')}}
         if app.config['ANONYMOUS_SEARCH_FILTER'] and current_user.is_anonymous():
             terms = {'visible':True,'accessible':True}
         else:
             terms = ''
-        # add default sort order by created date
-        # TODO: should perhaps actually remove this and make it a config and page setting
-        if 'sort' not in qs and app.config['SEARCH_SORT']:
-            qs['sort'] = {app.config['SEARCH_SORT'].rstrip(app.config['FACET_FIELD']) + app.config['FACET_FIELD'] : {"order":app.config.get('SEARCH_SORT_ORDER','asc')}}
         resp = make_response( json.dumps(klass().query(q=qs, terms=terms)) )
     resp.mimetype = "application/json"
     return resp
