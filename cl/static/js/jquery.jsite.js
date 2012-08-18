@@ -36,13 +36,8 @@
                 $('.edit_page').parent().remove()
                 editpage()
             }
-            var pagesettingsedit = function(event) {
-                event.preventDefault()
-                editoptions()
-                $('#jtedit_space').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
-            }
             $('.edit_page').bind('click',singleedit)
-            $('.edit_page_settings').bind('click',pagesettingsedit)
+            
             $('#facetview').facetview(options.facetview)
             if ( options.data && !options.data['editable'] ) {
                 viewpage()
@@ -66,8 +61,10 @@
                         'comments': false,
                         'embed': '',
                         'visible': false,
-                        'access': true,
+                        'accessible': true,
                         'editable': true,
+                        'image': '',
+                        'excerpt': '',
                         'tags': [],
                         'search': {
                             'format':'panels',  // panels, list
@@ -87,6 +84,11 @@
             } else {
                 $('.edit_page').hide()
                 $('.edit_page').parent().next().hide()
+            }
+            
+            if (options.loggedin)
+            {
+                editoptions()
             }
         }
         
@@ -203,8 +205,12 @@
             }
 
             if ( options.loggedin ) {
-                editoptions(record)
-                $('#jtedit_space').jtedit({'data':options.data, 'makeform': false, /*'actionbuttons': false, 'jsonbutton': false,*/ 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
+                $('#mainnavlist').append('<li><a class="pagemedia" href="">media</a></li>')
+                var showmedia = function(event) {
+                    event.preventDefault()
+                    !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
+                }
+                $('.pagemedia').bind('click',showmedia)
             } else {
                 $('.content').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
             }
@@ -212,21 +218,15 @@
 
 
         // EDIT OPTION BUTTON FUNCTIONS
-        var editoptions = function(record) {
-        
-            // ensure that record is set
-            var passed_record = true
-            if (!record) {
-                record = options.data
-                passed_record = false
-            }
-        
-            // create page settings options panel
+        var editoptions = function() {
+            // for convenience
+            var record = options.data
             
-            var settings = '\
-                <div id="metaopts" class="row-fluid"> \
+            // create page settings options panel
+            var metaopts = '\
+                <div id="metaopts" class="row-fluid" style="background:#eee; padding: 5px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px"> \
                     <div class="row-fluid"> \
-                        <div class="span8"><h2>Page Settings</h2></div> \
+                        <div class="span8"><h2>page settings</h2></div> \
                         <div class="span4"><button class="pagesettings close">x</button></div> \
                     </div> \
                     <div class="row-fluid"> \
@@ -235,6 +235,7 @@
                             <div class="row-fluid"><div class="span3"><strong>navigation title:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_title" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>featured image:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
                         </div> \
                         <div class="span6" id="access_settings"> \
@@ -242,64 +243,59 @@
                             <input type="checkbox" class="page_options access_page" /> <strong>anyone can access</strong> this page without login <br> \
                             <input type="checkbox" class="page_options mode_page" /> <strong>editable by default</strong>, to anyone that can view it <br> \
                             <input type="checkbox" class="page_options nav_page" /> <strong>list this page</strong> in public nav menu and search results <br> \
+                            <input type="checkbox" class="page_options page_comments" /> <strong>page comments</strong> enabled on this page<br> \
+                            <br>\
+                            <h3>embed content</h3> \
+                            <div class="row-fluid"><div class="span2"><strong>file url:</strong></div><div class="span10"><input type="text" class="span12 page_options jtedit_value jtedit_embed" /></div></div> \
                         </div> \
                     </div> \
-                    <div id="jtedit_space"></div> \
-                </div> \
-            '
+                    <div class="row-fluid"> \
+                        <div class="row-fluid"><h3>embedded search settings</h3></div> \
+                        <div class="row-fluid"> \
+                            <div class="span6"> \
+                                <div class="row-fluid"><div class="span3"><strong>query string:</strong></div><div class="span9"><textarea class="span12 page_options search_default"></textarea></div></div> \
+                                <div class="row-fluid"><div class="span3"><strong>sort by:</strong></div><div class="span9"> \
+                                    <select class="span6 page_options search_sort"> \
+                                        <option value="">relevance</option> \
+                                        <option value="created_desc">descending created date</option> \
+                                        <option value="created_asc">ascending created date</option> \
+                                    </select></div></div> \
+                                <div class="row-fluid"><div class="span3"><strong>results per page:</strong></div><div class="span9"><input type="text" class="span2 page_options search_howmany" value="9" /></div></div> \
+                            </div> \
+                            <div class="span6"> \
+                                <div class="row-fluid"><div class="span6"><strong>page location for results:</strong></div><div class="span6"> \
+                                    <select class="span4 page_options search_position"> \
+                                        <option value="top">top</option> \
+                                        <option value="bottom">bottom</option> \
+                                        <option value="left">left</option> \
+                                        <option value="right">right</option> \
+                                    </select></div></div> \
+                                <div class="row-fluid"><div class="span6"><strong>result display format:</strong></div><div class="span6"> \
+                                    <select class="span4 page_options list_search jtedit_search_format"> \
+                                        <option value="panels">panels</option> \
+                                        <option value="list">list</option> \
+                                    </select></div></div> \
+                                <div class="row-fluid"><div class="span6"><strong>Only show titles (list view):</strong></div><div class="span6"><input type="checkbox" class="page_options list_search_titles" /></div></div> \
+                                <div class="row-fluid"><div class="span6"><strong>Hide results until search bar is used</strong></div><div class="span6"><input type="checkbox" class="page_options hide_search" /></div></div> \
+                            </div> \
+                        </div> \
+                    </div> \
+                    <div class="row-fluid"> \
+                        <h3>advanced: raw json metadata</h3> \
+                        <p>Edit the raw metadata record of this page, then save changes to it if required.</p> \
+                        <div id="jtedit_space"></div> \
+                    </div> \
+                </div>'
             
-            var metaopts = '<div id="metaopts" class="clearfix"><button class="pagesettings close">x</button>'
-            metaopts += '<div class="span5"><h2>access settings</h2>'
-            metaopts += '<p><input type="checkbox" class="page_options access_page" /> anyone can access this page without login</p>'
-            metaopts += '<p><input type="checkbox" class="page_options mode_page" /> display as editable by default, to anyone that can view it</p>'
-            metaopts += '<p><input type="checkbox" class="page_options nav_page" /> list this page in public nav menu and search results</p>'
-            metaopts += '<h2><br />embed content</h2><p>file URL: '
-            metaopts += '<input type="text" class="span4 page_options jtedit_value jtedit_embed" /></p>'
-            metaopts += '<h2><br />page comments</h2><p><input type="checkbox" class="page_options page_comments" /> enable comments on this page</p>'
-            metaopts += '<h2><br />raw metadata</h2><p>Edit the raw metadata record of this page, then save changes to it if required.</p><div id="jtedit_space"></div>'
-            metaopts += '</div>'
-            metaopts += '<h2>search display settings</h2>'
-            metaopts += '<p>when showing results, display on \
-                <select class="span1 page_options search_position"><option value="top">top</option><option value="bottom">bottom</option> \
-                <option value="left">left</option><option value="right">right</option></select> of the page</p> \
-                <p><input type="checkbox" class="page_options hide_search" /> hide the search result panel until the search bar is used</p> \
-                <p><input type="checkbox" class="page_options list_search" /> display search results as list instead of panels</p> \
-                <p><input type="checkbox" class="page_options list_search_titles" /> and only show titles in list views</p> \
-                <p>show <input type="text" class="span1 page_options search_howmany" value="9" /> results per search result set</p> \
-                <p>set a default search value of <input type="text" class="span2 page_options search_default" /> </p> \
-                <p>sort search results by <select class="span2 page_options search_sort"> \
-                    <option value=""></option> \
-                    <option value="created_desc">descending created date</option> \
-                    <option value="created_asc">ascending created date</option> \
-                </select></p>'
-            metaopts += '</div>'
-            metaopts += '</div>'
+            $('#article').before(metaopts)
+            $('#metaopts').hide()
             
-            $('#article').before(settings)
-
-            if (passed_record)
-            {
-                $('#metaopts').hide()
-                $('#mainnavlist').append('<li><a class="pagesettings" href="">settings</a></li><li><a class="pagemedia" href="">media</a></li>')
-                var showopts = function(event) {
-                    event.preventDefault()
-                    $('#metaopts').toggle()
-                }
-                var showmedia = function(event) {
-                    event.preventDefault()
-                    !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
-                }
-                $('.pagemedia').bind('click',showmedia)
-                $('.pagesettings').bind('click',showopts)
+            var showopts = function(event) {
+                event.preventDefault()
+                $('#metaopts').toggle()
             }
-            else
-            {
-                var removeopts = function(event) {
-                    event.preventDefault()
-                    $('#metaopts').detach()
-                }
-                $('.pagesettings').bind('click',removeopts)
-            }
+            
+            $('.pagesettings').bind('click',showopts)
             
             // set pre-existing values into page settings
             options.data['editable'] ? $('.mode_page').attr('checked',true) : ""
@@ -338,8 +334,8 @@
                     update_sitemap(record)
                 } else if ( $(this).hasClass('hide_search') ) {
                     $(this).attr('checked') == 'checked' ? record['search']['hidden'] = true : record['search']['hidden'] = false
-                } else if ( $(this).hasClass('list_search') ) {
-                    $(this).attr('checked') ? record['search']['format'] = 'list' : record['search']['format'] = 'panels'
+                //} else if ( $(this).hasClass('list_search') ) {
+                //    $(this).attr('checked') ? record['search']['format'] = 'list' : record['search']['format'] = 'panels'
                 } else if ( $(this).hasClass('list_search_titles') ) {
                     $(this).attr('checked') ? record['search']['onlytitles'] = true : record['search']['onlytitles'] = false
                 } else if ( $(this).hasClass('search_position') ) {
@@ -367,6 +363,14 @@
                 $.fn.jtedit.saveit()
             }
             $('.page_options').bind('change',edits)
+            
+            $('#jtedit_space').jtedit({'data':options.data, 
+                                        'makeform': false, 
+                                        /*'actionbuttons': false, 'jsonbutton': false,*/ 
+                                        'delmsg':"", 
+                                        'savemsg':"", 
+                                        "saveonupdate":true, 
+                                        "reloadonsave":""})
         }
         
         var update_sitemap = function(record) {
@@ -413,6 +417,14 @@
             $('#navsearch').val(options.tagkey+':'+tag)
             $('#navsearch').trigger('keyup')
         }
+        /*var showtags = function(data) {
+            var tags = []
+            for (var term in data.facets.tagterm.terms) {
+                var val = data.facets.tagterm.terms[term]["term"]
+                tags.push({'label':val,'value':'tags:'+val})
+            }
+            $('.facetview_searchbox').autocomplete({source:tags, minLength:0})
+        }*/
         var showtags = function(data) {
             for (var term in data.facets.tagterm.terms) {
                 var val = data.facets.tagterm.terms[term]["term"]
