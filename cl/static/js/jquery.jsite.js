@@ -439,6 +439,33 @@
             }
         }
 
+        var contactus = function(event) {
+            event.preventDefault()
+            
+            var try_again = function(event) {
+                event.preventDefault()
+                
+                var form = $(this).parent().siblings("form")
+                $(this).parent().detach()
+                form.show()
+            }
+            
+            var form = $(this).parent()
+            var message = form.children('[name="message"]').val()
+            var email = form.children('[name="email"]').val()
+            var action = form.attr("action")
+            $.post(action, {"message" : message, "email" : email})
+                .success(function() {
+                    form.hide()
+                    form.parent().prepend('<div class="alert alert-success" style="text-align:left;">thanks for your message! we\'ll get back to you as soon as we can</div>')
+                })
+                .error(function() {
+                    form.hide()
+                    form.parent().prepend('<div class="alert alert-error" style="text-align:left;">oops! something went wrong sending your message; please <a href="/contact" id="contact_try_again">try again</a></div>') 
+                    $('#contact_try_again').bind('click', try_again)
+                })
+        }
+
         // prep showdown for displays
         var converter = false
         options['jspagecontent'] ? converter = new Showdown.converter() : ""
@@ -503,6 +530,9 @@
 
             // bind the twitter display if twitter account provided
             options.twitter ? tweets() : false
+            
+            // add the contact us form handler
+            $('#submit_contact').bind('click', contactus)
             
             // get going. for now it is assumed that the record is provided in the options. but could pull from a source, similar to jtedit
             makepage()
