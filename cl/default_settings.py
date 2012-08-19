@@ -42,7 +42,7 @@ JSITE_OPTIONS = {
         "search_index": 'elasticsearch',
         "searchbox_class": '.facetview_searchbox',
         "embedded_search": False,
-        "initialsearch": False,
+        "initialsearch": True,
         "display_images": False,
         "result_display": [
             [

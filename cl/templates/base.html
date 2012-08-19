@@ -82,7 +82,7 @@
 
 <div id="main" class="container"> 
 
-    <div id="topstrap" class="page-header hidden-phone hidden-tablet">
+    <div id="topstrap" class="page-header visible-desktop">
         <h1><a href="/" style="color:#333;">cottage labs</a>
             <small><br />we don't sell products, we trade our skills<!--<br />we do open source software development--></small>
         </h1>
@@ -99,6 +99,7 @@
                 <div id="tagcloud" class="hidden-phone">
                     <p></p>
                 </div>
+                <h3 class="hidden-desktop" style="padding:5px;"><a href="/">Cottage Labs</a></h3>
                 <div class="nav-collapse">
                     <ul id="mainnavlist" class="nav">
                         {% include 'sitemap/sitenav.html' %}
@@ -124,16 +125,12 @@
                         {% endif %}
                     </ul>
                 </div>
-                <div class="hidden-desktop" style="color:#c9d2d4;font-weight:bold;">
-                Cottage Labs &nbsp;
-                </div>
                 <ul id="searchnavholder" class="nav pull-right" style="margin-right:10px;">
-                    <li><img class="notify_loading" src="/static/loading.gif" /></li>
-                    <li>
-                        <form class="navbar-search" id="topsearch" name="topsearch" action="" method="GET">
-                        <i class="icon-search icon-white" style="margin-top:5px;"></i>
+                    <li><img class="visible-desktop notify_loading" src="/static/loading.gif" /></li>
+                    <li style="padding-top:6px;">
+                        <i class="visible-desktop icon-search icon-white" style="margin-top:5px;"></i>
+                        <span class="hidden-desktop"style="padding:5px; color:#c9d2d4; float:left;">search through our stuff: </span>
                         <input id="navsearch" class="search-query facetview_searchbox" type="text" name="q" placeholder="search everything" />
-                        </form>
                     </li>
                 </ul>
             </div>
