@@ -56,7 +56,7 @@
                     options.data = {
                         'id': tid,
                         'url': window.location.pathname,
-                        'title': window.location.pathname,
+                        'title': window.location.pathname.split("/").pop(),
                         'content': '',
                         'comments': false,
                         'embed': '',
