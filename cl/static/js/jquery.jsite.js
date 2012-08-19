@@ -542,21 +542,23 @@
 
         return this.each(function() {
                         
-            // make the topnav sticky on scroll
-            var fromtop = ''
-            $(window).scroll(function() {
-		        if ( $(window).scrollTop() > $('#topnav').offset().top && $('#topnav').hasClass('navbar-in-page') ) {
-		            fromtop = $('#topnav').offset().top
-                    $('#topnav').removeClass('navbar-in-page')
-                    $('#topnav').addClass('navbar-fixed-top')
-                    $('body').css({'padding-top':'40px'})
-                }
-                if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
-                    $('#topnav').removeClass('navbar-fixed-top')
-                    $('#topnav').addClass('navbar-in-page')
-                    $('body').css({'padding-top':'0px'})
-                }
-            })
+            // make the topnav sticky on scroll if on big screen
+            if ( $(window).width() > 797 ) {
+                var fromtop = ''
+                $(window).scroll(function() {
+		            if ( $(window).scrollTop() > $('#topnav').offset().top && $('#topnav').hasClass('navbar-in-page') ) {
+		                fromtop = $('#topnav').offset().top
+                        $('#topnav').removeClass('navbar-in-page')
+                        $('#topnav').addClass('navbar-fixed-top')
+                        $('body').css({'padding-top':'40px'})
+                    }
+                    if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
+                        $('#topnav').removeClass('navbar-fixed-top')
+                        $('#topnav').addClass('navbar-in-page')
+                        $('body').css({'padding-top':'0px'})
+                    }
+                })
+            }
 
             // bind new page creation to new page button
             var newpage = function(event) {
