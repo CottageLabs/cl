@@ -83,11 +83,11 @@ body > .container{
     position:relative;
     margin:0;
 }
-
 .navbar-inner{
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+    padding-left:0;
 }
 .navbar-search .search-query:focus, .navbar-search .search-query.focused {
     background-color:#eee;

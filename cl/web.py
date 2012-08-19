@@ -114,7 +114,7 @@ def query(path='Record'):
         elif 'source' in request.values:
             qs = json.loads(urllib2.unquote(request.values['source']))
         else: 
-            qs = {'query': {'match_all': {}}}
+            qs = ''
         for item in request.values:
             if item not in ['q','source']:
                 qs[item] = request.values[item]

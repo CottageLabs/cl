@@ -42,7 +42,7 @@ JSITE_OPTIONS = {
         "search_index": 'elasticsearch',
         "searchbox_class": '.facetview_searchbox',
         "embedded_search": False,
-        "initialsearch": True,
+        "initialsearch": False,
         "display_images": False,
         "result_display": [
             [
@@ -92,7 +92,6 @@ JSITE_OPTIONS = {
     "tagkey": "tags",
     "comments": "cottagelabs",
     "twitter": "cottagelabs",
-    "bannerheight": "245px",
     "editable": True,
     "richtextedit": False,
     "jspagecontent": False

@@ -159,7 +159,7 @@ class DomainObject(UserDict.IterableUserDict):
             query = q
         elif q:
             query = {'query': {'query_string': { 'query': q }}}
-        else: 
+        else:
             query = {'query': {'match_all': {}}}
 
         if facets:

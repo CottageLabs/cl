@@ -421,22 +421,22 @@
             $('#navsearch').val(options.tagkey+':'+tag)
             $('#navsearch').trigger('keyup')
         }
-        /*var showtags = function(data) {
+        var showtags = function(data) {
             var tags = []
             for (var term in data.facets.tagterm.terms) {
                 var val = data.facets.tagterm.terms[term]["term"]
                 tags.push({'label':val,'value':'tags:'+val})
             }
             $('.facetview_searchbox').autocomplete({source:tags, minLength:0})
-        }*/
-        var showtags = function(data) {
+        }
+        /*var showtags = function(data) {
             for (var term in data.facets.tagterm.terms) {
                 var val = data.facets.tagterm.terms[term]["term"]
                 var termlink = '<a class="tagsearch" href="?q=' + val + '">' + val + '</a> '
                 $('#tagcloud > p').append(termlink)
             }
             $('.tagsearch').bind('click',dotagsearch)
-        }
+        }*/
         var buildtagcloud = function() {
             var query = {
                 "query":{
@@ -459,8 +459,8 @@
                 dataType: options.datatype,
                 success: showtags
             })
-            jQuery('#navsearch').bind('focus',tagcloud)
-            jQuery('#navsearch').bind('blur',detagcloud)
+            //jQuery('#navsearch').bind('focus',tagcloud)
+            //jQuery('#navsearch').bind('blur',detagcloud)
         }
 
 
@@ -543,19 +543,16 @@
         return this.each(function() {
                         
             // make the topnav sticky on scroll
-            var fromtop = $('#topnav').offset().top
+            var fromtop = ''
             $(window).scroll(function() {
-		        if ( $(window).scrollTop() > fromtop && $('#topnav').hasClass('navbar-in-page') ) {
-                    $('#topstrap').css({height:options.bannerheight})
-                    $('#tagcloud').css({height:'0px'})
+		        if ( $(window).scrollTop() > $('#topnav').offset().top && $('#topnav').hasClass('navbar-in-page') ) {
+		            fromtop = $('#topnav').offset().top
                     $('#topnav').removeClass('navbar-in-page')
                     $('#topnav').addClass('navbar-fixed-top')
-                    $('#mainnavlist').parent().addClass('navbar-top-pad')
                     $('body').css({'padding-top':'40px'})
                 }
                 if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
                     $('#topnav').removeClass('navbar-fixed-top')
-                    $('#mainnavlist').parent().removeClass('navbar-top-pad')
                     $('#topnav').addClass('navbar-in-page')
                     $('body').css({'padding-top':'0px'})
                 }
