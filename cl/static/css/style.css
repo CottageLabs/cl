@@ -1,6 +1,3 @@
-/**********************************************
-  *   Generic Mods to Bootstrap
-  *********************************************/
 
 html, body {
     font-family: 'Open Sans', sans-serif;
@@ -52,6 +49,30 @@ body > .container{
     box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
 
+.cl_feature_box{
+    height:100px;
+    text-align:justify;
+}
+.cl_feature_title{
+    font-family:impact;
+    font-weight:normal;
+    text-align:justify;
+    margin-bottom:10px;
+    line-height:0.6em;
+    font-size:24px;
+    color:#999;
+}
+.cl_feature_text{
+    height:100px;
+    text-align:justify;
+}
+.cl_feature_content{
+    text-align:justify;
+}
+.cl_feature_link{
+    margin-bottom:10px;
+}
+
 #absolute_media_gallery{
     position:fixed;
     width:400px;
@@ -61,6 +82,7 @@ body > .container{
     border-left:1px solid #ccc;
     background-color:#333;
     padding:50px 10px 100px 20px;
+    z-index:10;
 }
 
 #topstrap {

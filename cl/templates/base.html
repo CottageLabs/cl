@@ -18,6 +18,8 @@
     
     <title>cottage labs{% if title %} | {{ title }}{% endif %}</title>
 
+    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
+
     <!--[if lt IE 9]>
     <script src="html5.js" type="text/javascript"></script>
     <![endif]-->
@@ -29,7 +31,6 @@
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/bootstrap/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/tweet/jquery.tweet.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/facetview/css/facetview.css" />
-    <!--<link rel="stylesheet" type="text/css" media="all" href="/static/vendor/facetview/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.css" />-->
 
     <script type="text/javascript" src="/static/vendor/jquery-1.7.1.min.js"></script>
     
@@ -43,23 +44,14 @@
     <script type="text/javascript" src="/static/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.min.js"></script>
 
     <script type="text/javascript" src="/static/vendor/facetview/vendor/linkify/1.0/jquery.linkify-1.0-min.js"></script>
-    <!--<script type="text/javascript" src="/static/vendor/facetview/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.min.js"></script>-->
-    <!--<script type="text/javascript" src="/static/vendor/facetview/vendor/d3/d3.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/facetview/vendor/d3/d3.min.js"></script>
     <script type="text/javascript" src="/static/vendor/facetview/vendor/d3/d3.geom.min.js?2.1.3"></script>
-    <script type="text/javascript" src="/static/vendor/facetview/vendor/d3/d3.layout.min.js?2.1.3"></script>-->
+    <script type="text/javascript" src="/static/vendor/facetview/vendor/d3/d3.layout.min.js?2.1.3"></script>
     <script type="text/javascript" src="/static/vendor/facetview/jquery.facetview.js"></script>
 
     <script type="text/javascript" src="/static/vendor/jtedit/vendor/jquery.autoResize.js"></script>
     <script type="text/javascript" src="/static/vendor/jtedit/jquery.jtedit.js"></script>
-
-    <!--<script type="text/javascript" src="/static/vendor/showdown.js"></script>-->
-
-    <!--<script type="text/javascript" src="/static/vendor/share/bcsocket.js"></script>
-    <script type="text/javascript" src="/static/vendor/share/share.js"></script>
-    <script type="text/javascript" src="/static/vendor/share/textarea.js"></script>-->
-
-    <!--<script type="text/javascript" src="/static/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>-->
-
+    
     <link rel="stylesheet" href="/static/vendor/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css">
 
     <script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
@@ -72,10 +64,39 @@
 
     <script type="text/javascript" src="/static/js/jquery.jsite.js"></script>
 
+    <script type="text/javascript" src="/static/vendor/jquery.textfill.js"></script>
+
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            jQuery('body').jsite({{ jsite_options|safe }})
-        })
+            var cl_feature_titles = function(event) {
+                var settings = {
+                    maxFontPixels: 60,
+                    minFontPixels: 28,
+                    innerTag: 'span',
+                    widthOnly: false,
+                    callback: null,
+                    complete: null,
+                    explicitWidth: null,
+                    explicitHeight: null
+                };
+                $('.cl_feature_box').textfill(settings);
+                settings.minFontPixels = 16;
+                $('.cl_feature_text').textfill(settings);
+                $('.cl_feature_title:odd').css("color","#ed1c24");
+                $('.row-fluid .feature_span:nth-child(4n+1)').css("margin-left",0);
+            };
+            var opts = {{ jsite_options|safe }};
+            opts.facetview.post_search_callback = cl_feature_titles;
+            $('body').jsite(opts);
+            
+            var dosearch = function(event) {
+                event.preventDefault();
+                if ( event.keyCode == 13 ) {
+                    window.location = '/search?q=' + $(this).val();
+                };
+            };
+            $('#navsearch').bind('keyup',dosearch);
+        });
     </script>
 
 </head>
@@ -98,9 +119,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <div id="tagcloud" class="hidden-phone">
-                    <p></p>
-                </div>
                 <h3 class="hidden-desktop" style="padding:5px;"><a href="/">cottage labs</a></h3>
                 <div class="nav-collapse">
                     <ul id="mainnavlist" class="nav">
@@ -132,7 +150,10 @@
                     <li style="padding-top:6px;">
                         <i class="visible-desktop icon-search icon-white" style="margin-top:5px;"></i>
                         <span class="hidden-desktop"style="padding:5px; color:#c9d2d4; float:left;">search through our stuff: </span>
-                        <input id="navsearch" class="search-query facetview_searchbox" type="text" name="q" placeholder="search everything" />
+                        <input id="navsearch" class="search-query{% if search %} facetview_searchbox{% endif %}" type="text" name="q" placeholder="search everything" />
+                        {% if not search %}
+                        <input style="display:none;" class="facetview_searchbox" type="text" name="q" />
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -217,14 +238,12 @@
             <span class='st_linkedin_large' displayText='LinkedIn'></span>
             <span class='st_email_large' displayText='Email'></span>
 
-            <hr class="embossed" />
-
+            <div class="well" style="margin-top:20px;">
             <ul class="nav nav-list">
             {% include 'sitemap/sitenav.html' %}
             </ul>
+            </div>
             
-            <hr class="embossed" />
-
             <p>We don't sell products, we trade our skills</p>
             <p>Cottage Labs does open source software development, consultancy, reporting and analysis for the higher education and research community</p>
             <p>Cottage Labs is a limited liability partnership, registered in Scotland with the number SO303454</p>

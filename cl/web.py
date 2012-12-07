@@ -116,7 +116,7 @@ def query(path='Record'):
         else: 
             qs = ''
         for item in request.values:
-            if item not in ['q','source']:
+            if item not in ['q','source','callback','_'] and isinstance(qs,dict):
                 qs[item] = request.values[item]
         if 'sort' not in qs and app.config['SEARCH_SORT']:
             qs['sort'] = {app.config['SEARCH_SORT'].rstrip(app.config['FACET_FIELD']) + app.config['FACET_FIELD'] : {"order":app.config.get('SEARCH_SORT_ORDER','asc')}}
@@ -128,7 +128,29 @@ def query(path='Record'):
     resp.mimetype = "application/json"
     return resp
         
-        
+
+@app.route('/deduplicate', methods=['GET', 'POST'])
+def deduplicate(path='',duplicates=[],target='/'):
+    if current_user.is_anonymous():
+        abort(401)
+    elif request.method == 'GET':
+        jsitem = deepcopy(app.config['JSITE_OPTIONS'])
+        jsitem['facetview']['initialsearch'] = False
+        return render_template('deduplicate.html', jsite_options=json.dumps(jsitem), duplicates=duplicates, url=target)
+    elif request.method == 'POST':
+        # update the submittede record
+        #try:
+        for k,v in request.values.items():
+            if v and v not in ['url', 'submit']:
+                rec = cl.dao.Record.pull(k)
+                rec.data['url'] = v
+                rec.save()
+        if 'url' in request.values: target = request.values['url']
+        return redirect(target)
+        #except:
+        #    abort(404)
+
+
 # this is a catch-all that allows us to present everything as a search
 @app.route('/', methods=['GET','POST','DELETE'])
 @app.route('/<path:path>', methods=['GET','POST','DELETE'])
@@ -139,20 +161,27 @@ def default(path=''):
     else:
         jsite['loggedin'] = True
 
-    ident = '___' + path.rstrip('/').replace('/', '___')
-    if ident == '___': ident += 'index'
-    if ident.endswith('.json'): ident = ident.replace('.json','')
-    comments = False
-    rec = cl.dao.Record.pull(ident)
-    
+    url = '/' + path.lstrip('/').rstrip('/')
+    if url == '/': url += 'index'
+    if url.endswith('.json'): url = url.replace('.json','')
+    rec = cl.dao.Record.pull_by_url(url)
+        
     # TODO: this catch is here just to test for old URLs from old site.
     # THIS SHOULD BE REMOVED EVENTUALLY, AND NOT USED ANYWHERE ELSE
-    if not rec and len(ident.split('___')) == 2:
-        rec = cl.dao.Record.pull('___news' + ident)
+    if not rec and len(url.split('/')) == 1:
+        rec = cl.dao.Record.pull_by_url('/news/' + url)
         if rec:
             return redirect(rec['url'])
-    if not rec and path.startswith('author'):
-        return redirect( path.replace('author','people') )
+    if not rec and url.startswith('author'):
+        return redirect( url.replace('author','people') )
+
+    # if no record returned by URL check if it is a duplicate
+    if not rec:
+        duplicates = cl.dao.Record.check_duplicate(url)
+        if duplicates and not current_user.is_anonymous():
+            return deduplicate(path,duplicates,url)
+        elif duplicates:
+            abort(404)
 
     if request.method == 'GET':
         if util.request_wants_json():
@@ -172,20 +201,11 @@ def default(path=''):
 
             # update content from collaborative pad
             if jsite['collaborative'] and not rec.get('decoupled',False):
-                c = requests.get('http://pads.cottagelabs.com/p/' + rec.id[0:50] + '/export/txt')
-                rec.data['content'] = c.text
-                rec.save()
+                c = requests.get('http://pads.cottagelabs.com/p/' + rec.id + '/export/txt')
+                if rec.data.get('content',False) != c.text:
+                    rec.data['content'] = c.text
+                    rec.save()
             content += markdown.markdown( rec.data.get('content','') )
-
-            # make sure there is a featured image
-            if rec.data.get('image',app.config['PLACEHOLDER_IMAGE']) == app.config['PLACEHOLDER_IMAGE']:
-                regex = r'(http:\/\/\S+?\.(jpg|png|gif|jpeg))'
-                res = re.findall(regex, rec.data['content'])
-                if res:
-                    rec.data['image'] = res[0]
-                else:
-                    rec.data['image'] = app.config['PLACEHOLDER_IMAGE']
-                rec.save()
 
             # this is a temporary catch from index errors - to be removed
             if not rec.data['embed'] or rec.data['embed'] == 'false':
@@ -202,6 +222,34 @@ def default(path=''):
             # setup search display
             if rec.data.get('search',{}).get('options',False):
                 jsite['facetview'].update(rec.data['search']['options'])
+            if rec.data['search']['format'] == 'features':
+                jsite['facetview']['result_display'] = [
+                    [
+                        {
+                            "pre": '<div class="cl_feature_box"><span class="cl_feature_title">',
+                            "field": "title",
+                            "post": "</span></div>"
+                        }
+                    ],
+                    [
+                        {
+                            "pre": '<div class="cl_feature_text"><span class="cl_feature_content">',
+                            "field": "excerpt",
+                            "post": '</span></div>'
+                        }
+                    ],
+                    [
+                        {
+                            "pre": '<div class="cl_feature_link"><a href="',
+                            "field": "url",
+                            "post": '">read more &raquo;</a></div>'
+                        }
+                    ]
+                ]
+                jsite['facetview']['searchwrap_start'] = '<div class="row-fluid"><div class="well" style="margin-top:20px;"><div id="facetview_results" class="clearfix">'
+                jsite['facetview']['searchwrap_end'] = '</div></div></div>'
+                jsite['facetview']['resultwrap_start'] = '<div class="span3 feature_span">'
+                jsite['facetview']['resultwrap_end'] = '</div>'
             if rec.data['search']['format'] == 'list':
                 jsite['facetview']['searchwrap_start'] = '<table id="facetview_results" class="table table-bordered table-striped table-condensed">'
                 jsite['facetview']['searchwrap_end'] = '</table>'
@@ -229,17 +277,46 @@ def default(path=''):
         elif rec:
             jsite['data'] = rec.data
 
-        else:
+        elif current_user.is_anonymous():
             # TODO: trigger a search for alternative content if not logged in
-            jsite['data'] = False
-            if current_user.is_anonymous():
-                abort(404)
+            abort(404)
+        else:
+            # create a new record for a new page here
+            newrecord = {
+                'id': cl.dao.makeid(),
+                'url': url,
+                'title': url.split('/')[-1],
+                'author': current_user.id,
+                'content': '',
+                'comments': False,
+                'embed': '',
+                'visible': False,
+                'accessible': True,
+                'editable': True,
+                'image': '',
+                'excerpt': '',
+                'tags': [],
+                'search': {
+                    'format':'panels',
+                    'position':'hidden',
+                    'options': {}
+                }
+            }
+            rec = cl.dao.Record(**newrecord)
+            rec.save()
+            jsite['newrecord'] = True
+            jsite['data'] = newrecord
+                
         
         title = ''
         if rec:
             title = rec.data.get('title','')
         
-        return render_template('index.html', content=content, title=title, jsite_options=json.dumps(jsite))
+        search = False
+        if url == '/search':
+            search = True
+
+        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite))
 
     elif request.method == 'POST':
         if rec:
@@ -252,7 +329,6 @@ def default(path=''):
                 abort(401)
             else:
                 newrec = request.json
-                newrec['id'] = ident
                 rec = cl.dao.Record(**newrec)
         rec.save()
         resp = make_response( rec.json )
@@ -263,8 +339,6 @@ def default(path=''):
         if current_user.is_anonymous():
             abort(401)
         try:
-            # TODO: need to add a remove from sitemap/nav etc if listed
-            # maybe this should be in the delete method of a record
             rec.delete()
             flash('you killed it! sad face...')
             return redirect('/')

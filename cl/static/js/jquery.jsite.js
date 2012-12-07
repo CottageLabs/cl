@@ -20,75 +20,44 @@
         // READY THE DEFAULTS
 
         // specify the defaults - currently pushed from Flask settings
-        var defaults = {}
+        var defaults = {};
 
         // and add in any overrides from the call
-        $.fn.jsite.options = $.extend(defaults,options)
-        var options = $.fn.jsite.options
+        $.fn.jsite.options = $.extend(defaults,options);
+        var options = $.fn.jsite.options;
         
-
+        
 //------------------------------------------------------------------------------
-        // BUILD THE PAGE CONTENT SECTION
+        // BUILD THE PAGE DEPENDING ON SETTINGS AND PERMISSIONS
         var makepage = function() {
+            options.loggedin ? editoptions() : "";
             var singleedit = function(event) {
-                event.preventDefault()
-                $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>')
-                $('.edit_page').parent().remove()
-                editpage()
-            }
-            $('.edit_page').bind('click',singleedit)
+                event.preventDefault();
+                editpage();
+            };
+            $('.edit_page').bind('click',singleedit);
             
-            $('#facetview').facetview(options.facetview)
-            if ( options.data && !options.data['editable'] ) {
-                viewpage()
+            $('#facetview').facetview(options.facetview);
+            if ( !options.newrecord && !options.data['editable'] ) {
+                viewpage();
             } else if ( options.editable ) {
-                if ( !options.data && options.loggedin ) {
+                if ( options.newrecord && options.loggedin ) {
                     var nothere = '<div class="alert alert-info"> \
                         <button class="close" data-dismiss="alert">x</button> \
                         <p><strong>There is no page here yet - create one.</strong></p> \
-                        <p><strong>NOTE</strong>: creating a page does not list it in the site navigation. However, once created, you can add it using the <strong>list</strong> option above.</p> \
-                        <p><strong>PLUS</strong>: a page is editable by default, which means it is displayed to anyone that can access it as editable (although only logged in users have access to the page setting buttons). Use the <strong>edit</strong> option if you want to change this to appearing as only viewable to non-logged in users whilst remaining as editable to those that are logged in, or select viewable to default to viewable for anyone (in this case, logged in users can still access the edit version from the <strong>options</strong> menu).</p> \
-                        <p><strong>ALSO</strong>: pages are public by default, whether editable or not; even though they may not be listed on the navigation, anyone with the URL can access them. Once you have created your page, you can change the page to <strong>private</strong> if necessary, in which case only logged in users will be able to view it.</p>'
-                    options.collaborative ? nothere += '<p>You can also share this page with others to collaboratively edit online.</p></div>' : nothere += '</div>'
-                    $('.alert-messages').prepend(nothere)
-                    var tid = window.location.pathname.replace(/\//g,'___')
-                    tid == '___' ? tid += 'index' : ""
-                    options.data = {
-                        'id': tid,
-                        'url': window.location.pathname,
-                        'title': window.location.pathname.split("/").pop(),
-                        'content': '',
-                        'comments': false,
-                        'embed': '',
-                        'visible': false,
-                        'accessible': true,
-                        'editable': true,
-                        'image': '',
-                        'excerpt': '',
-                        'tags': [],
-                        'search': {
-                            'format':'panels',  // panels, list
-                            'hidden': true,
-                            'position':'top',   // top, bottom, left, right
-                            'options': {}       // like facetview options
-                        }
-                    }
-                    $('.edit_page').parent().next().remove()
-                    $('.edit_page').parent().remove()
-                    editpage()
-                } else if ( options.data && options.data['editable'] && options.loggedin ) {
-                    $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>')
-                    $('.edit_page').parent().remove()
-                    editpage()
+                        <p><strong>NOTE</strong>: creating a page does not list it in the site navigation.</p> \
+                        <p><strong>PLUS</strong>: You need to set some settings for new pages first...</p>';
+                    $('.alert-messages').prepend(nothere);
+                    $('.edit_page').parent().next().remove();
+                    $('.edit_page').parent().remove();
+                    showopts();
+                    editpage();
+                } else if ( !options.newrecord && options.data['editable'] && options.loggedin ) {
+                    editpage();
                 }
             } else {
-                $('.edit_page').hide()
-                $('.edit_page').parent().next().hide()
-            }
-            
-            if (options.loggedin)
-            {
-                editoptions()
+                $('.edit_page').hide();
+                $('.edit_page').parent().next().hide();
             }
         }
         
@@ -133,8 +102,9 @@
             } else if ( record["search"]["position"] == "bottom" ) {
                 $('#facetview').insertAfter('#article')
                 $('#facetview').addClass('onbottom')
+            } else if ( record["search"]["position"] == "hidden" ) {
+                $('#facetview').hide()
             }
-            record['search']['hidden'] && $.fn.facetview.options.q.length == 0 ? $('#facetview').hide() : ""
             
             // show disqus
             if ( record["comments"] && options.comments ) {
@@ -157,39 +127,39 @@
             event ? event.preventDefault() : ""
             var record = options.data
         
+            $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>');
+            $('.edit_page').parent().remove();
             $('#facetview').hide()
             $('#topstrap').hide()
+            $('#bottom').hide()
             $('#article').html("")
                                     
-            var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"><textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."></textarea></div></div>'
-            $('#article').append(editor)
-
-            if ( options.richtextedit ) {
-	            $('textarea.tinymce').tinymce({
-		            script_url : '/static/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js',
-		            theme : "advanced",
-		            plugins : "autolink,lists,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,fullscreen,noneditable,nonbreaking,xhtmlxtras,advlist",
-		            theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,styleprops",
-		            theme_advanced_buttons2 : "undo,redo,|,cut,copy,paste,|,search,replace,|,hr,link,unlink,anchor,image,charmap,media,table,|,insertlayer,moveforward,movebackward,absolute,|,cleanup,code,help,visualaid,fullscreen",
-		            theme_advanced_toolbar_location : "top",
-		            theme_advanced_toolbar_align : "left",
-		            theme_advanced_statusbar_location : "bottom",
-		            theme_advanced_resizing : true,
-
-	            })
-	        }
-
-            // update with any values already present in record
             // if collaborative edit is on, get the content from etherpad
             if ( options.collaborative ) {
-                $('#form_content').unbind()
-                $('#form_content').hide()
                 $('#article').hide()
-                var collab_edit = '<div class="container"><div id="collab_edit" class="content"></div></div>'
-                $('#main').after(collab_edit)
-                $('#collab_edit').css({'padding':0})
+                $('hr').hide()
+                $('#main').css({
+                    'position':'absolute',
+                    'z-index':1000,
+                    'width':'100%'
+                })
+                $('body > .container > .content').css({
+                    'padding-top':0,
+                    'padding-bottom':0,
+                })
+                var collab_edit = '<div id="collab_edit"></div>'
+                $('body').append(collab_edit)
+                $('#collab_edit').css({
+                    'padding':0,
+                    'margin':'40px 0 0 0',
+                    'position':'absolute',
+                    'top':0,
+                    'left':0,
+                    'width':'100%',
+                    'z-index':2
+                })
                 $('#collab_edit').pad({
-                  'padId'             : record.id.substring(0,50),
+                  'padId'             : record.id,
                   'host'              : 'http://pads.cottagelabs.com',
                   'baseUrl'           : '/p/',
                   'showControls'      : true,
@@ -199,11 +169,31 @@
                   'useMonospaceFont'  : false,
                   'noColors'          : false,
                   'hideQRCode'        : false,
-                  'height'            : 800,
-                  //'border'            : 0,
+                  'height'            : '100%',
+                  'border'            : 0,
                   'borderStyle'       : 'solid'
                 })
+                $('#collab_edit').height( $(window).height() - 44 )
             } else {
+                var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"> \
+                    <textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" \
+                    style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."> \
+                    </textarea></div></div>'
+                $('#article').append(editor)
+                if ( options.richtextedit ) {
+	                $('textarea.tinymce').tinymce({
+		                script_url : '/static/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js',
+		                theme : "advanced",
+		                plugins : "autolink,lists,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,fullscreen,noneditable,nonbreaking,xhtmlxtras,advlist",
+		                theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,styleprops",
+		                theme_advanced_buttons2 : "undo,redo,|,cut,copy,paste,|,search,replace,|,hr,link,unlink,anchor,image,charmap,media,table,|,insertlayer,moveforward,movebackward,absolute,|,cleanup,code,help,visualaid,fullscreen",
+		                theme_advanced_toolbar_location : "top",
+		                theme_advanced_toolbar_align : "left",
+		                theme_advanced_statusbar_location : "bottom",
+		                theme_advanced_resizing : true,
+
+	                })
+	            }
                 $('#form_content').val(record['content'])
             }
 
@@ -214,38 +204,43 @@
                     !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
                 }
                 $('.pagemedia').bind('click',showmedia)
-            } else {
-                $('.content').jtedit({'data':options.data, 'makeform': false, 'actionbuttons': false, 'jsonbutton': false, 'delmsg':"", 'savemsg':"", "saveonupdate":true, "reloadonsave":""})
             }
         }
 
 
         // EDIT OPTION BUTTON FUNCTIONS
+        var showopts = function(event) {
+            event ? event.preventDefault() : ""
+            $('#metaopts').toggle()
+        }
         var editoptions = function() {
+            $('#metaopts').remove()
+            
             // for convenience
             var record = options.data
             
             // create page settings options panel
             var metaopts = '\
-                <div id="metaopts" class="row-fluid" style="background:#eee; padding: 5px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin-bottom:10px;"> \
+                <div id="metaopts" class="row-fluid" style="background:#eee; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin-bottom:10px;"> \
                     <div class="row-fluid"> \
-                        <div class="span8"><h2>page settings</h2></div> \
-                        <div class="span4"><button class="pagesettings close">x</button></div> \
+                        <div class="span8" style="padding:5px;"><h2>page settings</h2></div> \
+                        <div class="span4" style="padding:5px;"><button class="pagesettings close">x</button></div> \
                     </div> \
                     <div class="row-fluid"> \
-                        <div class="span6" id="page_info"> \
+                        <div class="span6" id="page_info" style="padding:5px;"> \
                             <h3>page info</h3> \
                             <div class="row-fluid"><div class="span3"><strong>navigation title:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_title" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>page address:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_url" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>featured image:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
                         </div> \
-                        <div class="span6" id="access_settings"> \
+                        <div class="span6" id="access_settings" style="padding:5px;"> \
                             <h3>access settings</h3> \
                             <input type="checkbox" class="page_options access_page" /> <strong>anyone can access</strong> this page without login <br> \
                             <input type="checkbox" class="page_options mode_page" /> <strong>editable by default</strong>, to anyone that can view it <br> \
-                            <input type="checkbox" class="page_options nav_page" /> <strong>list this page</strong> in public nav menu and search results <br> \
+                            <input type="checkbox" class="page_options nav_page" /> <strong>list this page</strong> in public search results <br> \
                             <input type="checkbox" class="page_options page_comments" /> <strong>page comments</strong> enabled on this page<br> \
                             <br>\
                             <h3>embed content</h3> \
@@ -253,9 +248,9 @@
                         </div> \
                     </div> \
                     <div class="row-fluid"> \
-                        <div class="row-fluid"><h3>embedded search settings</h3></div> \
+                        <div class="row-fluid" style="padding:5px;"><h3>embedded search settings</h3></div> \
                         <div class="row-fluid"> \
-                            <div class="span6"> \
+                            <div class="span6" style="padding:5px;"> \
                                 <div class="row-fluid"><div class="span3"><strong>query string:</strong></div><div class="span9"><textarea class="span12 page_options search_default"></textarea></div></div> \
                                 <div class="row-fluid"><div class="span3"><strong>sort by:</strong></div><div class="span9"> \
                                     <select class="span6 page_options search_sort"> \
@@ -265,25 +260,26 @@
                                     </select></div></div> \
                                 <div class="row-fluid"><div class="span3"><strong>results per page:</strong></div><div class="span9"><input type="text" class="span2 page_options search_howmany" value="9" /></div></div> \
                             </div> \
-                            <div class="span6"> \
+                            <div class="span6" style="padding:5px;"> \
                                 <div class="row-fluid"><div class="span6"><strong>page location for results:</strong></div><div class="span6"> \
                                     <select class="span4 page_options search_position"> \
+                                        <option value="hidden">hidden</option> \
                                         <option value="top">top</option> \
                                         <option value="bottom">bottom</option> \
                                         <option value="left">left</option> \
                                         <option value="right">right</option> \
                                     </select></div></div> \
                                 <div class="row-fluid"><div class="span6"><strong>result display format:</strong></div><div class="span6"> \
-                                    <select class="span4 page_options list_search jtedit_search_format"> \
+                                    <select class="span4 page_options list_search"> \
                                         <option value="panels">panels</option> \
+                                        <option value="features">features</option> \
                                         <option value="list">list</option> \
                                     </select></div></div> \
                                 <div class="row-fluid"><div class="span6"><strong>Only show titles (list view):</strong></div><div class="span6"><input type="checkbox" class="page_options list_search_titles" /></div></div> \
-                                <div class="row-fluid"><div class="span6"><strong>Hide results until search bar is used</strong></div><div class="span6"><input type="checkbox" class="page_options hide_search" /></div></div> \
                             </div> \
                         </div> \
                     </div> \
-                    <div class="row-fluid"> \
+                    <div class="row-fluid" style="padding:5px;"> \
                         <h3>advanced: raw json metadata</h3> \
                         <p>Edit the raw metadata record of this page, then save changes to it if required.</p> \
                         <div id="jtedit_space"></div> \
@@ -292,12 +288,6 @@
             
             $('#article').before(metaopts)
             $('#metaopts').hide()
-            
-            var showopts = function(event) {
-                event.preventDefault()
-                $('#metaopts').toggle()
-            }
-            
             $('.pagesettings').bind('click',showopts)
             
             // set pre-existing values into page settings
@@ -305,7 +295,6 @@
             options.data['accessible'] ? $('.access_page').attr('checked',true) : ""
             options.data['visible'] ? $('.nav_page').attr('checked',true) : ""
             options.data['comments'] ? $('.page_comments').attr('checked',true) : ""
-            options.data['search']['hidden'] ? $('.hide_search').attr('checked',true) : ""
             options.data['search']['format'] == 'list' ? $('.list_search').attr('checked',true) : ""
             options.data['search']['onlytitles'] ? $('.list_search_titles').attr('checked',true) : ""
             if (options.data['search']['options']['paging']) {
@@ -331,14 +320,12 @@
                     $(this).attr('checked') == 'checked' ? record['comments'] = true : record['comments'] = false
                 } else if ( $(this).hasClass('access_page') ) {
                     $(this).attr('checked') == 'checked' ? record['accessible'] = true : record['accessible'] = false
-                    update_sitemap(record)
+                    //update_sitemap(record)
                 } else if ( $(this).hasClass('nav_page') ) {
                     $(this).attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false
-                    update_sitemap(record)
-                } else if ( $(this).hasClass('hide_search') ) {
-                    $(this).attr('checked') == 'checked' ? record['search']['hidden'] = true : record['search']['hidden'] = false
-                //} else if ( $(this).hasClass('list_search') ) {
-                //    $(this).attr('checked') ? record['search']['format'] = 'list' : record['search']['format'] = 'panels'
+                    //update_sitemap(record)
+                } else if ( $(this).hasClass('list_search') ) {
+                    record['search']['format'] = $(this).val()
                 } else if ( $(this).hasClass('list_search_titles') ) {
                     $(this).attr('checked') ? record['search']['onlytitles'] = true : record['search']['onlytitles'] = false
                 } else if ( $(this).hasClass('search_position') ) {

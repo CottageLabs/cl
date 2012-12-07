@@ -27,7 +27,6 @@ MEDIA_FOLDER = "media"
 ANONYMOUS_SEARCH_FILTER = True
 SEARCH_SORT = ''
 SEARCH_SORT_ORDER = ''
-PLACEHOLDER_IMAGE = '/static/placeholder.png'
 
 # jsite settings
 JSITE_OPTIONS = {
@@ -86,7 +85,7 @@ JSITE_OPTIONS = {
         "result_box_colours":['#e7ffdf','#f7f9d0','#cacaff','#caffd8','#ffdfff','#eeeeee','#c9d2d4'],
         "paging":{
             "from":0,
-            "size":9
+            "size":4
         }
     },
     "tagkey": "tags",

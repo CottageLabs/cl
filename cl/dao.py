@@ -165,8 +165,8 @@ class DomainObject(UserDict.IterableUserDict):
         if facets:
             if 'facets' not in query:
                 query['facets'] = {}
-            for item in facet_fields:
-                query['facets'][item['key']] = {"terms":item}
+            for k, v in facets.items():
+                query['facets'][k] = {"terms":v}
 
         if terms:
             boolean = {'must': [] }
@@ -204,7 +204,21 @@ class DomainObject(UserDict.IterableUserDict):
 class Record(DomainObject):
     __type__ = 'record'
 
-    # TODO: on first save, a record should update the site nav
+    @classmethod
+    def pull_by_url(cls,url):
+        res = cls.query(q='url.exact:' + url)
+        if res['hits']['total'] == 1:
+            return cls(**res['hits']['hits'][0]['_source'])
+        else:
+            return None
+
+    @classmethod
+    def check_duplicate(cls,url):
+        res = cls.query(q='url.exact:' + url)
+        if res['hits']['total'] > 1:
+            return [i['_source'] for i in res['hits']['hits']]
+        else:
+            return None
 
 
 class Account(DomainObject, UserMixin):
