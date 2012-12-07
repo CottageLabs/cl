@@ -46,13 +46,6 @@ JSITE_OPTIONS = {
         "result_display": [
             [
                 {
-                    "pre": '<img class="thumbnail" style="float:left; width:100px; margin:0 5px 10px 0; max-height:150px;" src="',
-                    "field": 'image',
-                    "post": '" />'
-                }
-            ],
-            [
-                {
                     "pre": '<h4><a href="',
                     "field": "url",
                     "post": '">'
