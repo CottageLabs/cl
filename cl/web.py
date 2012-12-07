@@ -166,8 +166,13 @@ def default(path=''):
     if url.endswith('.json'): url = url.replace('.json','')
     rec = cl.dao.Record.pull_by_url(url)
         
-    # TODO: this catch is here just to test for old URLs from old site.
+    # TODO: these catches are here just to test for old URLs from old site versions.
     # THIS SHOULD BE REMOVED EVENTUALLY, AND NOT USED ANYWHERE ELSE
+    if not rec:
+        ident = '___' + path.rstrip('/').replace('/', '___')
+        if ident == '___': ident += 'index'
+        if ident.endswith('.json'): ident = ident.replace('.json','')
+        rec = cl.dao.Record.pull(ident)
     if not rec and len(url.split('/')) == 1:
         rec = cl.dao.Record.pull_by_url('/news/' + url)
         if rec:
