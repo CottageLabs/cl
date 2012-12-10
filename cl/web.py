@@ -166,20 +166,6 @@ def default(path=''):
     if url.endswith('.json'): url = url.replace('.json','')
     rec = cl.dao.Record.pull_by_url(url)
         
-    # TODO: these catches are here just to test for old URLs from old site versions.
-    # THIS SHOULD BE REMOVED EVENTUALLY, AND NOT USED ANYWHERE ELSE
-    if not rec:
-        ident = '___' + path.rstrip('/').replace('/', '___')
-        if ident == '___': ident += 'index'
-        if ident.endswith('.json'): ident = ident.replace('.json','')
-        rec = cl.dao.Record.pull(ident)
-    if not rec and len(url.split('/')) == 1:
-        rec = cl.dao.Record.pull_by_url('/news/' + url)
-        if rec:
-            return redirect(rec['url'])
-    if not rec and url.startswith('author'):
-        return redirect( url.replace('author','people') )
-
     # if no record returned by URL check if it is a duplicate
     if not rec:
         duplicates = cl.dao.Record.check_duplicate(url)
@@ -198,8 +184,8 @@ def default(path=''):
 
         content = ''
 
-        # build the content unless it is being done by the js (unlikely)
-        if rec and not jsite['jspagecontent']:
+        # build the content
+        if rec:
 
             if not rec.data.get('accessible',False) and current_user.is_anonymous():
                 abort(401)
@@ -212,11 +198,6 @@ def default(path=''):
                     rec.save()
             content += markdown.markdown( rec.data.get('content','') )
 
-            # this is a temporary catch from index errors - to be removed
-            if not rec.data['embed'] or rec.data['embed'] == 'false':
-                rec.data['embed'] = ""
-                rec.save()
-
             # embed any file set as to be embedded
             if rec.data.get('embed', False):
                 if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
@@ -224,66 +205,11 @@ def default(path=''):
                 else:
                     content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + urllib.quote_plus(rec.data['embed']) + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
-            # setup search display
-            if rec.data.get('search',{}).get('options',False):
-                jsite['facetview'].update(rec.data['search']['options'])
-            if rec.data['search']['format'] == 'features':
-                jsite['facetview']['result_display'] = [
-                    [
-                        {
-                            "pre": '<div class="cl_feature_box"><span class="cl_feature_title">',
-                            "field": "title",
-                            "post": "</span></div>"
-                        }
-                    ],
-                    [
-                        {
-                            "pre": '<div class="cl_feature_text"><span class="cl_feature_content">',
-                            "field": "excerpt",
-                            "post": '</span></div>'
-                        }
-                    ],
-                    [
-                        {
-                            "pre": '<div class="cl_feature_link"><a href="',
-                            "field": "url",
-                            "post": '">read more &raquo;</a></div>'
-                        }
-                    ]
-                ]
-                jsite['facetview']['searchwrap_start'] = '<div class="row-fluid"><div class="well" style="margin-top:20px;"><div id="facetview_results" class="clearfix">'
-                jsite['facetview']['searchwrap_end'] = '</div></div></div>'
-                jsite['facetview']['resultwrap_start'] = '<div class="span3 feature_span">'
-                jsite['facetview']['resultwrap_end'] = '</div>'
-            if rec.data['search']['format'] == 'list':
-                jsite['facetview']['searchwrap_start'] = '<table id="facetview_results" class="table table-bordered table-striped table-condensed">'
-                jsite['facetview']['searchwrap_end'] = '</table>'
-                jsite['facetview']['resultwrap_start'] = '<tr><td>'
-                jsite['facetview']['resultwrap_end'] = '</td></tr>'
-            if rec.data['search'].get('onlytitles',False):
-                jsite['facetview']['result_display'] = [
-                    [
-                        {
-                            "pre": '<h4><a href="',
-                            "field": "url",
-                            "post": '">'
-                        },
-                        {
-                            "field": "title",
-                            "post": "</a></h4>"
-                        }
-                    ]
-                ]
-            
-            # as the page is not being built by js, remove the content to save load
+            # remove the content box to save load - it is built separately
             jsite['data'] = rec.data
             del jsite['data']['content']
 
-        elif rec:
-            jsite['data'] = rec.data
-
         elif current_user.is_anonymous():
-            # TODO: trigger a search for alternative content if not logged in
             abort(404)
         else:
             # create a new record for a new page here
@@ -301,22 +227,17 @@ def default(path=''):
                 'image': '',
                 'excerpt': '',
                 'tags': [],
-                'search': {
-                    'format':'panels',
-                    'position':'hidden',
-                    'options': {}
-                }
             }
             rec = cl.dao.Record(**newrecord)
             rec.save()
             jsite['newrecord'] = True
-            jsite['data'] = newrecord
-                
+            jsite['data'] = newrecord                
         
         title = ''
         if rec:
             title = rec.data.get('title','')
-        
+
+        # if on the /search page, wire in the search everything box to the displayed search results
         search = False
         if url == '/search':
             search = True

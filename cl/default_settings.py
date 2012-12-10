@@ -35,58 +35,147 @@ JSITE_OPTIONS = {
     "savetourl": "",
     "datatype": "json",
     "collaborative": True,
+    "comments": "",#"cottagelabs",
+    "twitter": "",#"cottagelabs",
+    "sharethis": False,#True,
+    "editable": True,
+    "richtextedit": False,
     "facetview": {
         "search_url": "/query/record/_search?",
         "datatype": "json",
-        "search_index": 'elasticsearch',
-        "searchbox_class": '.facetview_searchbox',
-        "embedded_search": False,
-        "initialsearch": True,
-        "display_images": False,
-        "result_display": [
-            [
-                {
-                    "pre": '<h4><a href="',
-                    "field": "url",
-                    "post": '">'
-                },
-                {
-                    "field": "title",
-                    "post": "</a></h4>"
-                }
-            ],
-            [
-                {
-                    "field": "excerpt"
-                }
-            ],
-            [
-                {
-                    "pre": "by ",
-                    "field": "author"
-                },
-                {
-                    "pre": " on ",
-                    "field": "created_date"
-                }
-            ]
-        ],
-        "searchwrap_start": '<div id="facetview_results" class="clearfix">',
-        "searchwrap_end":"</div>",
-        "resultwrap_start":'<div class="result_box"><div class="result_info">',
-        "resultwrap_end":"</div></div>",
-        "result_box_colours":['#e7ffdf','#f7f9d0','#cacaff','#caffd8','#ffdfff','#eeeeee','#c9d2d4'],
-        "paging":{
-            "from":0,
-            "size":4
-        }
+        "display_images": False
     },
-    "tagkey": "tags",
-    "comments": "cottagelabs",
-    "twitter": "cottagelabs",
-    "editable": True,
-    "richtextedit": False,
-    "jspagecontent": False
+    "facetview_displays": {
+        "features": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<div class="cl_feature_box"><a class="cl_feature_title" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></div>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_text"><a class="cl_feature_content" style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "excerpt",
+                        "post": '</a></div>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div class="well" style="margin-top:20px;margin-bottom:0px;"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div></div>',
+            'resultwrap_start': '<div class="span3 feature_span">',
+            'resultwrap_end': '</div>',
+            "paging":{
+                "from":0,
+                "size":4
+            }
+        },
+        "panels": {
+            "result_display": [
+                [
+                    {
+                        "pre": '<h4><a href="',
+                        "field": "url",
+                        "post": '">'
+                    },
+                    {
+                        "field": "title",
+                        "post": "</a></h4>"
+                    }
+                ],
+                [
+                    {
+                        "field": "excerpt"
+                    }
+                ],
+                [
+                    {
+                        "pre": "by ",
+                        "field": "author"
+                    },
+                    {
+                        "pre": " on ",
+                        "field": "created_date"
+                    }
+                ]
+            ],
+            "searchwrap_start": '<div id="facetview_results" class="clearfix">',
+            "searchwrap_end":"</div>",
+            "resultwrap_start":'<div class="result_box"><div class="result_info">',
+            "resultwrap_end":"</div></div>",
+            "result_box_colours":['#e7ffdf','#f7f9d0','#cacaff','#caffd8','#ffdfff','#eeeeee','#c9d2d4'],
+            "paging":{
+                "from":0,
+                "size":9
+            }
+        },
+        "list": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<div class="cl_feature_box"><span class="cl_feature_title">',
+                        "field": "title",
+                        "post": "</span></div>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_text"><span class="cl_feature_content">',
+                        "field": "excerpt",
+                        "post": '</span></div>'
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_link"><a href="',
+                        "field": "url",
+                        "post": '">read more &raquo;</a></div>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<table id="facetview_results" class="table table-bordered table-striped table-condensed">',
+            'searchwrap_end': '</table>',
+            'resultwrap_start': '<tr><td>',
+            'resultwrap_end': '</td></tr>',
+            "paging":{
+                "from":0,
+                "size":10
+            }
+        },
+        "titles": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<h4><a href="',
+                        "field": "url",
+                        "post": '">'
+                    },
+                    {
+                        "field": "title",
+                        "post": "</a></h4>"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<table id="facetview_results" class="table table-bordered table-striped table-condensed">',
+            'searchwrap_end': '</table>',
+            'resultwrap_start': '<tr><td>',
+            'resultwrap_end': '</td></tr>',
+            "paging":{
+                "from":0,
+                "size":10
+            }
+        }
+    }
 }
 
 # a dict of the ES mappings. identify by name, and include name as first object name

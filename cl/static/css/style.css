@@ -52,6 +52,9 @@ body > .container{
 .cl_feature_box{
     height:100px;
     text-align:justify;
+    overflow:hidden;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 .cl_feature_title{
     font-family:impact;
@@ -65,12 +68,13 @@ body > .container{
 .cl_feature_text{
     height:100px;
     text-align:justify;
+    overflow:hidden;
+    padding-top:5px;
+    padding-bottom:5px;
+    margin-bottom:10px;
 }
 .cl_feature_content{
     text-align:justify;
-}
-.cl_feature_link{
-    margin-bottom:10px;
 }
 
 #absolute_media_gallery{

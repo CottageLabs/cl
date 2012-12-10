@@ -37,7 +37,6 @@
             };
             $('.edit_page').bind('click',singleedit);
             
-            $('#facetview').facetview(options.facetview);
             if ( !options.newrecord && !options.data['editable'] ) {
                 viewpage();
             } else if ( options.editable ) {
@@ -63,51 +62,28 @@
         
         
         // VIEW A PAGE AS NORMAL
-        var viewpage = function() {
-            var record = options.data
+        var viewpage = function(event) {
+            $('.facetviewer').each(function() {
+                var opts = jQuery.extend(true, {}, options.facetview); // clone the options
+                for ( var style in options.facetview_displays ) {
+                    $(this).hasClass('facetview-' + style) ? opts = $.extend(opts, options.facetview_displays[style] ) : "";
+                };
+                $(this).hasClass('facetview-slider') ? opts.pager_slider = true : "";
+                $(this).hasClass('facetview-descending') ? opts['sort'] = [{"created_date.exact":{"order":"desc"}}] : "";
+                $(this).hasClass('facetview-ascending') ? opts['sort'] = [{"created_date.exact":{"order":"asc"}}] : "";
+                if ( $(this).hasClass('facetview-searchable') ) {
+                    opts.embedded_search = true;
+                } else {
+                    opts.embedded_search = false;
+                };
+                $(this).attr('data-search') ? opts.q = $(this).attr('data-search') : "";                
+                $(this).attr('data-size') ? opts.paging.size = $(this).attr('data-size') : "";
+                $(this).attr('data-from') ? opts.paging.from = $(this).attr('data-from') : "";
+                $(this).facetview(opts);
+            });
 
-            // if page content to be built by js (alt. can be built by backend first)
-            if ( options.jspagecontent ) {
-                $('#article').html("")    // empty the article block
-                // display any embedded content
-                if ( record["embed"] && record["embed"] != "undefined" ) {
-                    var embed = '<div class="span12">'
-                    if ( ( record["embed"].indexOf("/pub?") != -1 ) && ( record["embed"].indexOf("docs.google.com") != -1 ) ) {
-                        embed += '<iframe id="embedded" src="' + record["embed"] +
-                            '&amp;embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
-                    } else {
-                        $('.content').css({"overflow":"hidden","padding":0})
-                        embed += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + record["embed"] +
-                            '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
-                    }
-                    embed += '</div>'
-                    $('#article').prepend(embed)
-                }
-
-                // display the page content
-                var content = '<div class="span12">' + converter.makeHtml(record["content"]) + '</div>'
-                $('#article').prepend(content)
-            }
-            
-            if ( record["search"]["position"] == "right" ) {
-                var moved = '<div class="span9">' + $('#article').html() + '</div>'
-                $('#article').html(moved)
-                $('#facetview').appendTo('#article')
-                $('#facetview').removeClass('row-fluid').addClass('span3').addClass('onright')
-            } else if ( record["search"]["position"] == "left" ) {
-                var moved = '<div class="span9">' + $('#article').html() + '</div>'
-                $('#article').html(moved)
-                $('#facetview').prependTo('#article')
-                $('#facetview').removeClass('row-fluid').addClass('span3').addClass('onleft')
-            } else if ( record["search"]["position"] == "bottom" ) {
-                $('#facetview').insertAfter('#article')
-                $('#facetview').addClass('onbottom')
-            } else if ( record["search"]["position"] == "hidden" ) {
-                $('#facetview').hide()
-            }
-            
-            // show disqus
-            if ( record["comments"] && options.comments ) {
+            // enable commenting if necessary
+            if ( options.data["comments"] && options.comments ) {
                 var disqus = '<div id="comments" class="container"><div class="comments"><div class="row-fluid" id="disqus_thread"></div></div></div> \
                     <script type="text/javascript"> \
                     var disqus_shortname = "' + options.comments + '"; \
@@ -116,11 +92,10 @@
                         dsq.src = "http://" + disqus_shortname + ".disqus.com/embed.js"; \
                         (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq); \
                     })(); \
-                </script>'
-                $('#main').after(disqus)
-            }
-        }
-
+                </script>';
+                $('#main').after(disqus);
+            };
+        };
         
         // SHOW EDITABLE VERSION OF PAGE
         var editpage = function(event) {
@@ -233,7 +208,6 @@
                             <div class="row-fluid"><div class="span3"><strong>page address:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_url" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
-                            <div class="row-fluid"><div class="span3"><strong>featured image:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
                         </div> \
                         <div class="span6" id="access_settings" style="padding:5px;"> \
@@ -244,46 +218,12 @@
                             <input type="checkbox" class="page_options page_comments" /> <strong>page comments</strong> enabled on this page<br> \
                             <br>\
                             <h3>embed content</h3> \
-                            <div class="row-fluid"><div class="span2"><strong>file url:</strong></div><div class="span10"><input type="text" class="span12 page_options jtedit_value jtedit_embed" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>file url:</strong></div><div class="span9"><input type="text" class="span12 page_options jtedit_value jtedit_embed" /></div></div> \
+                            <h3>featured image</h3> \
+                            <div class="row-fluid"><div class="span3"><strong>featured image:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
                         </div> \
                     </div> \
-                    <div class="row-fluid"> \
-                        <div class="row-fluid" style="padding:5px;"><h3>embedded search settings</h3></div> \
-                        <div class="row-fluid"> \
-                            <div class="span6" style="padding:5px;"> \
-                                <div class="row-fluid"><div class="span3"><strong>query string:</strong></div><div class="span9"><textarea class="span12 page_options search_default"></textarea></div></div> \
-                                <div class="row-fluid"><div class="span3"><strong>sort by:</strong></div><div class="span9"> \
-                                    <select class="span6 page_options search_sort"> \
-                                        <option value="">relevance</option> \
-                                        <option value="created_desc">descending created date</option> \
-                                        <option value="created_asc">ascending created date</option> \
-                                    </select></div></div> \
-                                <div class="row-fluid"><div class="span3"><strong>results per page:</strong></div><div class="span9"><input type="text" class="span2 page_options search_howmany" value="9" /></div></div> \
-                            </div> \
-                            <div class="span6" style="padding:5px;"> \
-                                <div class="row-fluid"><div class="span6"><strong>page location for results:</strong></div><div class="span6"> \
-                                    <select class="span4 page_options search_position"> \
-                                        <option value="hidden">hidden</option> \
-                                        <option value="top">top</option> \
-                                        <option value="bottom">bottom</option> \
-                                        <option value="left">left</option> \
-                                        <option value="right">right</option> \
-                                    </select></div></div> \
-                                <div class="row-fluid"><div class="span6"><strong>result display format:</strong></div><div class="span6"> \
-                                    <select class="span4 page_options list_search"> \
-                                        <option value="panels">panels</option> \
-                                        <option value="features">features</option> \
-                                        <option value="list">list</option> \
-                                    </select></div></div> \
-                                <div class="row-fluid"><div class="span6"><strong>Only show titles (list view):</strong></div><div class="span6"><input type="checkbox" class="page_options list_search_titles" /></div></div> \
-                            </div> \
-                        </div> \
-                    </div> \
-                    <div class="row-fluid" style="padding:5px;"> \
-                        <h3>advanced: raw json metadata</h3> \
-                        <p>Edit the raw metadata record of this page, then save changes to it if required.</p> \
-                        <div id="jtedit_space"></div> \
-                    </div> \
+                    <div id="jtedit_space"></div> \
                 </div>'
             
             $('#article').before(metaopts)
@@ -295,20 +235,6 @@
             options.data['accessible'] ? $('.access_page').attr('checked',true) : ""
             options.data['visible'] ? $('.nav_page').attr('checked',true) : ""
             options.data['comments'] ? $('.page_comments').attr('checked',true) : ""
-            options.data['search']['format'] == 'list' ? $('.list_search').attr('checked',true) : ""
-            options.data['search']['onlytitles'] ? $('.list_search_titles').attr('checked',true) : ""
-            if (options.data['search']['options']['paging']) {
-                options.data['search']['options']['paging']['size'] ? $('.search_howmany').val(options.data['search']['options']['paging']['size']) : ""
-            }
-            if (options.data['search']['options']['sort']) {            
-                if ( options.data['search']['options']['sort']['created_date.exact']['order'] == 'desc' ) {
-                    $('.search_sort').val('created_desc')
-                } else {
-                    $('.search_sort').val('created_asc')
-                }
-            }
-            options.data['search']['options']['q'] ? $('.search_default').val(options.data['search']['options']['q']) : ""
-            options.data['search']['position'] ? $('.search_position').val(options.data['search']['position']) : ""
             options.data['tags'] ? $('.page_tags').val(options.data['tags']) : ""
 
             // handle changes to page settings
@@ -320,33 +246,13 @@
                     $(this).attr('checked') == 'checked' ? record['comments'] = true : record['comments'] = false
                 } else if ( $(this).hasClass('access_page') ) {
                     $(this).attr('checked') == 'checked' ? record['accessible'] = true : record['accessible'] = false
-                    //update_sitemap(record)
                 } else if ( $(this).hasClass('nav_page') ) {
                     $(this).attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false
-                    //update_sitemap(record)
-                } else if ( $(this).hasClass('list_search') ) {
-                    record['search']['format'] = $(this).val()
-                } else if ( $(this).hasClass('list_search_titles') ) {
-                    $(this).attr('checked') ? record['search']['onlytitles'] = true : record['search']['onlytitles'] = false
-                } else if ( $(this).hasClass('search_position') ) {
-                    record['search']['position'] = $(this).val()
-                } else if ( $(this).hasClass('search_howmany') ) {
-                    record['search']['options']['paging'] = {'from':0,'size':$(this).val() }
-                } else if ( $(this).hasClass('search_default') ) {
-                    record['search']['options']['q'] = $(this).val()
                 } else if ( $(this).hasClass('page_tags') ) {
                     var tags = $(this).val().split(',')
                     record['tags'] = []
                     for ( var item in tags ) {
                         record['tags'].push($.trim(tags[item]))
-                    }
-                } else if ( $(this).hasClass('search_sort') ) {
-                    if ( $(this).val() == "created_desc" ) {
-                        record['search']['options']['sort'] = {'created_date.exact': {'order': 'desc'}}
-                    } else if ( $(this).val() == "created_asc" ) {
-                        record['search']['options']['sort'] = {'created_date.exact': {'order': 'asc'}}
-                    } else if ( 'sort' in record['search']['options'] ) {
-                         delete record['search']['options']['sort']
                     }
                 }
                 $('#jtedit_json').val(JSON.stringify(record,"","    "))
@@ -357,99 +263,13 @@
             $('#jtedit_space').jtedit({'data':options.data, 
                                         'makeform': false, 
                                         'actionbuttons': false,
-                                        /*'jsonbutton': false,*/ 
+                                        'jsonbutton': false,
                                         'delmsg':"", 
                                         'savemsg':"", 
                                         "saveonupdate":true, 
                                         "reloadonsave":""})
         }
         
-        var update_sitemap = function(record) {
-            var info = {
-                'visible': record['visible'],
-                'accessible': record['accessible'],
-                'title': record['title'],
-                'url': window.location.pathname
-            }
-            var url = '/sitemap' + window.location.pathname
-            $.ajax({ 
-                type: 'POST', 
-                url: url, 
-                data: JSON.stringify(info),
-                contentType: "application/json; charset=utf-8"
-            })
-        }
-
-
-//------------------------------------------------------------------------------
-        // TAG CLOUD
-        var tagcloud = function(event) {
-            $('.alert').remove()
-            if ( $('.navbar-in-page').length ) {
-                $('#topstrap').animate({height:'60px'},{duration:500})
-                $('#tagcloud').animate({height:'185px'},{duration:500})
-            } else {
-                $('html,body').scrollTop($('#facetview').offset().top - 20)
-            }
-            $('#navsearch').animate({width:'400px'},{duration:500})
-        }
-
-        var detagcloud = function(event) {
-            if ( $('.navbar-in-page').length ) {
-                jQuery('#topstrap').animate({height:options.bannerheight},{duration:500})
-                jQuery('#tagcloud').animate({height:'0px'},{duration:500})
-            }
-            jQuery('#navsearch').animate({width:'200px'},{duration:500})
-        }
-
-        var dotagsearch = function(event) {
-            event.preventDefault()
-            var tag = $(this).html()
-            $('#navsearch').val(options.tagkey+':'+tag)
-            $('#navsearch').trigger('keyup')
-        }
-        var showtags = function(data) {
-            var tags = []
-            for (var term in data.facets.tagterm.terms) {
-                var val = data.facets.tagterm.terms[term]["term"]
-                tags.push({'label':val,'value':'tags:'+val})
-            }
-            $('.facetview_searchbox').autocomplete({source:tags, minLength:0})
-        }
-        /*var showtags = function(data) {
-            for (var term in data.facets.tagterm.terms) {
-                var val = data.facets.tagterm.terms[term]["term"]
-                var termlink = '<a class="tagsearch" href="?q=' + val + '">' + val + '</a> '
-                $('#tagcloud > p').append(termlink)
-            }
-            $('.tagsearch').bind('click',dotagsearch)
-        }*/
-        var buildtagcloud = function() {
-            var query = {
-                "query":{
-                    "match_all":{}
-                },
-                "facets":{
-                    "tagterm":{
-                        "terms":{
-                            "field":options.tagkey,
-                            "size":100
-                        }
-                    }
-                }
-            }
-            $.ajax({
-                type: "get",
-                url: options.searchurl,
-                data: {source: JSON.stringify(query) },
-                // processData: false,
-                dataType: options.datatype,
-                success: showtags
-            })
-            //jQuery('#navsearch').bind('focus',tagcloud)
-            //jQuery('#navsearch').bind('blur',detagcloud)
-        }
-
 
 //------------------------------------------------------------------------------
         // TWEETS
@@ -473,25 +293,6 @@
             if ( $(this).attr('href').length > 1 && $(this).attr('href').substring(0,1) == '#' ) {
                 event.preventDefault()
                 $('html,body').animate({scrollTop: $('a[name=' + $(this).attr('href').replace('#','') +  ']').offset().top - 50}, 10)
-            }
-        }
-
-        // display search area whenever required, if not already available
-        var searchvis = function() {
-            if ( !$('#facetview').is(':visible') || $('#facetview').hasClass('onbottom') || ( $('#facetview').hasClass('onright') && $(window).width() <= 767 ) ) {
-                $('#close_facetview').remove()
-                $('#facetview').prepend('<button id="close_facetview" class="close">close search results</button>')
-                $('#close_facetview').css({'margin':'5px'})
-                $('#close_facetview').unbind()
-                var closefv = function(event) {
-                    event.preventDefault()
-                    $('#facetview').hide()
-                }
-                $('#close_facetview').bind('click',closefv)
-                $('#facetview').insertBefore('#article')
-                $('#facetview').removeClass('span3').removeClass('onbottom').removeClass('onright').addClass('row-fluid')                
-                $('#facetview').show()
-                $('#navsearch').trigger('keyup')
             }
         }
 
@@ -522,66 +323,54 @@
                 })
         }
 
-        // prep showdown for displays
-        var converter = false
-        options['jspagecontent'] ? converter = new Showdown.converter() : ""
-
-
         return this.each(function() {
                         
             // make the topnav sticky on scroll if on big screen
             if ( $(window).width() > 797 ) {
-                var fromtop = ''
+                var fromtop = '';
                 $(window).scroll(function() {
 		            if ( $(window).scrollTop() > $('#topnav').offset().top && $('#topnav').hasClass('navbar-in-page') ) {
-		                fromtop = $('#topnav').offset().top
-                        $('#topnav').removeClass('navbar-in-page')
-                        $('#topnav').addClass('navbar-fixed-top')
-                        $('body').css({'padding-top':'40px'})
-                    }
+		                fromtop = $('#topnav').offset().top;
+                        $('#topnav').removeClass('navbar-in-page');
+                        $('#topnav').addClass('navbar-fixed-top');
+                        $('body').css({'padding-top':'40px'});
+                    };
                     if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
-                        $('#topnav').removeClass('navbar-fixed-top')
-                        $('#topnav').addClass('navbar-in-page')
-                        $('body').css({'padding-top':'0px'})
-                    }
-                })
-            }
+                        $('#topnav').removeClass('navbar-fixed-top');
+                        $('#topnav').addClass('navbar-in-page');
+                        $('body').css({'padding-top':'0px'});
+                    };
+                });
+            };
 
             // bind new page creation to new page button
             var newpage = function(event) {
-                event.preventDefault()
-                var subaddr = window.location.pathname
-                subaddr.charAt(subaddr.length-1) != '/' ? subaddr += '/' : ""
-                var newaddr = prompt('what / where ?',subaddr)
-                newaddr.indexOf('/null') == -1 ? window.location = newaddr : ""
-            }
-            $('#new_page').bind('click',newpage)
-
-            // bind search display
-            $('.facetview_searchbox').bind('focus',searchvis)
+                event.preventDefault();
+                var subaddr = window.location.pathname;
+                subaddr.charAt(subaddr.length-1) != '/' ? subaddr += '/' : "";
+                var newaddr = prompt('what / where ?',subaddr);
+                newaddr.indexOf('/null') == -1 ? window.location = newaddr : "";
+            };
+            $('#new_page').bind('click',newpage);
 
             // bind anchor scroller offset fix
-            $('a').bind('click',scroller)
-
-            // setup the tag cloud functionality
-            options.tagkey ? buildtagcloud() : false
+            $('a').bind('click',scroller);
 
             // bind the twitter display if twitter account provided
-            options.twitter ? tweets() : false
+            options.twitter ? tweets() : false;
             
             // add the contact us form handler
-            $('#submit_contact').bind('click', contactus)
+            $('#submit_contact').bind('click', contactus);
             
-            // get going. for now it is assumed that the record is provided in the options. but could pull from a source, similar to jtedit
-            makepage()
+            makepage();
 
-        })
+        });
 
-    }
+    };
 
     // options are declared as a function so that they can be retrieved
     // externally (which allows for saving them remotely etc)
-    $.fn.jsite.options = {}
+    $.fn.jsite.options = {};
 
 })(jQuery)
 
