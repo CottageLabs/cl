@@ -63,7 +63,7 @@
         
         // VIEW A PAGE AS NORMAL
         var viewpage = function(event) {
-            $('.facetviewer').each(function() {
+            $('.facetview').each(function() {
                 var opts = jQuery.extend(true, {}, options.facetview); // clone the options
                 for ( var style in options.facetview_displays ) {
                     $(this).hasClass('facetview-' + style) ? opts = $.extend(opts, options.facetview_displays[style] ) : "";
