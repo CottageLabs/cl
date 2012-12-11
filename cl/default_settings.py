@@ -35,9 +35,9 @@ JSITE_OPTIONS = {
     "savetourl": "",
     "datatype": "json",
     "collaborative": True,
-    "comments": "",#"cottagelabs",
-    "twitter": "",#"cottagelabs",
-    "sharethis": False,#True,
+    "comments": "cottagelabs",
+    "twitter": "cottagelabs",
+    "sharethis": True,
     "editable": True,
     "richtextedit": False,
     "facetview": {
