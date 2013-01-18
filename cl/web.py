@@ -9,6 +9,7 @@ from cl.core import app, login_manager
 from cl.view.account import blueprint as account
 from cl.view.sitemap import blueprint as sitemap
 from cl.view.media import blueprint as media
+from cl.view.admin import blueprint as admin
 from cl import auth
 from copy import deepcopy
 
@@ -16,6 +17,7 @@ from copy import deepcopy
 app.register_blueprint(account, url_prefix='/account')
 app.register_blueprint(sitemap, url_prefix='/sitemap')
 app.register_blueprint(media, url_prefix='/media')
+app.register_blueprint(admin, url_prefix='/admin')
 
 
 @login_manager.user_loader
@@ -26,7 +28,7 @@ def load_account_for_login_manager(userid):
 @app.context_processor
 def set_current_user():
     """ Set some template context globals. """
-    return dict(current_user=current_user)
+    return dict(current_user=current_user, sharethis=app.config.get('JSITE_OPTIONS',[]).get('sharethis',False))
 
 @app.before_request
 def standard_authentication():
@@ -82,10 +84,11 @@ def mailer():
 # pass queries direct to index. POST only for receipt of complex query objects
 @app.route('/query/<path:path>', methods=['GET','POST'])
 @app.route('/query/', methods=['GET','POST'])
+@util.jsonp
 def query(path='Record'):
     pathparts = path.split('/')
     subpath = pathparts[0]
-    if subpath.lower() == 'account':
+    if subpath.lower() in app.config['NO_QUERY_VIA_API']:
         abort(401)
     klass = getattr(cl.dao, subpath[0].capitalize() + subpath[1:] )
     
@@ -128,6 +131,55 @@ def query(path='Record'):
     resp.mimetype = "application/json"
     return resp
         
+        
+# implement a JSON stream that can be used for autocompletes
+# index type and key to choose should be provided, and can be comma-separated lists
+# "q" param can provide query term to filter by
+# "counts" param indicates whether to return a list of strings or a list of lists [string, count]
+# "size" can be set to get more back
+# NOTE THIS DOES NOT USE THE DAO- IT IS DIRECT TO ES
+@app.route('/stream/')
+@app.route('/stream/<index>/')
+@app.route('/stream/<index>/<key>/')
+def stream(index='record',key='tags'):
+
+    t = 'http://' + str(app.config['ELASTIC_SEARCH_HOST']).lstrip('http://').rstrip('/') + '/' + app.config['ELASTIC_SEARCH_DB'] + '/'
+
+    if [index] == app.config['NO_QUERY_VIA_API']: abort(401)
+    indices = []
+    for idx in index.split(','):
+        if idx not in app.config['NO_QUERY_VIA_API']:
+            indices.append(idx)
+
+    keys = key.split(',')
+
+    q = request.values.get('q','*')
+    if not q.endswith("*"): q += "*"
+    if not q.startswith("*"): q = "*" + q
+
+    qry = {
+        #'query':{'query_string':{'query':q}},
+        'query':{'match_all':{}},
+        'size': 0,
+        'facets':{}
+    }
+    for ky in keys:
+        qry['facets'][ky] = {"terms":{"field":ky,"order":request.values.get('order','term'), "size":request.values.get('size',100)}}
+    
+    r = requests.post(t + ','.join(indices) + '/_search', json.dumps(qry))
+
+    res = []
+    if request.values.get('counts',False):
+        for k in keys:
+            res = res + [[i['term'],i['count']] for i in r.json['facets'][k]["terms"]]
+    else:
+        for k in keys:
+            res = res + [i['term'] for i in r.json['facets'][k]["terms"]]
+
+    resp = make_response( json.dumps(res) )
+    resp.mimetype = "application/json"
+    return resp
+
 
 @app.route('/deduplicate', methods=['GET', 'POST'])
 def deduplicate(path='',duplicates=[],target='/'):
@@ -198,14 +250,14 @@ def default(path=''):
                     rec.save()
             content += markdown.markdown( rec.data.get('content','') )
 
-            # embed any file set as to be embedded
+            # if an embedded file url has been provided, embed it in the content too
             if rec.data.get('embed', False):
                 if rec.data['embed'].find('/pub?') != -1 or rec.data['embed'].find('docs.google.com') != -1:
                     content += '<iframe id="embedded" src="' + rec.data['embed'] + '" width="100%" height="1000" style="border:none;"></iframe>'
                 else:
                     content += '<iframe id="embedded" src="http://docs.google.com/viewer?url=' + urllib.quote_plus(rec.data['embed']) + '&embedded=true" width="100%" height="1000" style="border:none;"></iframe>'
             
-            # remove the content box to save load - it is built separately
+            # remove the content box from the js to save load - it is built separately
             jsite['data'] = rec.data
             del jsite['data']['content']
 
@@ -249,7 +301,10 @@ def default(path=''):
             if not rec.data.get('accessible',False) and current_user.is_anonymous():
                 abort(401)
             else:
-                rec.data = request.json
+                # content is not always sent, to save transmission size. If not there, don't overwrite it to blank
+                newdata = request.json
+                if 'content' not in newdata: newdata['content'] = rec.data['content']
+                rec.data = newdata
         else:
             if current_user.is_anonymous():
                 abort(401)

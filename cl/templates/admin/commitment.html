@@ -1,0 +1,90 @@
+
+
+
+<div id="newcommitments" class="row-fluid newitemdiv">
+
+    <script type="text/javascript">
+    
+        // define actions  that need to be attached to the boxes of this form to enable it to work properly
+        var actions = function() {
+        }
+        
+        // define validation activities that should take place on this record before saving is allowed
+        var validate = function() {
+            $('.alert-error').remove();
+            var valid = true;
+            var errors = '';
+
+            // write validation functions here. e.g. compare the values of certain fields, see if they have particular types, etc
+            // when an error is found, append a description paragraph to var errors, and set valid to false
+            
+            if ( valid ) {
+                return true;
+            } else {
+                $('.new_container').after('<div class="alert alert-error">' + errors + '</div>');
+                $(window).scrollTop($(window).scrollTop()+100);
+                return false;
+            }
+        }
+    </script>
+
+    <div class="span6">
+    <div class="well new_container">
+
+        <div><span class="upload_label">Project:</span>
+            <select name="project" data-path="project" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["projects"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">Name:</span>
+            <select name="name" data-path="name" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">Date from:</span> <input type="text" name="datefrom" data-path="datefrom" class="jtedit_value datepicker" /></div>
+
+        <div><span class="upload_label">Date to:</span> <input type="text" name="dateto" data-path="dateto" class="jtedit_value datepicker" /></div>
+
+        <div><span class="upload_label">% time:</span> <input type="text" name="time" data-path="time" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">% share:</span> <input type="text" name="share" data-path="share" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">Tags:</span> <input type="text" name="tags" data-path="tags" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">Notes:</span> <textarea name="notes" data-path="notes" class="jtedit_value"></textarea></div>
+
+        <div style="margin-top:10px;">
+            <span class="upload_label"></span>
+            <a id="commitmentsnewsave" class="btn" style="margin:-10px 5px 20px 0;" href="#">save</a><a id="commitmentsnewcancel" class="btn" style="margin:-10px 0 20px 0;" href="#">cancel</a>
+        </div>
+
+    </div>
+    </div>
+    
+    <div class="span6">
+        <div class="well help_container">
+            <p class="help project">Choose the project to which this commitment relates.</p>            
+            <p class="help who">Select the username of the CL person this commitment is about.</p>
+            <p class="help datefrom">Select the starting date of this commitment.</p>
+            <p class="help dateto">Select the ending date of this commitment.</p>
+            <p class="help time">Enter the approximate percentage number of the persons overall time that will be dedicated to this project, for example if 10% per week of this persons time will be spent on this project during the time period indicated, then enter the number 10.</p>
+            <p class="help share">Enter the percentage share that this partner will receive for the work they do on this project in relation to this time commitment; note, this need not match the time commitment percentage - partners may receive any agreed percentage share, regardless of time share on a project. If this partner has multiple time commitments on this project, specify the percentage share due to them for each time commitment</p>
+            <p class="help tags">Add any relevant tags, they are useful for searching for particular records later. For example you might tag some records with "check", to remind you to come back and check them later for some reason.</p>
+            <p class="help notes">Add any further notes, e.g. write a short note whenever you have to make a change to this record, or just a note about the content of this record, for future reference.</p>
+
+
+
+        </div>
+    </div>
+    
+</div>
+
+

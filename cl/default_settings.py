@@ -17,6 +17,8 @@ SUPER_USER = ["test"]
 # elasticsearch settings
 ELASTIC_SEARCH_HOST = "127.0.0.1:9200"
 ELASTIC_SEARCH_DB = "cl"
+INITIALISE_INDEX = True
+NO_QUERY_VIA_API = ['account'] # list index types that should not be queryable via the API
 
 # location of media storage folder
 MEDIA_FOLDER = "media"
@@ -37,7 +39,7 @@ JSITE_OPTIONS = {
     "collaborative": True,
     "comments": "cottagelabs",
     "twitter": "cottagelabs",
-    "sharethis": True,
+    "sharethis": False,
     "editable": True,
     "richtextedit": False,
     "facetview": {
@@ -198,7 +200,31 @@ MAPPINGS = {
                         }
                     }
                 }
-            ]
+            ],
+            "properties":{
+                "datefrom":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "dateto":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "date":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                }
+            }
         }
     }
 }
+MAPPINGS['account'] = {'account':MAPPINGS['record']['record']}
+MAPPINGS['project'] = {'project':MAPPINGS['record']['record']}
+MAPPINGS['customer'] = {'customer':MAPPINGS['record']['record']}
+MAPPINGS['financial'] = {'financial':MAPPINGS['record']['record']}
+MAPPINGS['commitment'] = {'commitment':MAPPINGS['record']['record']}
+MAPPINGS['contractor'] = {'contractor':MAPPINGS['record']['record']}
+

@@ -183,7 +183,10 @@ class DomainObject(UserDict.IterableUserDict):
             query['query'] = {'bool': boolean}
 
         for k,v in kwargs.items():
-            query[k] = v
+            if k == '_from':
+                query['from'] = v
+            else:
+                query[k] = v
 
         if endpoint in ['_mapping']:
             r = requests.get(cls.target() + recid + endpoint)
@@ -234,4 +237,167 @@ class Account(DomainObject, UserMixin):
     def is_super(self):
         return cl.auth.user.is_super(self)
     
+    @property
+    def projects(self):
+        comms = self.commitments()
+        p = []
+        for item in comms:
+            if item['data']['project'] not in p:
+                p.append(Project.pull(item['data']['project']))
+        return p
+    
+    def share(self,datefrom='',dateto='',projects=[]):
+        # return the total amount due to this partner during given date range, filtered by project ID list if necessary
+        if not projects:
+            projects = [i.id for i in self.projects]
+        commitments = Commitment().query(terms={"name":self.id,"project":projects})# add a date filter
+        financials = Finance().query(terms={"name":self.id,"project":projects}) # add a date filter to this
+        # list and total these values and return them
+        # perhaps include expenses in this
+        pass
+    
+    def expenses(self,datefrom='',dateto='',projects=[]):
+        # return the total expenses due back to this partner during given date range, filtered by project list if necessary
+        pass
+    
+    def commitments(self,datefrom='',dateto=''):
+        c = [Commitment.pull(i['_source']['id']) for i in Commitment.query(terms={'who':self.id},size=100000,sort={"start":{"order":"desc"}}).get('hits',{}).get('hits',[])]
+        
+        if len(c) == 0:
+            return []
+        else:
+            if not datefrom: datefrom = c[-1]['data']['start']
+            if not dateto:
+                cto = [Commitment.pull(i['_source']['id']) for i in Commitment.query(terms={'who':self.id},size=1,sort={"end":{"order":"desc"}}).get('hits',{}).get('hits',[])]
+                dateto = cto[0]['data']['end']
+            cs = []
+            for item in c:
+                if self.data["end"] > datefrom and self.data["start"] < dateto:
+                    cs.append(item)
+            return cs
+        
+    def committed(self,datefrom='',dateto=''):
+        comms = self.commitments(datefrom,dateto)
+        tc = 0
+        for c in comms:
+            pass # % score of commitment between date range
+        return tc
+    
+
+class Project(DomainObject):
+    __type__ = 'project'
+
+    @property
+    def commitments(self):
+        return [Commitment.pull(i['_source']['id']) for i in Commitment.query(terms={'project':self.id},size=100000,sort={"start":{"order":"desc"}}).get('hits',{}).get('hits',[])]
+        
+    @property
+    def financials(self):
+        return [Finance.pull(i['_source']['id']) for i in Finance.query(terms={'project':self.id},size=100000,sort={"created_date":{"order":"desc"}}).get('hits',{}).get('hits',[])]
+
+    @property
+    def outgoings(self):
+        dets = {"total":0,"transactions":[]}
+        for item in self.financials:
+            if item.data['cost'] < 0:
+                dets["total"] += item.data['cost']
+                dets["transactions"].append((item.data['date'],item.data['cost']))
+        return dets
+
+    @property
+    def income(self):
+        dets = {"total":0,"transactions":[]}
+        for item in self.financials:
+            if item.data['cost'] > 0:
+                dets["total"] += item.data['cost']
+                dets["transactions"].append((item.data['date'],item.data['cost']))
+        return total
+
+    @property
+    def report(self):
+        today = datetime.now().strftime("%Y-%m-%d %H%M")        
+        res = {
+            "status": self.data["status"],
+            "state": "green", # one of green, yellow, red
+            "warnings":[], # a human-readable list of things that are wrong, with embedded links where relevant
+            "totalincome": self.income["total"],
+            "totaloutgoings": self.outgoings["total"],
+            "financials": self.financials,
+            "commitments": self.commitments,
+            "data": self.data
+        }
+
+        if self.data['datefrom'] < today and self.data["status"] in ["proposed","current"]:
+            if len(self.commitments) == 0:
+                res["state"] = "yellow"
+                res["warnings"].append("Project start date has passed but there are no people commitments listed for it")
+            if len(self.financials) == 0:
+                res["state"] = "yellow"
+                res["warnings"].append("Project start date has passed but there are no financial transactions listed for it")
+
+        # check if any incoming invoice events have occurred and no subsequent payments out
+        outgoingpaymentfound = False
+        incomingpaymentrequestfound = False 
+        for item in self.financials:
+            if outgoingpaymentfound or incomingpaymentrequestfound: # don't need to go further
+                break
+            elif True: # if this is a request for payment, note it
+                incomingpaymentrequestfound = True
+            elif False: # if this is an outoing payment, note it
+                outgoingpaymentfound = True
+        if incomingpaymentrequestfound and not outgoingpaymentfound:
+            res["state"] = "yellow"
+            res["warnings"].append("There is at least one incoming payment request for which payment has not yet been made")
+
+        # check if any of our invoices are more than 30 days since sending out, but not yet paid
+        for item in self.financials:
+            if item.data['event'] == "":
+                if item.data["created_date"] < today - 30:
+                    res["state"] = "yellow"
+                    res["warnings"].append("There is at least one invoice issued more than 30 days ago for which payment has not yet been received")
+                    
+        
+        # check if any project team members are extremely busy over the remaining duration
+        for item in self.commitments:
+            person = Account.pull(item.data["who"])
+            if person.committed(today, self.data["dateto"]) > 95:
+                res["state"] = "yellow"
+                res["warnings"].append("Team member " + person.id + " is more than 95% committed during the remaining duration of this project")
+
+        # check if total costs paid out are approaching total budget
+        if self.outgoings > self.data["budget"] * .8:
+            res["state"] = "yellow"
+            res["warnings"].append("The total outgoings on this project are already more than 80% of total available budget")
+
+        # check status against end date, and check if status is late
+        if project.data['status'] == "current" and project.data["dateto"] < today:
+            res["state"] = "red"
+            res["warnings"].append("Project status is listed as current but project end date has passed")
+
+        return res
+
+
+class Financial(DomainObject):
+    __type__ = 'financial'
+
+    @classmethod
+    def find_by_ref(cls,ref):
+        '''Retrieve object by id.'''
+        if ref is None:
+            return None
+
+        return [cls(**i['_source']) for i in cls().query(terms={"ref":ref},sort={"created_date":{"order":"desc"}}).get('hits',{}).get('hits',[])]
+
+
+class Commitment(DomainObject):
+    __type__ = 'commitment'
+
+
+class Contact(DomainObject):
+    __type__ = 'contact'
+
+
+class Contractor(DomainObject):
+    __type__ = 'contractor'
+
 

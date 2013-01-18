@@ -36,7 +36,7 @@ def media():
             else:
                 files += '<div class="span2 thumbnail"><h3><a _target="blank" href="/' 
                 files += app.config['MEDIA_FOLDER'] + '/' + f + '">' + f + '</a></h3></div>'
-        return render_template('media/media.html', jsite_options=json.dumps(jsite), files=files)
+        return render_template('media/media.html', jsite_options=json.dumps(jsite), files=files, nosettings=True)
 
 
 @blueprint.route('/<path:path>', methods=['GET','POST'])

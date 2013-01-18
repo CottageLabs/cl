@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block subnav %}
+
+    <div id="subnav" class="subnav">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#financials">Financials</a></li>
+                <li><a href="#commitments">Commitments</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#contractors">Contractors</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="/media">Media</a></li>
+                <li><a href="/sitemap">Sitemap</a></li>
+                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!--new user / make staff / make partner / make senior / delete / edit
+    -->
+
+<script type="text/javascript" charset="utf-8">
+jQuery(document).ready(function() {
+
+    // the lists of new item form boxes required to create each sort of new item
+    var creators = {
+        "commitments": '<div><span class="upload_label">Project:</span><select name="project" data-path="project" class="jtedit_value"><option></option>{% for name in dropdowns["projects"] %}<option>{{ name }}</option>{% endfor %}</select></div><div><span class="upload_label">Who:</span><select name="who" data-path="who" class="jtedit_value"><option></option>{% for name in dropdowns["clpeople"] %}<option>{{ name }}</option>{% endfor %}</select></div><div><span class="upload_label">Date from:</span><input type="text" name="datefrom" data-path="datefrom" class="jtedit_value datepicker"></div><div><span class="upload_label">Date to:</span><input type="text" name="dateto" data-path="dateto" class="jtedit_value datepicker"></div><div><span class="upload_label">% Time:</span><input type="text" name="time" data-path="time" class="jtedit_value"></div><div><span class="upload_label">% Share:</span><input type="text" name="share" data-path="share" class="jtedit_value"></div>',
+        "financials": '<div><span class="upload_label">Project:</span><select name="project" data-path="project" class="jtedit_value"><option></option>{% for name in dropdowns["projects"] %}<option>{{ name }}</option>{% endfor %}</select></div><div><span class="upload_label">Date:</span><input type="text" name="date" data-path="date" class="jtedit_value datepicker"></div><div><span class="upload_label">Event type:</span><select name="type" data-path="type" class="jtedit_value"><option></option>{% for item in dropdowns["events"] %}<option>{{item}}</option>{% endfor %}</select></div><div><span class="upload_label">Status:</span><select name="status" data-path="status" class="jtedit_value" disabled><option></option></select></div><div><span class="upload_label">Reference:</span><input type="text" name="reference" data-path="reference" class="jtedit_value"></div><div><span class="upload_label">Recipient:</span><select name="recipient" data-path="recipient" class="jtedit_value" disabled><option></option></select></div><div><span class="upload_label">Description:</span><textarea name="description" data-path="description" class="jtedit_value"></textarea></div><div><span class="upload_label">Transaction reference:</span><input type="text" name="transaction" data-path="transaction" class="jtedit_value" disabled></div><div><span class="upload_label">£ + / - ex VAT:</span><input type="text" name="cost" data-path="cost" class="jtedit_value"></div><div><span class="upload_label">VAT:</span><input type="text" name="vat" data-path="vat" class="jtedit_value"></div>',
+        "contacts": '<div><span class="upload_label">Company name:</span><input type="text" name="name" data-path="name" class="jtedit_value"></div><div><span class="upload_label">Address:</span><textarea name="address" data-path="address" class="jtedit_value"></textarea></div><div><span class="upload_label">Vat status:</span><select name="vat" data-path="vat" class="jtedit_value"><option></option>{% for item in dropdowns["vat"] %}<option>{{item}}</option>{% endfor %}</select></div><div><span class="upload_label">Description:</span><textarea name="description" data-path="description" class="jtedit_value"></textarea></div><div><span class="upload_label">Contact name:</span><input type="text" name="contact.0.name" data-path="contact.0.name" class="jtedit_value"></div><div><span class="upload_label">Contact email:</span><input type="text" name="contact.0.email" data-path="contact.0.email" class="jtedit_value"></div><div><span class="upload_label">Contact phone:</span><input type="text" name="contact.0.phone" data-path="contact.0.phone" class="jtedit_value"></div>',
+        "contractors": '<div><span class="upload_label">Name:</span><input type="text" name="name" data-path="name" class="jtedit_value"></div><div><span class="upload_label">Address:</span><textarea name="address" data-path="address" class="jtedit_value"></textarea></div><div><span class="upload_label">VAT status:</span><select name="vat" data-path="vat" class="jtedit_value"><option></option><option>VAT registered</option><option>Not VAT registered</option></select></div><div><span class="upload_label">Description:</span><textarea name="description" data-path="description" class="jtedit_value"></textarea></div><div><span class="upload_label">Payment details:</span><textarea name="payment" data-path="payment" class="jtedit_value"></textarea></div><div><span class="upload_label">Contact name:</span><input type="text" name="contact.0.name" data-path="contact.0.name" class="jtedit_value"></div><div><span class="upload_label">Contact email:</span><input type="text" name="contact.0.email" data-path="contact.0.email" class="jtedit_value"></div><div><span class="upload_label">Contact phone:</span><input type="text" name="contact.0.phone" data-path="contact.0.phone" class="jtedit_value"></div>'
+    };
+
+    // notes to add for relevant new item boxes
+    var notes = {
+        "commitments": {
+            "project": {
+                "title": "project",
+                "description": "choose the project to which this commitment relates",
+                "type": "select",
+                "values": "projects"
+            },
+            "who": {
+                "title": "who",
+                "description": "select the username of the CL person this commitment is about",
+                "type": "select",
+                "values": "partners"
+                
+            },
+            "datefrom": {
+                "title": "date from",
+                "description": "select the starting date of this commitment",
+                "type": "date"
+            },
+            "dateto": {
+                "title": "date to",
+                "description": "select the ending date of this commitment",
+                "type": "date"
+            },
+            "time": {
+                "title": "% time",
+                "description": "enter the approximate percentage number of the persons overall time that will be dedicated to this project, for example if 10% per week of this persons time will be spent on this project during the time period indicated, then enter the number 10",
+                "type": "text"
+            },
+            "share": {
+                "title": "% share",
+                "description": "enter the percentage share that this partner will receive for the work they do on this project in relation to this time commitment; note, this need not match the time commitment percentage - partners may receive any agreed percentage share, regardless of time share on a project. If this partner has multiple time commitments on this project, specify the percentage share due to them for each time commitment",
+                "type": "text"
+            },
+            "tags": {
+                "title": "tags",
+                "description": "add any relevant tags",
+                "type": "text"
+            },
+            "notes": {
+                "title": "notes",
+                "description": "add any further notes",
+                "type": "text"
+            }
+        },
+        "financials": {
+            "project": {
+                "title":"project",
+                "description": "choose the project to which this financial event relates",
+                "type":"select",
+                "values":"projects",
+            },
+            "date": {
+                "title":"date due",
+                "description": "select the date that this event will or did take place",
+                "type":"date"
+            },
+            "type": {
+                "title":"event type",
+                "description": "select the event type - <br><br>a <strong>cost</strong> we have to pay on this project<br><br>a <strong>payment</strong> we expect to receive from the customer for this project<br><br>or an <strong>expense</strong> a team member can incur and expect to be reimbursed for on this project",
+                "type":"select",
+                "values":"financial"
+            },
+            "status": {
+                "title":"status",
+                "description": "select the status of this event, dependent on the event type; it is expected that events will progress through the status options available as a project progresses, although some may be skipped",
+                "type":"select",
+                "values":"finstatus"
+            },
+            "reference": {
+                "title":"reference",
+                "description": "enter one of -<br><br>our reference for this event e.g. our reference number that we put on an invoice that we issue to the customer (remember our invoices must include VAT, and invoices with VAT on them must have a unique reference)<br><br>or the reference provided by the recipient, for example the reference number given on an invoice we receive from a supplier",
+                "type":"text"
+            },
+            "recipient": {
+                "title":"recipient",
+                "description": "select the recipient of this financial event; for example a contractor in the case of a cost",
+                "type":"select",
+                "values":"contacts"
+            },
+            "description": {
+                "title":"description",
+                "description": "provide a description of this financial event, such as the goods or services supplied or received, or a description of an incurred expense",
+                "type":"textarea"
+            },
+            "cost": {
+                "title":"cost",
+                "description": "The amount coming into our bank account in the case of a payment to us (a positive number), or the amount leaving our bank account in the case of a cost or expense (a negative number) - always excluding VAT",
+                "type":"text"
+            },
+            "vat": {
+                "title":"vat",
+                "description": "enter the amount of VAT related to the cost of this event, if any; this may be the amount of VAT we charge on an invoice, or the amount of VAT charged to us by a supplier",
+                "type":"text"
+            },
+            "tags": {
+                "title":"tags",
+                "description":"add any relevant tags",
+                "type":"text"
+            },
+            "notes": {
+                "title":"notes",
+                "description":"add any further notes",
+                "type":"textarea"
+            },
+            "confirmed": {
+                "title": "confirmed",
+                "description": "before any invoice sent, payment made, or expense reimbursed, it must be confirmed with the leader of the project to which it relates",
+                "type":"checkbox"
+            }
+        },
+        "contacts": {
+            "name": {
+                "title":"name",
+                "description":"enter the person name of this contact (could be blank if this is contact is some sort of organisation)",
+                "type": "text"
+            },
+            "companyname": {
+                "title":"company name",
+                "description":"enter the name of the company / parent organisation this contact belongs to, if any",
+                "type": "text"
+            },
+            "companynumber": {
+                "title":"company number",
+                "description":"enter the company number of this company, if any",
+                "type": "text"
+            },
+            "vatnumber": {
+                "title":"VAT number",
+                "description":"enter the VAT number of this contact, if any",
+                "type": "text"
+            },
+            "vatstatus": {
+                "title":"VAT status",
+                "description":"enter the VAT status of this contact, if we are ever likely to invoice them; this is based on their location, as we must charge VAT to customers in Europe",
+                "type": "text"
+            },
+            "billable": {
+                "title":"billable",
+                "description":"indicate whether this contact is somebody to whom invoices can be issued",
+                "type": "checkbox"
+            },
+            "address": {
+                "title":"address",
+                "description":"enter the address of this contact address",
+                "type": "textarea"
+            },
+            "description": {
+                "title":"description",
+                "description":"enter a description of this contact; what they do, for example",
+                "type": "textarea"
+            },
+            "email": {
+                "title":"email",
+                "description":"enter the contact email address",
+                "type": "text"
+            },
+            "phone": {
+                "title":"phone number",
+                "description":"enter the contact phone number",
+                "type": "text"
+            },
+            "tags": {
+                "title":"tags",
+                "description":"add any relevant tags",
+                "type":"text"
+            },
+            "notes": {
+                "title":"notes",
+                "description":"add any further notes",
+                "type":"textarea"
+            }
+        },
+        "contractors": {
+            "name": {
+                "title":"name",
+                "description":"enter the person name of this contact (could be blank if this is contractor is some sort of organisation)",
+                "type": "text"
+            },
+            "companyname": {
+                "title":"company name",
+                "description":"enter the name of the company / parent organisation this contractor belongs to, if any",
+                "type": "text"
+            },
+            "companynumber": {
+                "title":"company number",
+                "description":"enter the company number of this contractor, if any",
+                "type": "text"
+            },
+            "vatnumber": {
+                "title":"VAT number",
+                "description":"enter the VAT number of this contractor, if any",
+                "type": "text"
+            },
+            "vatstatus": {
+                "title":"VAT status",
+                "description":"enter the VAT status of this contractor; they are either VAT registered or not",
+                "type": "text"
+            },
+            "address": {
+                "title":"address",
+                "description":"enter the address of this contact address",
+                "type": "textarea"
+            },
+            "description": {
+                "title":"description",
+                "description":"enter a description of this contact; what they do, for example",
+                "type": "textarea"
+            },
+            "email": {
+                "title":"email",
+                "description":"enter the contact email address",
+                "type": "text"
+            },
+            "phone": {
+                "title":"phone number",
+                "description":"enter the contact phone number",
+                "type": "text"
+            },
+            "tags": {
+                "title":"tags",
+                "description":"add any relevant tags",
+                "type":"text"
+            },
+            "notes": {
+                "title":"notes",
+                "description":"add any further notes",
+                "type":"textarea"
+            }
+        }
+    };
+    
+    // actions to add onto new item boxes when they are created
+    var actions = function(item) {
+        if ( item == "financials" ) {
+            // when selecting type, add relevant status and recipient dropdowns
+            $('[name="status"]').attr("disabled","disabled");                
+            $('[name="recipient"]').attr("disabled","disabled");
+            var seteventsandrecipients = function() {
+                $('[name="status"]').attr("disabled","disabled");                
+                $('[name="recipient"]').attr("disabled","disabled");
+                if ( $(this).val().length != 0 ) {
+                    var optstring = '<option></option>';
+                    if ( $(this).val() == "cost" ) {
+                        $('[name="status"] option[value="ordered"]').remove();
+                        $('[name="status"] option[value="claimed"]').remove();
+                        $('[name="status"] option[value="reminded"]').remove();
+                        for ( var item in ds[''] ) {
+                            optstring += '<option>' + ds[''][item] + '</option>';
+                        }
+                        $('[name="recipient"]').append(optstring);
+                        $('[name="recipient"]').removeAttr("disabled");
+                    } else if ( $(this).val() == "payment" ) {
+                        $('[name="status"] option[value="ordered"]').remove();
+                        $('[name="status"] option[value="claimed"]').remove();
+                        $('[name="status"] option[value="reminded"]').remove();
+                        for ( var item in ds[''] ) {
+                            optstring += '<option>' + ds[''][item] + '</option>';
+                        }
+                    } else if ( $(this).val() == "expense" ) {
+                        $('[name="status"] option[value="ordered"]').remove();
+                        $('[name="status"] option[value="claimed"]').remove();
+                        $('[name="status"] option[value="reminded"]').remove();
+                        for ( var item in ds['clpeople'] ) {
+                            optstring += '<option>' + ds['clpeople'][item] + '</option>';
+                        }
+                    }
+                    $('[name="recipient"]').append(optstring);
+                    $('[name="recipient"]').removeAttr("disabled");
+                };
+            };
+            $('[name="type"]').bind('change',seteventsandrecipients);
+            // when selecting status, enable transaction box if appropriate
+            var transaction = function() {
+                $('[name="transaction"]').attr("disabled","disabled");
+                if ( $('[name="status"]').val() == "paid" ) {
+                    $('[name="transaction"]').removeAttr("disabled");
+                };
+            };
+            $('[name="status"]').bind('change',transaction);
+            return true;
+        }
+    };
+    
+    // the validation to perform when accepting a submission of a new item
+    var validate = function(item,data) {
+        if ( item == "commitments" ) {
+            return [];
+        } else if ( item == "financials" ) {
+            return [];
+        } else if ( item == "contacts" ) {
+            return [];
+        } else if ( item == "contractors" ) {
+            return [];
+        } else {
+            return false;
+        }
+    };
+    
+    // prep facetview on each of the different types of objects
+    var opts = {{ jsite_options|safe }}.facetview;
+    opts.sharesave_link = false;
+
+    opts.facets = [{"field":"project.exact","order":"term"},{"field":"status.exact"},{"field":"lead.exact","order":"term"},{"field":"customer.exact","order":"term"}];
+    opts.search_url = '/query/project/_search?';
+    $('#projectsfacet').facetview(opts);
+
+    opts.facets = [{"field":"name.exact"}];
+    opts.search_url = '/query/contact/_search?';
+    $('#contactsfacet').facetview(opts);
+
+    opts.facets = [{"field":"project.exact","order":"term"},{"field":"type.exact"},{"field":"status.exact"},{"field":"recipient.exact"}];
+    opts.search_url = '/query/finance/_search?';
+    $('#financialsfacet').facetview(opts);
+
+    opts.facets = [{"field":"project.exact","order":"term"},{"field":"type.exact"},{"field":"status.exact"},{"field":"recipient.exact"}];
+    opts.search_url = '/query/commitment/_search?';
+    $('#commitmentsfacet').facetview(opts);
+
+    opts.facets = [{"field":"name.exact"}];
+    opts.search_url = '/query/contractor/_search?';
+    $('#contractorsfacet').facetview(opts);
+
+    // create new item form on click of add new item button
+    var newitem = function(event) {
+        event.preventDefault();
+        var ds = {{ dropdowns|safe }};
+        var item = $(this).attr('href').replace('#','');
+        $('.newitemdiv').remove();
+        var tabin = '<div id="' + item + 'new" class="newitemdiv"><div class="span6">';
+        for ( var key in notes[item] ) {
+            var obj = notes[item][key];
+            tabin += '<div><span class="upload_label">' + obj['title'] + '</span>';
+            if ( obj['type'] == 'text' ) {
+                tabin += '<input type="text" name="' + key + '" data-path="' + key + '" class="jtedit_value">';
+            } else if ( obj['type'] == 'textarea' ) {
+                tabin += '<textarea name="' + key + '" data-path="' + key + '" class="jtedit_value"></textarea>';
+            } else if ( obj['type'] == 'select' ) {
+                tabin += '<select name="' + key + '" data-path="' + key + '" class="jtedit_value"><option></option>';
+                var dt = obj['values'];
+                for ( var d in ds[dt] ) {
+                    tabin += '<option>' + ds[dt][d] + '</option>';
+                };
+                tabin += '</select>';
+            } else if ( obj['type'] == 'date' ) {
+                tabin += '<input type="text" name="' + key + '" data-path="' + key + '" class="jtedit_value datepicker">';
+            } else if ( obj['type'] == 'checkbox' ) {
+                tabin += '<input type="checkbox" name="' + key + '" data-path="' + key + '" class="jtedit_value">';
+            }
+            tabin += '</div>';
+        };
+        tabin += '<div style="margin-top:10px;"><span class="upload_label"></span><a id="' + item + 'newsave" class="btn" style="margin:-10px 5px 20px 0;" href="#">save</a><a id="' + item + 'newcancel" class="btn" style="margin:-10px 0 20px 0;" href="#">cancel</a></div></div><div class="span6"><div class="well help_container"></div></div></div>';
+        $('#'+item+'facet').hide().before(tabin);
+        $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
+        $('#'+item+'new').jtedit({
+            'data':{}, 
+            'makeform': false, 
+            'actionbuttons': false,
+            'jsonbutton': false,
+            'target': '/admin/' + item,
+            'delmsg':"", 
+            'savemsg':"", 
+            "saveonupdate":false, 
+            "reloadonsave":""
+        });
+        
+        for ( var key in notes[item] ) {
+            var note = notes[item][key]['description'];
+            $('.help_container').append('<div class="help ' + key + '">' + note + '</div>');
+        };
+        var showhelp = function() {
+            $('.help').hide();
+            var show = $(this).attr('data-path');
+            $('.' + show).show();
+        };
+        $('.jtedit_value').bind('focus',showhelp);
+        
+        actions(item);
+        
+        var saveit = function(event) {
+            event.preventDefault();
+            var data = $('#jtedit_json');
+            var errors = validate(item,data);
+            alert(validated);
+            if ( errors == false ) {
+                alert("Sorry. your changes could not be saved.");
+            } else if ( errors.length == 0 ) {
+                $.fn.jtedit.saveit();
+                alert("all good");
+            } else {
+                // alert errors on the page
+                alert("some errors");
+            };
+        };
+        $('#'+item+'newsave').bind('click',saveit);
+        
+        var cancelit = function(event) {
+            event.preventDefault();
+            $('#'+item+'new').remove();
+            $('#'+item+'facet').show();
+        };
+        $('#'+item+'newcancel').bind('click',cancelit);
+    };
+    $('.newitem').bind('click',newitem);
+
+});
+</script>            
+
+{% endblock %}
+
+{% block content %}
+
+<a name="dashboard"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2>Dashboard</h2>
+        <p>projects overview - list all, show green orange red depending on status and invoicing state.</p>
+        <p>TODO list</p>
+        <p>commitment overview - people resources, how much available etc</p>
+        <p>cl x overview</p>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="projects"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;"><a class="btn" href="/admin/project" alt="create a new project" title="create a new project"><i class="icon-plus"></i></a> Projects</h2>
+        <div class="row-fluid" id="projectsfacet">
+        </div>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="financials"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;"><a class="btn newitem" href="#financials" alt="create a new event" title="create a new event"><i class="icon-plus"></i></a> Financial events</h2>
+        <div class="row-fluid" id="financialsfacet">
+        </div>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="commitments"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;"><a class="btn newitem" href="#commitments" alt="create a new commitment" title="create a new commitment"><i class="icon-plus"></i></a>Partner commitments</h2>
+        <div class="row-fluid" id="commitmentsfacet">
+        </div>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="contacts"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;"><a class="btn newitem" href="#contacts" alt="create a new contact" title="create a new contact"><i class="icon-plus"></i></a> Contacts</h2>
+        <div class="row-fluid" id="contactsfacet">
+        </div>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="contractors"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;"><a class="btn newitem" href="#contractors" alt="create a new contractor" title="create a new contractor"><i class="icon-plus"></i></a> Contractors / suppliers</h2>
+        <div class="row-fluid" id="contractorsfacet">
+        </div>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="reports"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Reports</h2>
+        <p>quarterly, annual, vat, clx report</p>
+    </div>
+</div>
+
+{% endblock %}
+

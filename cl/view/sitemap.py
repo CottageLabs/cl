@@ -32,9 +32,9 @@ def index():
         resp.mimetype = "application/json"
         return resp
     elif current_user.is_anonymous():
-        return render_template('sitemap/sitemap.html', public=True, jsite_options=json.dumps(jsitemap))
+        return render_template('sitemap/sitemap.html', public=True, jsite_options=json.dumps(jsitemap), nosettings=True)
     else:
-        return render_template('sitemap/sitemap.html', public=False, jsite_options=json.dumps(jsitemap))
+        return render_template('sitemap/sitemap.html', public=False, jsite_options=json.dumps(jsitemap), nosettings=True)
 
 
 @blueprint.route('/<path:path>', methods=['GET','POST','DELETE'])

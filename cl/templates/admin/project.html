@@ -1,0 +1,208 @@
+
+<div id="newprojects" class="row-fluid newitemdiv">
+
+    <script type="text/javascript">
+    
+        // define actions  that need to be attached to the boxes of this form to enable it to work properly
+        var actions = function() {
+        }
+        
+        // define validation activities that should take place on this record before saving is allowed
+        var validate = function() {
+            $('.alert-error').remove();
+            var valid = true;
+            var errors = '';
+
+            // write validation functions here. e.g. compare the values of certain fields, see if they have particular types, etc
+            // when an error is found, append a description paragraph to var errors, and set valid to false
+            if ( !$('[name="id"]').val().length ) {
+                valid = false;
+                errors += '<p>You must provide a unique project ID tag.</p>';
+            }
+            
+            if ( valid ) {
+                return true;
+            } else {
+                $('.new_container').after('<div class="alert alert-error">' + errors + '</div>');
+                $(window).scrollTop($(window).scrollTop()+100);
+                return false;
+            }
+        }
+    </script>
+
+    <div class="span6">
+    <div class="well new_container">
+                                        
+        <div><span class="upload_label">title:</span> <input type="text" name="title" data-path="title" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">description:</span> <textarea name="description" data-path="description" class="jtedit_value"></textarea></div>
+
+        <div><span class="upload_label">Is this an internal project</span>
+            <select name="internal" data-path="internal" class="jtedit_value">
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+        </div>
+
+        <div><span class="upload_label">UNIQUE project ID tag:</span> <input type="text" name="id" data-path="id" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">other relevant tags:</span> <input type="text" name="tags" data-path="tags" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">proposer</span> 
+            <select name="proposer" data-path="proposer" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">senior +1</span> 
+            <select name="seniorplusone" data-path="seniorplusone" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["seniors"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">additional +1</span> 
+            <select name="plusone" data-path="plusone" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">QC partner</span> 
+            <select name="qc" data-path="qc" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">project lead</span>
+            <select name="lead" data-path="lead" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">related projects:</span>
+            <select name="related" data-path="related" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["projects"] %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">project docs folder URL:</span> <input type="text" name="folder" data-path="folder" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">project page URL:</span> <input type="text" name="page" data-path="page" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">start date:</span> <input type="text" name="datefrom" data-path="datefrom" class="jtedit_value datepicker" /></div>
+
+        <div><span class="upload_label">end date:</span> <input type="text" name="dateto" data-path="dateto" class="jtedit_value datepicker" /></div>
+
+        <div><span class="upload_label">status:</span> 
+            <select name="status" data-path="status" class="jtedit_value">
+                <option>draft</option>
+                <option>proposed</option>
+                <option>abandoned</option>
+                <option>rejected</option>
+                <option>accepted</option>
+                <option>current</option>
+                <option>late</option>
+                <option>complete</option>
+            </select>
+        </div>
+        
+        <div><span class="upload_label">external participants:</span> <input type="text" name="externals" data-path="externals" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">customer:</span> 
+            <select name="customer" data-path="customer" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["contacts"] %}
+                <option value="{{ name[1] }}{% if name[2] %}_{{ name[2] }}{% endif %}">
+                    {{ name[1] }}{% if name[2] %} - {{ name[2] }}{% endif %}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">funder:</span> 
+            <select name="funder" data-path="funder" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["contacts"] %}
+                <option value="{{ name[1] }}{% if name[2] %}_{{ name[2] }}{% endif %}">
+                    {{ name[1] }}{% if name[2] %} - {{ name[2] }}{% endif %}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">biling contact:</span> 
+            <select name="billing" data-path="billing" class="jtedit_value">
+                <option></option>
+                {% for name in dropdowns["billables"] %}
+                <option value="{{ name[1] }}{% if name[2] %}_{{ name[2] }}{% endif %}">
+                    {{ name[1] }}{% if name[2] %} - {{ name[2] }}{% endif %}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">Total budget ex VAT:</span> <input type="text" name="budget" data-path="budget" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">Total VAT to charge:</span> <input type="text" name="vat" data-path="vat" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">Total expenses budget:</span> <input type="text" name="expenses" data-path="expenses" class="jtedit_value" /></div>
+
+        <div><span class="upload_label">Notes:</span> <textarea name="notes" data-path="notes" class="jtedit_value"></textarea></div>
+
+        <div style="margin-top:10px;">
+            <span class="upload_label"></span>
+            <a id="projectsnewsave" class="btn" style="margin:-10px 5px 20px 0;" href="#">save</a><a id="projectsnewcancel" class="btn" style="margin:-10px 0 20px 0;" href="#">cancel</a>
+        </div>
+
+    </div>
+    </div>
+    
+    <div class="span6">
+        <div class="well help_container">
+            <p>NOTE: before getting started, make sure that records exist for any contacts or contractors that you will want to include in this project.</p>
+            <p class="help title">Provide a title for this project. This will be displayed elsewhere on the website.</p>
+            <p class="help description">Provide a short description of this project. This may be used elsewhere on the website.</p>
+            <p class="help internal">Identify whether this is a Cottage Labs internal project or not. Internal projects will not have an external customer, but can receive payments from other Cottage Labs projects - for example, a standard external software development project may pay some money to the internal Cottage Labs admin project for assistance received during the course of said project.</p>
+            <p class="help id">Select a unique project ID for this project. This should be used when referencing this project, and should be used to tag any other web pages that are about this project. It MUST be a single string of letters or numbers with no spaces in it.</p>
+            <p class="help proposer">Select the username of the person within Cottage Labs who proposes this project.</p>
+            <p class="help seniorplusone">Select the name of the senior partner who agrees to this project going ahead.</p>
+            <p class="help plusone">Select the name of one further partner who agrees to this project going ahead.</p>
+            <p class="help qc">Select the name of the partner who agrees to act as quality controller for this project.</p>
+            <p class="help lead">Select the name of the partner who will be project leader and main contact for this project.</p>
+            <p class="help related">List the unique IDs of any other Cottage Labs projects to which this project is related, where it would be useful to know this.</p>
+            <p class="help folder">Provide the URL to the Google docs folder where the documentation about this project will reside.</p>
+            <p class="help page">Provide the URL to the web page that will be the main introductory page to this project. This should be on the Cottage Labs website, although that page may then refer to somebody elses website. If this project should be kept private at the request of the customer, it should still have a project page created, but that page should be kept private.</p>
+            <p class="help datefrom">Select the start date of this project.</p>
+            <p class="help dateto">Select the end date of this project.</p>
+            <p class="help status">Select the status of this project.</p>
+            <p class="help externals">List any people / organisations external to Cottage Labs who it would be useful to know are also working on this project.</p>
+            <p class="help customer">Select the customer of this project.</p>
+            <p class="help funder">Select the funder of this project, if different from the customer.</p>
+            <p class="help billing">Select the billing contact of this project.</p>
+            <p class="help budget">Provide an integer number to represent the overall budget excluding VAT of this project. Do not include a £ or any other monetary symbol.</p>
+            <p class="help vat">Enter the amount of VAT relevant to the budget of this project. Note that we must charge VAT as we are a VAT registered business, unless the customer to which we send invoices has their registered address outside the EU.</p>
+            <p class="help expenses">List the total cost of any explicitly specified expenses that the customer will be directly charged over and above the budget of the project.</p>
+            <p class="help tags">Add any relevant tags, they are useful for searching for particular records later. For example you might tag some records with "check", to remind you to come back and check them later for some reason.</p>
+            <p class="help notes">Add any further notes, e.g. write a short note whenever you have to make a change to this record, or just a note about the content of this record, for future reference.</p>
+        </div>
+    </div>
+    
+</div>
+

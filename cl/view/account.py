@@ -3,7 +3,7 @@ import uuid, json
 from flask import Blueprint, request, url_for, flash, redirect, abort
 from flask import render_template
 from flask.ext.login import login_user, logout_user, current_user
-from flask.ext.wtf import Form, TextField, TextAreaField, PasswordField, validators, ValidationError
+from flask.ext.wtf import Form, TextField, TextAreaField, SelectField, PasswordField, validators, ValidationError
 from copy import deepcopy
 
 from cl import auth
@@ -128,6 +128,8 @@ class RegisterForm(Form):
         validators.EqualTo('c', message='Passwords must match')
     ])
     c = PasswordField('Repeat Password')
+    p = SelectField('Partner?', choices=[('no','No'),('yes','Yes')])
+    sn = SelectField('Senior partner?', choices=[('no','No'),('yes','Yes')])
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -139,6 +141,8 @@ def register():
         account = dao.Account(
             id=form.w.data, 
             email=form.n.data,
+            partner=form.p.data,
+            senior=form.sn.data,
             api_key=api_key
         )
         account.set_password(form.s.data)

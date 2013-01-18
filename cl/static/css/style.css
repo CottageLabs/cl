@@ -21,6 +21,10 @@ body > .container{
     margin-bottom:50px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom:7px;
+}
+
 .thumbnail{
     margin:5px;
 }
@@ -105,6 +109,26 @@ body > .container{
     bottom:10px;
 }
 
+.subnav-fixed-top {
+  position: fixed;
+  top: 40px;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.upload_label{
+    width:200px;
+    display:block;
+    float:left;
+    text-align:right;
+    margin-top:3px;
+    margin-right:5px;
+}
+.help{
+    display:none;
+}
+
 .navbar-in-page {
     position:relative;
     margin:0;
@@ -121,23 +145,6 @@ body > .container{
 .notify_loading{
     display:none;
     margin:12px 10px 0 0;
-}
-
-#tagcloud{
-    overflow:hidden;
-    height:0px;
-    background-color:none;
-    margin:0;
-    padding:0 10px 0 10px;
-}
-#tagcloud p{
-    padding-top:5px;
-}
-#tagcloud p a{
-    font-size:1em;
-    line-height:1.1em;
-    color:#c9d2d4;
-    padding-right:10px;
 }
 
 #editoptions{

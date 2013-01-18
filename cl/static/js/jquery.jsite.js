@@ -63,6 +63,17 @@
         
         // VIEW A PAGE AS NORMAL
         var viewpage = function(event) {
+            // replace any dynamic content divs with the actual content
+            $('.dynamic').each(function() {
+                var src = $(this).attr('data-source').replace('.json','') + '.json';
+                var embed = function(data,into) {
+                    var content = data['content'];
+                    this.into.append(content);
+                };
+                $.ajax({"url": src, "success": embed, "into": $(this)});
+            });
+        
+            // put any facetviews into any facetview divs
             $('.facetview').each(function() {
                 var opts = jQuery.extend(true, {}, options.facetview); // clone the options
                 for ( var style in options.facetview_displays ) {
@@ -76,7 +87,7 @@
                 } else {
                     opts.embedded_search = false;
                 };
-                $(this).attr('data-search') ? opts.q = $(this).attr('data-search') : "";                
+                $(this).attr('data-search') ? opts.q = $(this).attr('data-search') : "";
                 $(this).attr('data-size') ? opts.paging.size = $(this).attr('data-size') : "";
                 $(this).attr('data-from') ? opts.paging.from = $(this).attr('data-from') : "";
                 $(this).facetview(opts);
@@ -199,7 +210,10 @@
                 <div id="metaopts" class="row-fluid" style="background:#eee; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin-bottom:10px;"> \
                     <div class="row-fluid"> \
                         <div class="span8" style="padding:5px;"><h2>page settings</h2></div> \
-                        <div class="span4" style="padding:5px;"><button class="pagesettings close">x</button></div> \
+                        <div class="span4" style="padding:5px;"> \
+                            <button class="pagesettings close">x</button> \
+                            <button class="save_option_edits close">save</button> \
+                        </div> \
                     </div> \
                     <div class="row-fluid"> \
                         <div class="span6" id="page_info" style="padding:5px;"> \
@@ -209,6 +223,7 @@
                             <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
+                            <div class="row-fluid"><div class="span3"></div><div class="span9"><a class="btn btn-primary save_option_edits">Save these settings</a></div></div> \
                         </div> \
                         <div class="span6" id="access_settings" style="padding:5px;"> \
                             <h3>access settings</h3> \
@@ -220,45 +235,41 @@
                             <h3>embed content</h3> \
                             <div class="row-fluid"><div class="span3"><strong>file url:</strong></div><div class="span9"><input type="text" class="span12 page_options jtedit_value jtedit_embed" /></div></div> \
                             <h3>featured image</h3> \
-                            <div class="row-fluid"><div class="span3"><strong>featured image:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>featured image url:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
                         </div> \
                     </div> \
                     <div id="jtedit_space"></div> \
                 </div>'
             
-            $('#article').before(metaopts)
-            $('#metaopts').hide()
-            $('.pagesettings').bind('click',showopts)
+            $('#article').before(metaopts);
+            $('#metaopts').hide();
+            $('.pagesettings').bind('click',showopts);
             
             // set pre-existing values into page settings
-            options.data['editable'] ? $('.mode_page').attr('checked',true) : ""
-            options.data['accessible'] ? $('.access_page').attr('checked',true) : ""
-            options.data['visible'] ? $('.nav_page').attr('checked',true) : ""
-            options.data['comments'] ? $('.page_comments').attr('checked',true) : ""
-            options.data['tags'] ? $('.page_tags').val(options.data['tags']) : ""
+            options.data['editable'] ? $('.mode_page').attr('checked',true) : "";
+            options.data['accessible'] ? $('.access_page').attr('checked',true) : "";
+            options.data['visible'] ? $('.nav_page').attr('checked',true) : "";
+            options.data['comments'] ? $('.page_comments').attr('checked',true) : "";
+            options.data['tags'] ? $('.page_tags').val(options.data['tags']) : "";
 
             // handle changes to page settings
-            var edits = function(event) {
-                var record = $.parseJSON($('#jtedit_json').val())
-                if ( $(this).hasClass('mode_page') ) {
-                    $(this).attr('checked') == 'checked' ? record['editable'] = true : record['editable'] = false
-                } else if ( $(this).hasClass('page_comments') ) {
-                    $(this).attr('checked') == 'checked' ? record['comments'] = true : record['comments'] = false
-                } else if ( $(this).hasClass('access_page') ) {
-                    $(this).attr('checked') == 'checked' ? record['accessible'] = true : record['accessible'] = false
-                } else if ( $(this).hasClass('nav_page') ) {
-                    $(this).attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false
-                } else if ( $(this).hasClass('page_tags') ) {
-                    var tags = $(this).val().split(',')
-                    record['tags'] = []
-                    for ( var item in tags ) {
-                        record['tags'].push($.trim(tags[item]))
-                    }
+            var save = function(event) {
+                var record = $.parseJSON($('#jtedit_json').val());
+                $('.mode_page').attr('checked') == 'checked' ? record['editable'] = true : record['editable'] = false;
+                $('.page_comments').attr('checked') == 'checked' ? record['comments'] = true : record['comments'] = false;
+                $('.access_page').attr('checked') == 'checked' ? record['accessible'] = true : record['accessible'] = false;
+                $('.nav_page').attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false;
+                var tags = $('.page_tags').val().split(',');
+                record['tags'] = [];
+                for ( var item in tags ) {
+                    var titem = $.trim(tags[item]);
+                    titem.length != 0 ? record['tags'].push(titem) : false;
                 }
-                $('#jtedit_json').val(JSON.stringify(record,"","    "))
-                $.fn.jtedit.saveit()
+                $('#jtedit_json').val(JSON.stringify(record,"","    "));
+                $.fn.jtedit.saveit(false,false,record);
+                showopts();
             }
-            $('.page_options').bind('change',edits)
+            $('.save_option_edits').bind('click',save);
             
             $('#jtedit_space').jtedit({'data':options.data, 
                                         'makeform': false, 
@@ -266,8 +277,8 @@
                                         'jsonbutton': false,
                                         'delmsg':"", 
                                         'savemsg':"", 
-                                        "saveonupdate":true, 
-                                        "reloadonsave":""})
+                                        //"saveonupdate":true, 
+                                        "reloadonsave":""});
         }
         
 
@@ -292,7 +303,7 @@
         var scroller = function(event) {
             if ( $(this).attr('href').length > 1 && $(this).attr('href').substring(0,1) == '#' ) {
                 event.preventDefault()
-                $('html,body').animate({scrollTop: $('a[name=' + $(this).attr('href').replace('#','') +  ']').offset().top - 50}, 10)
+                $('html,body').animate({scrollTop: $('a[name=' + $(this).attr('href').replace('#','') +  ']').offset().top - 70}, 10)
             }
         }
 
@@ -334,8 +345,15 @@
                         $('#topnav').removeClass('navbar-in-page');
                         $('#topnav').addClass('navbar-fixed-top');
                         $('body').css({'padding-top':'40px'});
+                        if ( $('#subnav').length ) {
+                            $('#subnav').addClass('subnav-fixed-top');
+                            $('body').css({'padding-top':'80px'});
+                        };
                     };
                     if ( $(window).scrollTop() < fromtop && $('#topnav').hasClass('navbar-fixed-top') ) {
+                        if ( $('#subnav').length ) {
+                            $('#subnav').removeClass('subnav-fixed-top');
+                        };
                         $('#topnav').removeClass('navbar-fixed-top');
                         $('#topnav').addClass('navbar-in-page');
                         $('body').css({'padding-top':'0px'});

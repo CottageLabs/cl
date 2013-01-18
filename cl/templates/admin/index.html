@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block subnav %}
+
+    <div id="subnav" class="subnav">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#financials">Financials</a></li>
+                <li><a href="#commitments">Commitments</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#contractors">Contractors</a></li>
+                <li><a href="/media">Media</a></li>
+                <li><a href="/sitemap">Sitemap</a></li>
+                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
+            </ul>
+        </div>
+    </div>
+
+<script type="text/javascript" charset="utf-8">
+jQuery(document).ready(function() {
+
+    // prep facetview on each of the different types of objects
+    var opts = {{ jsite_options|safe }}.facetview;
+    opts.sharesave_link = false;
+    var openforedit = function(event) {
+        event ? event.preventDefault() : false;
+        bubblegetthenewitem(event,source=$(this).attr('href'),which=$(this).attr('data-type'));
+    };
+    var prepopenforedit = function() {
+        $('.openforedit').bind('click',openforedit);
+    }
+    opts.post_search_callback = prepopenforedit;
+
+    opts.facets = [{"field":"status.exact","display":"status"},{"field":"lead.exact","order":"term","display":"project leader"},{"field":"customer.exact","order":"term"}];
+    opts.search_url = '/query/project/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="cl_feature_title openforedit" data-type="projects" href="/admin/project/',
+                "field": "id"
+            },
+            {
+                "pre": '">',
+                "field": "id",
+                "post": "</a></div>"
+            }
+        ],
+        [
+            {
+                "field": "status",
+                "post": " "
+            },
+            {
+                "field": "datefrom"
+            },
+            {
+                "pre": ' to ',
+                "field": "dateto"
+            }
+        ]
+    ]
+    $('#projectsfacet').facetview(opts);
+    $('#projectsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="projects" alt="create a new project" title="create a new project" href="#"><i class="icon-plus"></i> create a new project</a>');
+
+    opts.facets = [{"field":"project.exact","order":"term","display":"for project"},{"field":"type.exact","display":"event type"},{"field":"status.exact","display":"event status"},{"field":"recipient.exact","display":"recipient"}];
+    opts.search_url = '/query/financial/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="openforedit" data-type="financials" href="/admin/financial/',
+                "field": "id"
+            },
+            {
+                "pre": '">',
+                "field": "status",
+                "post": " "
+            },
+            {
+                "field": "type",
+                "post":'</a>'
+            },
+            {
+                "pre": ' to ',
+                "field": "recipient"
+            },
+            {
+                "pre": " due on ",
+                "field": "duedate"
+            },
+            {
+                "pre": " and paid on ",
+                "field": "datepaid"
+            }
+        ]
+    ]
+    $('#financialsfacet').facetview(opts);
+    $('#financialsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="financials" alt="create a new financial event" title="create a new financial event" href="#"><i class="icon-plus"></i> create a new financial event</a>');
+
+    opts.facets = [{"field":"name.exact","display":"name"},{"field":"project.exact","order":"term","display":"for project"}];
+    opts.search_url = '/query/commitment/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="openforedit" data-type="commitments" href="/admin/commitment/',
+                "field": "id"
+            },
+            {
+                "pre": '"><span class="cl_feature_title ">',
+                "field": "who",
+                "post": '</span>'
+            },
+            {
+                "pre": ' on <span class="cl_feature_title">',
+                "field": "project",
+                "post": '</span></a>'
+            }
+        ],
+        [
+            {
+                "field": "status",
+                "post": " "
+            },
+            {
+                "field": "datefrom"
+            },
+            {
+                "pre": ' to ',
+                "field": "dateto",
+                "post": ". "
+            },
+            {
+                "pre": " On ",
+                "field": "time",
+                "post": "% time"
+            },
+            {
+                "pre": " for ",
+                "field": "share",
+                "post": "% share."
+            }
+        ]
+    ]
+    $('#commitmentsfacet').facetview(opts);
+    $('#commitmentsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="commitments" alt="create a new partner commitment" title="create a new partner commitment" href="#"><i class="icon-plus"></i> create a new partner commitment</a>');
+
+    opts.facets = [{"field":"name.exact"}];
+    opts.search_url = '/query/contact/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="cl_feature_title openforedit" data-type="contacts" href="/admin/contact/',
+                "field": "id"
+            },
+            {
+                "pre": '">',
+                "field": "name",
+                "post":'</a>'
+            },
+            {
+                "pre": ' - ',
+                "field": "role"
+            },
+            {
+                "pre": ' at ',
+                "field": "companyname"
+            },
+            {
+                "pre": ". Billable contact - ",
+                "field": "billable",
+                "post": "."
+            },
+            {
+                "pre": " ",
+                "field": "email"
+            }
+        ]
+    ]
+    $('#contactsfacet').facetview(opts);
+    $('#contactsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="contacts" alt="create a new contact" title="create a new contact" href="#"><i class="icon-plus"></i> create a new contact</a>');
+
+    opts.facets = [{"field":"name.exact"}];
+    opts.search_url = '/query/contractor/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="cl_feature_title openforedit" data-type="contractors" href="/admin/contractor/',
+                "field": "id"
+            },
+            {
+                "pre": '">',
+                "field": "name",
+                "post":'</a>'
+            },
+            {
+                "pre": ' - ',
+                "field": "role",
+                "post": " at "
+            },
+            {
+                "field": "companyname",
+                "post": "."
+            },
+            {
+                "pre": " ",
+                "field": "email"
+            }
+        ]
+    ]
+    $('#contractorsfacet').facetview(opts);
+    $('#contractorsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="contractors" alt="create a new contractor" title="create a new contractor" href="#"><i class="icon-plus"></i> create a new contractor</a>');
+
+    // take all new X out of page, for later insertion with jtedit when needed
+    var content = {
+        "projects": $('#newprojects'),
+        "commitments": $('#newcommitments'),
+        "contractors": $('#newcontractors'),
+        "contacts": $('#newcontacts'),
+        "financials": $('#newfinancials')
+    }
+    $('#newprojects').remove()
+    $('#newcommitments').remove()
+    $('#newcontractors').remove()
+    $('#newcontacts').remove()
+    $('#newfinancials').remove()
+
+    // create new item form on click of add new item button
+    bubblegetthenewitem = function(event,source,which) {
+        event ? event.preventDefault() : false;
+        $('.newitemdiv').remove();
+        $('.facetdisplay').show();
+        var which = which ? which : $(this).attr('data-type');
+        $('#' + which + 'facet').hide();
+        $('#' + which + 'facet').parent().parent().after(content[which]);
+        var top = $('a[name="' + which + '"]').offset().top - 80;
+        $('html, body').animate({scrollTop: top});
+        $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
+        //$('#ui-datepicker-div').show().css({'z-index':10000000})
+        $('#new'+which).jtedit({
+            'source': source,
+            'data':{}, 
+            'makeform': false, 
+            'actionbuttons': false,
+            'jsonbutton': false,
+            'target': '/admin/' + which.substring(0,which.length - 1),
+            'delmsg':"", 
+            'savemsg':"", 
+            "saveonupdate":false, 
+            "reloadonsave":window.location
+        });
+        actions();
+        var save = function(event) {
+            event.preventDefault();
+            var validated = validate();
+            validated ? $.fn.jtedit.saveit() : false;
+        }
+        var cancel = function(event) {
+            event.preventDefault();
+            $('#new' + which).remove();
+            $('#' + which + 'facet').show();
+        }
+        $('#' + which + 'newsave').bind('click',save);
+        $('#' + which + 'newcancel').bind('click',cancel);
+        var showhelp = function() {
+            $('.' + show).css({'padding-top':'10px'})
+            $('.help').hide();
+            var show = $(this).attr('data-path');
+            $('.' + show).show();
+            var pad = $(this).offset().top - $('.' + show).offset().top + 'px';
+            $('.' + show).css({'padding-top':pad})
+        };
+        $('.jtedit_value').bind('focus',showhelp);
+
+    };
+    $('.newitem').bind('click',bubblegetthenewitem);
+
+});
+</script>            
+
+{% endblock %}
+
+{% block content %}
+
+
+<a name="dashboard"></a>
+{% include "admin/dashboard.html" %}
+
+<hr></hr>
+
+<a name="reports"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Reports</h2>
+        <p>quarterly, annual, vat, clx report... perhaps generatable from the above vis.</p>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="projects"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Projects</h2>
+        <div class="row-fluid facetdisplay" id="projectsfacet">
+        </div>
+    </div>
+</div>
+
+{% include "admin/project.html" %}
+
+<hr></hr>
+
+<a name="financials"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Financial events</h2>
+        <div class="row-fluid facetdisplay" id="financialsfacet">
+        </div>
+    </div>
+</div>
+
+{% include "admin/financial.html" %}
+
+<hr></hr>
+
+<a name="commitments"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Partner commitments</h2>
+        <div class="row-fluid facetdisplay" id="commitmentsfacet">
+        </div>
+    </div>
+</div>
+
+{% include "admin/commitment.html" %}
+
+<hr></hr>
+
+<a name="contacts"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Contacts</h2>
+        <div class="row-fluid facetdisplay" id="contactsfacet">
+        </div>
+    </div>
+</div>
+
+{% include "admin/contact.html" %}
+
+<hr></hr>
+
+<a name="contractors"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Contractors / suppliers</h2>
+        <div class="row-fluid facetdisplay" id="contractorsfacet">
+        </div>
+    </div>
+</div>
+
+{% include "admin/contractor.html" %}
+
+{% endblock %}
+
