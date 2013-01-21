@@ -210,7 +210,7 @@ class Record(DomainObject):
     @classmethod
     def pull_by_url(cls,url):
         res = cls.query(q='url.exact:' + url)
-        if res['hits']['total'] == 1:
+        if res.get('hits',{}).get('total',0) == 1:
             return cls(**res['hits']['hits'][0]['_source'])
         else:
             return None
