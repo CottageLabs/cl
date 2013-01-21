@@ -122,7 +122,7 @@ class DomainObject(UserDict.IterableUserDict):
             if out.status_code == 404:
                 return None
             else:
-                return cls(**out.json)
+                return cls(**out.json())
         except:
             return None
 
@@ -192,7 +192,7 @@ class DomainObject(UserDict.IterableUserDict):
             r = requests.get(cls.target() + recid + endpoint)
         else:
             r = requests.post(cls.target() + recid + endpoint, data=json.dumps(query))
-        return r.json
+        return r.json()
 
     def accessed(self):
         if 'last_access' not in self.data:

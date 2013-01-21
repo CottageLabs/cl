@@ -8,7 +8,7 @@ setup(
         "Flask==0.8",
         "Flask-Login",
         "Flask-WTF",
-        "requests>=0.13.0",
+        "requests==1.1.0",
         "markdown"
     ],
     url = 'http://cottagelabs.com/',
