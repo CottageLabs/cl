@@ -18,8 +18,9 @@
             // write validation functions here. e.g. compare the values of certain fields, see if they have particular types, etc
             // when an error is found, append a description paragraph to var errors, and set valid to false
             
+            var data = $.fn.jtedit.options.data;
             if ( valid ) {
-                return true;
+                return data;
             } else {
                 $('.new_container').after('<div class="alert alert-error">' + errors + '</div>');
                 $(window).scrollTop($(window).scrollTop()+100);

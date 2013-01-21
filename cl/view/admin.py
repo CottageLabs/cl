@@ -145,7 +145,7 @@ def geteverything(q=False,person=False,project=False,contact=False,contractor=Fa
         projqryobj['query']['bool']['must'].append(fromqry)
         commqryobj['query']['bool']['must'].append(fromqry)
         if not dateto:
-            fromqry = {"range" : {"date" : {"from" : datefrom}}}
+            fromqry = {"range" : {"duedate" : {"from" : datefrom}}}
             finqryobj['query']['bool']['must'].append(fromqry)
 
     # if provided a maximum date to, then only return objects that have started before that date
@@ -154,17 +154,14 @@ def geteverything(q=False,person=False,project=False,contact=False,contractor=Fa
         projqryobj['query']['bool']['must'].append(toqry)
         commqryobj['query']['bool']['must'].append(toqry)
         if not datefrom:
-            toqry = {"range" : {"date" : {"to" : dateto}}}
+            toqry = {"range" : {"duedate" : {"to" : dateto}}}
             finqryobj['query']['bool']['must'].append(toqry)
         
     # because financial events only have one date on which they occurred, when datefrom and dateto are both set,
     # simplify down to just one query on "date" with from and to params
     if datefrom and dateto:
-        qry = {"range" : {"date" : {"from": datefrom, "to" : dateto}}}
+        qry = {"range" : {"duedate" : {"from": datefrom, "to" : dateto}}}
         finqryobj['query']['bool']['must'].append(qry)
-    
-    print json.dumps(projqryobj,indent=4)
-    print json.dumps(cl.dao.Project.query(q=projqryobj,size=10000),indent=4)
     
     linkables = {
         "projects": [i['_source'] for i in cl.dao.Project.query(q=projqryobj,size=10000).get('hits',{}).get('hits',[])],
@@ -184,7 +181,6 @@ def geteverything(q=False,person=False,project=False,contact=False,contractor=Fa
                         item['budget'] = item['cost']
                         if not item['budget']: item['budget'] = 1000
                     if 'share' in item:
-                        print item
                         project = cl.dao.Project.pull(item['project'])
                         pb = project.data.get('budget',0)
                         if not pb: pb = 0
@@ -286,7 +282,7 @@ def adminitem(itype,iid=False):
                         iid = False
             if not iid:
                 iid = cl.dao.makeid()
-        
+
         if iid:
             rec = klass.pull(iid)
             if request.method == 'GET':
@@ -300,6 +296,7 @@ def adminitem(itype,iid=False):
                 if rec is None:
                     rec = klass(**request.json)
                 rec.data = request.json
+                print rec.data
                 rec.save()
                 return ""
         else:

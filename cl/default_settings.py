@@ -212,7 +212,12 @@ MAPPINGS = {
                     "index": "not_analyzed",
                     "format": "dd/MM/yyyy"
                 },
-                "date":{
+                "duedate":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "datepaid":{
                     "type": "date",
                     "index": "not_analyzed",
                     "format": "dd/MM/yyyy"

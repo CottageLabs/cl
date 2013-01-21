@@ -5,6 +5,31 @@
     
         // define actions  that need to be attached to the boxes of this form to enable it to work properly
         var actions = function() {
+            $('.datepicker').datepicker({"dateFormat":"dd/mm/yy", "setDate": new Date()});
+            var vals = $.fn.jtedit.options.data.tags;
+            $('#tags').val(vals);
+            var tagify = function(data) {
+                $('.tagselect').select2({
+                    "tags":data,
+                    "tokenSeparators":[","," "],
+                    "width":"element",
+                });
+                $('.tagselect').css({
+                    "margin-bottom":"8px"
+                });
+                $('.select2-choices').css({
+                    "-webkit-border-radius":"3px",
+                    "-moz-border-radius":"3px",
+                    "border-radius":"3px",
+                    "border":"1px solid #ccc"
+                });            
+            };
+            $.ajax({
+                "url": "/stream/project/tags?size=1000",
+                "success": function(data) {
+                    tagify(data);
+                }
+            });
         }
         
         // define validation activities that should take place on this record before saving is allowed
@@ -20,8 +45,14 @@
                 errors += '<p>You must provide a unique project ID tag.</p>';
             }
             
+            var data = $.fn.jtedit.options.data;
+            data.tags = [];
+            var tags = $('.tagselect').select2("data");
+            for ( var key in tags ) {
+                data.tags.push(tags[key].text);
+            };
             if ( valid ) {
-                return true;
+                return data;
             } else {
                 $('.new_container').after('<div class="alert alert-error">' + errors + '</div>');
                 $(window).scrollTop($(window).scrollTop()+100);
@@ -46,7 +77,7 @@
 
         <div><span class="upload_label">UNIQUE project ID tag:</span> <input type="text" name="id" data-path="id" class="jtedit_value" /></div>
 
-        <div><span class="upload_label">other relevant tags:</span> <input type="text" name="tags" data-path="tags" class="jtedit_value" /></div>
+        <div><span class="upload_label">other relevant tags:</span> <input type="text" id="tags" name="tags" class="tagselect" /></div>
 
         <div><span class="upload_label">proposer</span> 
             <select name="proposer" data-path="proposer" class="jtedit_value">

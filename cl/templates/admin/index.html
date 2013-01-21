@@ -236,8 +236,9 @@ jQuery(document).ready(function() {
         $('#' + which + 'facet').parent().parent().after(content[which]);
         var top = $('a[name="' + which + '"]').offset().top - 80;
         $('html, body').animate({scrollTop: top});
-        $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
-        //$('#ui-datepicker-div').show().css({'z-index':10000000})
+        var prep = function() {
+            actions(); // defined in the included page for the given record type
+        }
         $('#new'+which).jtedit({
             'source': source,
             'data':{}, 
@@ -248,13 +249,13 @@ jQuery(document).ready(function() {
             'delmsg':"", 
             'savemsg':"", 
             "saveonupdate":false, 
-            "reloadonsave":window.location
+            "reloadonsave":window.location,
+            "post_source_callback":prep
         });
-        actions();
         var save = function(event) {
             event.preventDefault();
-            var validated = validate();
-            validated ? $.fn.jtedit.saveit() : false;
+            var validdata = validate();
+            validdata ? $.fn.jtedit.saveit(false,false,validdata) : false;
         }
         var cancel = function(event) {
             event.preventDefault();

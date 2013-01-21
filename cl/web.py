@@ -138,14 +138,14 @@ def query(path='Record'):
 # "counts" param indicates whether to return a list of strings or a list of lists [string, count]
 # "size" can be set to get more back
 # NOTE THIS DOES NOT USE THE DAO- IT IS DIRECT TO ES
-@app.route('/stream/')
-@app.route('/stream/<index>/')
-@app.route('/stream/<index>/<key>/')
+@app.route('/stream')
+@app.route('/stream/<index>')
+@app.route('/stream/<index>/<key>')
 def stream(index='record',key='tags'):
 
     t = 'http://' + str(app.config['ELASTIC_SEARCH_HOST']).lstrip('http://').rstrip('/') + '/' + app.config['ELASTIC_SEARCH_DB'] + '/'
 
-    if [index] == app.config['NO_QUERY_VIA_API']: abort(401)
+    if index in app.config['NO_QUERY_VIA_API']: abort(401)
     indices = []
     for idx in index.split(','):
         if idx not in app.config['NO_QUERY_VIA_API']:
@@ -164,10 +164,11 @@ def stream(index='record',key='tags'):
         'facets':{}
     }
     for ky in keys:
-        qry['facets'][ky] = {"terms":{"field":ky,"order":request.values.get('order','term'), "size":request.values.get('size',100)}}
+        qry['facets'][ky] = {"terms":{"field":ky+app.config['FACET_FIELD'],"order":request.values.get('order','term'), "size":request.values.get('size',100)}}
     
     r = requests.post(t + ','.join(indices) + '/_search', json.dumps(qry))
 
+    print json.dumps(r.json)
     res = []
     if request.values.get('counts',False):
         for k in keys:
