@@ -30,6 +30,7 @@ jQuery(document).ready(function() {
         bubblegetthenewitem(event,source=$(this).attr('href'),which=$(this).attr('data-type'));
     };
     var prepopenforedit = function() {
+        $('.openforedit').unbind('click',openforedit);
         $('.openforedit').bind('click',openforedit);
     }
     opts.post_search_callback = prepopenforedit;
@@ -220,12 +221,48 @@ jQuery(document).ready(function() {
         "contacts": $('#newcontacts'),
         "financials": $('#newfinancials')
     }
-    $('#newprojects').remove()
-    $('#newcommitments').remove()
-    $('#newcontractors').remove()
-    $('#newcontacts').remove()
-    $('#newfinancials').remove()
+    $('#newprojects').remove();
+    $('#newcommitments').remove();
+    $('#newcontractors').remove();
+    $('#newcontacts').remove();
+    $('#newfinancials').remove();
 
+    // things to do whenever any type of object is loaded for edit. then calls any defined on each type page
+    var allactions = function() {
+        var objtype = 'project';
+        $('#newcommitments').length ? objtype = 'commitment' : false;
+        $('#newcontractors').length ? objtype = 'contractor' : false;
+        $('#newcontacts').length ? objtype = 'contact' : false;
+        $('#newfinancials').length ? objtype = 'financial' : false;
+        
+        alert(objtype);
+        $('.datepicker').datepicker({"dateFormat":"dd/mm/yy", "setDate": new Date()});
+        var vals = $.fn.jtedit.options.data.tags;
+        $('.tagselect').val(vals);
+        var tagify = function(data) {
+            $('.tagselect').select2({
+                "tags":data,
+                "tokenSeparators":[","],
+                "width":"element",
+            });
+            $('.tagselect').css({
+                "margin-bottom":"8px"
+            });
+            $('.select2-choices').css({
+                "-webkit-border-radius":"3px",
+                "-moz-border-radius":"3px",
+                "border-radius":"3px",
+                "border":"1px solid #ccc"
+            });            
+        };
+        $.ajax({
+            "url": "/stream/" + objtype + "/tags?size=1000",
+            "success": function(data) {
+                tagify(data);
+            }
+        });
+        actions();
+    }
     // create new item form on click of add new item button
     bubblegetthenewitem = function(event,source,which) {
         event ? event.preventDefault() : false;
@@ -237,7 +274,7 @@ jQuery(document).ready(function() {
         var top = $('a[name="' + which + '"]').offset().top - 80;
         $('html, body').animate({scrollTop: top});
         var prep = function() {
-            actions(); // defined in the included page for the given record type
+            allactions();
         }
         $('#new'+which).jtedit({
             'source': source,
@@ -252,6 +289,7 @@ jQuery(document).ready(function() {
             "reloadonsave":window.location,
             "post_source_callback":prep
         });
+        !source ? allactions() : false;
         var save = function(event) {
             event.preventDefault();
             var validdata = validate();

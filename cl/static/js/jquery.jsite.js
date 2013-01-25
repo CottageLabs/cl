@@ -60,16 +60,24 @@
             }
         }
         
-        
+
+        // do the nested embed of dynamic divs
+        var embed = function(data) {
+            var content = data['content'];
+            this.into.html('');
+            this.into.append(content);
+            this.into.attr('id',data['id']);
+            this.into.addClass('expanded');
+            this.into.find('.dynamic').each(function() {
+                var src = $(this).attr('data-source').replace('.json','') + '.json';
+                $.ajax({"url": src, "success": embed, "into": $(this)});
+            });
+        };        
         // VIEW A PAGE AS NORMAL
         var viewpage = function(event) {
             // replace any dynamic content divs with the actual content
             $('.dynamic').each(function() {
                 var src = $(this).attr('data-source').replace('.json','') + '.json';
-                var embed = function(data,into) {
-                    var content = data['content'];
-                    this.into.append(content);
-                };
                 $.ajax({"url": src, "success": embed, "into": $(this)});
             });
         
@@ -113,7 +121,6 @@
             event ? event.preventDefault() : ""
             var record = options.data
         
-            $('.edit_page').parent().before('<li><a class="jtedit_deleteit" style="color:red;" href="">delete this page</a></li>');
             $('.edit_page').parent().remove();
             $('#facetview').hide()
             $('#topstrap').hide()
@@ -162,7 +169,7 @@
                 $('#collab_edit').height( $(window).height() - 44 )
             } else {
                 var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"> \
-                    <textarea class="tinymce jtedit_value jtedit_content" id="form_content" name="content" \
+                    <textarea class="tinymce jtedit_value data-path="content" id="form_content" name="content" \
                     style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."> \
                     </textarea></div></div>'
                 $('#article').append(editor)
@@ -218,12 +225,18 @@
                     <div class="row-fluid"> \
                         <div class="span6" id="page_info" style="padding:5px;"> \
                             <h3>page info</h3> \
-                            <div class="row-fluid"><div class="span3"><strong>navigation title:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_title" /></div></div> \
-                            <div class="row-fluid"><div class="span3"><strong>page address:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_url" /></div></div> \
-                            <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_author" /></div></div> \
-                            <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value jtedit_excerpt"></textarea></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>navigation title:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="title" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>page address:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="url" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>primary author:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="author" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>brief summary:</strong></div><div class="span9"><textarea class="span12 jtedit_value" data-path="excerpt"></textarea></div></div> \
                             <div class="row-fluid"><div class="span3"><strong>tags:</strong></div><div class="span9"><textarea class="span12 page_options page_tags"></textarea></div></div> \
-                            <div class="row-fluid"><div class="span3"></div><div class="span9"><a class="btn btn-primary save_option_edits">Save these settings</a></div></div> \
+                            <div class="row-fluid"> \
+                                <div class="span3"></div> \
+                                <div class="span9"> \
+                                    <a class="btn btn-primary save_option_edits">Save these settings</a> \
+                                    <a class="btn btn-danger delete_page" href="#">Delete this page</a> \
+                                </div> \
+                            </div> \
                         </div> \
                         <div class="span6" id="access_settings" style="padding:5px;"> \
                             <h3>access settings</h3> \
@@ -233,9 +246,9 @@
                             <input type="checkbox" class="page_options page_comments" /> <strong>page comments</strong> enabled on this page<br> \
                             <br>\
                             <h3>embed content</h3> \
-                            <div class="row-fluid"><div class="span3"><strong>file url:</strong></div><div class="span9"><input type="text" class="span12 page_options jtedit_value jtedit_embed" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>file url:</strong></div><div class="span9"><input type="text" class="span12 page_options jtedit_value" data-path="embed" /></div></div> \
                             <h3>featured image</h3> \
-                            <div class="row-fluid"><div class="span3"><strong>featured image url:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value jtedit_image" /></div></div> \
+                            <div class="row-fluid"><div class="span3"><strong>featured image url:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="image" /></div></div> \
                         </div> \
                     </div> \
                     <div id="jtedit_space"></div> \
@@ -252,6 +265,32 @@
             options.data['comments'] ? $('.page_comments').attr('checked',true) : "";
             options.data['tags'] ? $('.page_tags').val(options.data['tags']) : "";
 
+            // enable tagselect on the tags box
+            var tagify = function(data) {
+                $('.page_tags').select2({
+                    "tags":data,
+                    "tokenSeparators":[","],
+                    "width":"element",
+                });
+                $('.page_tags').css({
+                    "margin-bottom":"8px",
+                    "width":"100%"
+                });
+                $('.select2-choices').css({
+                    "-webkit-border-radius":"3px",
+                    "-moz-border-radius":"3px",
+                    "border-radius":"3px",
+                    "border":"1px solid #ccc"
+                });            
+            };
+            $.ajax({
+                "url": "/stream/record/tags?size=1000",
+                "success": function(data) {
+                    tagify(data);
+                }
+            });
+
+
             // handle changes to page settings
             var save = function(event) {
                 var record = $.parseJSON($('#jtedit_json').val());
@@ -261,22 +300,29 @@
                 $('.nav_page').attr('checked') == 'checked' ? record['visible'] = true : record['visible'] = false;
                 var tags = $('.page_tags').val().split(',');
                 record['tags'] = [];
-                for ( var item in tags ) {
-                    var titem = $.trim(tags[item]);
-                    titem.length != 0 ? record['tags'].push(titem) : false;
-                }
+                var tags = $('.page_tags').select2("data");
+                for ( var key in tags ) {
+                    record.tags.push(tags[key].text);
+                };
                 $('#jtedit_json').val(JSON.stringify(record,"","    "));
                 $.fn.jtedit.saveit(false,false,record);
-                showopts();
+                record.url != window.location.pathname ? setTimeout(function() {window.location = record.url;},300) : showopts();
             }
             $('.save_option_edits').bind('click',save);
             
+            var deletepage = function(event) {
+                event ? event.preventDefault() : false;
+                $.fn.jtedit.deleteit();
+            }
+            $('.delete_page').bind('click',deletepage);
+
             $('#jtedit_space').jtedit({'data':options.data, 
                                         'makeform': false, 
                                         'actionbuttons': false,
                                         'jsonbutton': false,
                                         'delmsg':"", 
                                         'savemsg':"", 
+                                        'reloadondelete': "/",
                                         //"saveonupdate":true, 
                                         "reloadonsave":""});
         }

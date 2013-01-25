@@ -217,11 +217,12 @@ class Record(DomainObject):
 
     @classmethod
     def check_duplicate(cls,url):
-        res = cls.query(q='url.exact:' + url)
-        if res['hits']['total'] > 1:
+        res = cls.query(q='url.exact:' + url,size=1000000)
+        if res.get('hits',{}).get('total',0) > 1:
             return [i['_source'] for i in res['hits']['hits']]
         else:
             return None
+
 
 
 class Account(DomainObject, UserMixin):

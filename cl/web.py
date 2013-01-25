@@ -168,14 +168,13 @@ def stream(index='record',key='tags'):
     
     r = requests.post(t + ','.join(indices) + '/_search', json.dumps(qry))
 
-    print json.dumps(r.json)
     res = []
     if request.values.get('counts',False):
         for k in keys:
-            res = res + [[i['term'],i['count']] for i in r.json['facets'][k]["terms"]]
+            res = res + [[i['term'],i['count']] for i in r.json()['facets'][k]["terms"]]
     else:
         for k in keys:
-            res = res + [i['term'] for i in r.json['facets'][k]["terms"]]
+            res = res + [i['term'] for i in r.json()['facets'][k]["terms"]]
 
     resp = make_response( json.dumps(res) )
     resp.mimetype = "application/json"
@@ -191,17 +190,17 @@ def deduplicate(path='',duplicates=[],target='/'):
         jsitem['facetview']['initialsearch'] = False
         return render_template('deduplicate.html', jsite_options=json.dumps(jsitem), duplicates=duplicates, url=target)
     elif request.method == 'POST':
-        # update the submittede record
-        #try:
         for k,v in request.values.items():
-            if v and v not in ['url', 'submit']:
-                rec = cl.dao.Record.pull(k)
-                rec.data['url'] = v
-                rec.save()
+            if v and k not in ['url', 'submit']:
+                if k.startswith('delete_'):
+                    rec = cl.dao.Record.pull(k.replace('delete_',''))
+                    if rec: rec.delete()
+                else:
+                    rec = cl.dao.Record.pull(k)
+                    rec.data['url'] = v
+                    rec.save()
         if 'url' in request.values: target = request.values['url']
         return redirect(target)
-        #except:
-        #    abort(404)
 
 
 # this is a catch-all that allows us to present everything as a search
@@ -322,8 +321,7 @@ def default(path=''):
             abort(401)
         try:
             rec.delete()
-            flash('you killed it! sad face...')
-            return redirect('/')
+            return ""
         except:
             abort(404)
 

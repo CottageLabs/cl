@@ -19,6 +19,11 @@
             // when an error is found, append a description paragraph to var errors, and set valid to false
             
             var data = $.fn.jtedit.options.data;
+            data.tags = [];
+            var tags = $('.tagselect').select2("data");
+            for ( var key in tags ) {
+                data.tags.push(tags[key].text);
+            };
             if ( valid ) {
                 return data;
             } else {
@@ -56,7 +61,7 @@
         
         <div><span class="upload_label">Description:</span><textarea name="description" data-path="description" class="jtedit_value"></textarea></div>
         
-        <div><span class="upload_label">Tags:</span> <input type="text" name="tags" data-path="tags" class="jtedit_value" /></div>
+        <div><span class="upload_label">Tags:</span> <input type="text" name="tags" data-path="tags" class="tagselect" /></div>
 
         <div><span class="upload_label">Notes:</span> <textarea name="notes" data-path="notes" class="jtedit_value"></textarea></div>
 
