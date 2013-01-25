@@ -235,7 +235,6 @@ jQuery(document).ready(function() {
         $('#newcontacts').length ? objtype = 'contact' : false;
         $('#newfinancials').length ? objtype = 'financial' : false;
         
-        alert(objtype);
         $('.datepicker').datepicker({"dateFormat":"dd/mm/yy", "setDate": new Date()});
         var vals = $.fn.jtedit.options.data.tags;
         $('.tagselect').val(vals);
