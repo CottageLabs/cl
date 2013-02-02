@@ -36,9 +36,10 @@ JSITE_OPTIONS = {
     "recordurl": "/query/record/",
     "savetourl": "",
     "datatype": "json",
-    "collaborative": True,
+    "collaborative": False,#True,
     "comments": "cottagelabs",
-    "twitter": "cottagelabs",
+    "twitter": "",#"cottagelabs",
+    "offline": True,#False, # set to true to disable google fonts and analytics etc useful for offline dev
     "sharethis": False,
     "editable": True,
     "richtextedit": False,

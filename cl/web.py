@@ -8,6 +8,7 @@ import cl.util as util
 from cl.core import app, login_manager
 from cl.view.account import blueprint as account
 from cl.view.sitemap import blueprint as sitemap
+from cl.view.tagging import blueprint as tagging
 from cl.view.media import blueprint as media
 from cl.view.admin import blueprint as admin
 from cl import auth
@@ -16,6 +17,7 @@ from copy import deepcopy
 
 app.register_blueprint(account, url_prefix='/account')
 app.register_blueprint(sitemap, url_prefix='/sitemap')
+app.register_blueprint(tagging, url_prefix='/tagging')
 app.register_blueprint(media, url_prefix='/media')
 app.register_blueprint(admin, url_prefix='/admin')
 
@@ -194,7 +196,7 @@ def deduplicate(path='',duplicates=[],target='/'):
             if v and k not in ['url', 'submit']:
                 if k.startswith('delete_'):
                     rec = cl.dao.Record.pull(k.replace('delete_',''))
-                    if rec: rec.delete()
+                    if rec is not None: rec.delete()
                 else:
                     rec = cl.dao.Record.pull(k)
                     rec.data['url'] = v
@@ -294,7 +296,7 @@ def default(path=''):
         if url == '/search':
             search = True
 
-        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite))
+        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'])
 
     elif request.method == 'POST':
         if rec:

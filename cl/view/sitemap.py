@@ -178,11 +178,10 @@ def generate_sitenav(sitemap=False):
         sitemap = json.load(open('cl/templates/sitemap/sitemap.json'))
     sn = ''
     for key,menu in sitemap.items():
-        if menu['__META__'].get('listed',False) and menu['__META__'].get('access',True):
+        if menu['__META__'].get('listed',False) and menu['__META__'].get('access',True) and menu['__META__']['url'] not in ['/admin','/sitemap','/tagging','/stream']:
             sn += '<li><a href="' + menu['__META__']['url'] + '">' + menu['__META__']['section'] + '</a></li>\n'
 
     out = open('cl/templates/sitemap/sitenav.html','w')
     out.write(sn)
     out.close()
-
 
