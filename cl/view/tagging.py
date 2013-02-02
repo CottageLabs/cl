@@ -35,22 +35,22 @@ def index():
                     else:
                         update = False
                         if 'title_'+kid in request.values:
-                            if rec.data['title'] != request.values['title_'+kid]:
+                            if rec.data.get('title','') != request.values['title_'+kid]:
                                 update = True
                                 rec.data['title'] = request.values['title_'+kid]
                         if 'excerpt_'+kid in request.values: 
-                            if rec.data['excerpt'] != request.values['excerpt_'+kid]:
+                            if rec.data.get('excerpt','') != request.values['excerpt_'+kid]:
                                 update = True
                                 rec.data['excerpt'] = request.values['excerpt_'+kid]
                         if 'url_'+kid in request.values: 
-                            if rec.data['url'] != request.values['url_'+kid]:
+                            if rec.data.get('url','') != request.values['url_'+kid]:
                                 update = True
                                 rec.data['url'] = request.values['url_'+kid]
 
-                        if 'accessible_'+kid in request.values and not rec.data['accessible']:
+                        if 'accessible_'+kid in request.values and not rec.data.get('accessible',False):
                             update = True
                             rec.data['accessible'] = True
-                        elif rec.data['accessible'] and not 'accessible_'+kid in request.values:
+                        elif rec.data.get('accessible',False) and not 'accessible_'+kid in request.values:
                             update = True
                             rec.data['accessible'] = False
 
@@ -59,7 +59,7 @@ def index():
                             tgs = []
                             for t in request.values['tags_'+kid].split(','):
                                 if len(t) > 0 : tgs.append(t)
-                            if rec.data['tags'] != tgs:
+                            if rec.data.get('tags',[]) != tgs:
                                 update = True
                                 rec.data['tags'] = tgs
 
