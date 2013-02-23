@@ -49,6 +49,58 @@ JSITE_OPTIONS = {
         "display_images": False
     },
     "facetview_displays": {
+        "compact" : {
+            'result_display':  [
+                [
+                    {
+                        "pre": '<a class="cl_red_leader" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a>&nbsp;"
+                    },
+                    {
+                        "field" : "excerpt"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div>',
+            'resultwrap_start': '<span>',
+            'resultwrap_end': '</span>',
+            "paging":{
+                "from":0,
+                "size":4
+            }
+        },
+        "stories" : {
+            'result_display':   [
+                [
+                    {
+                        "pre": '<strong><a class="cl_black_leader" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></strong><br>"
+                    },
+                    {
+                        "field" : "excerpt"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div>',
+            'resultwrap_start': '<div class="cl_news_line">',
+            'resultwrap_end': '</div>',
+            "paging":{
+                "from":0,
+                "size":20
+            }
+        },
         "features": {
             'result_display': [
                 [
