@@ -166,7 +166,7 @@ def stream(index='record',key='tags'):
         'facets':{}
     }
     for ky in keys:
-        qry['facets'][ky] = {"terms":{"field":ky+app.config['FACET_FIELD'],"order":request.values.get('order','term'), "size":request.values.get('size',100)}}
+        qry['facets'][ky] = {"terms":{"field":ky+app.config['FACET_FIELD'],"order":request.values.get('order','term'), "size":request.values.get('size',1000)}}
     
     r = requests.post(t + ','.join(indices) + '/_search', json.dumps(qry))
 
@@ -230,7 +230,7 @@ def default(path=''):
 
     if request.method == 'GET':
         if util.request_wants_json():
-            if not rec or current_user.is_anonymous():
+            if not rec or not app.config['PUBLIC_ACCESSIBLE_JSON']:
                 abort(404)
             resp = make_response( rec.json )
             resp.mimetype = "application/json"

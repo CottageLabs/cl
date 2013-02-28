@@ -73,16 +73,15 @@ jQuery(document).ready(function() {
         [
             {
                 "pre": '<a class="openforedit" data-type="financials" href="/admin/financial/',
-                "field": "id"
+                "field": "id",
+                "post": '">EDIT</a> '
             },
             {
-                "pre": '">',
                 "field": "status",
                 "post": " "
             },
             {
-                "field": "type",
-                "post":'</a>'
+                "field": "type"
             },
             {
                 "pre": ' to ',
@@ -107,17 +106,18 @@ jQuery(document).ready(function() {
         [
             {
                 "pre": '<a class="openforedit" data-type="commitments" href="/admin/commitment/',
-                "field": "id"
+                "field": "id",
+                "post": '">EDIT</a> '
             },
             {
-                "pre": '"><span class="cl_feature_title ">',
-                "field": "who",
+                "pre": '<span class="cl_feature_title ">',
+                "field": "name",
                 "post": '</span>'
             },
             {
                 "pre": ' on <span class="cl_feature_title">',
                 "field": "project",
-                "post": '</span></a>'
+                "post": '</span>'
             }
         ],
         [
@@ -153,13 +153,12 @@ jQuery(document).ready(function() {
     opts.result_display = [
         [
             {
-                "pre": '<a class="cl_feature_title openforedit" data-type="contacts" href="/admin/contact/',
-                "field": "id"
+                "pre": '<a class="openforedit" data-type="contacts" href="/admin/contact/',
+                "field": "id",
+                "post": '">EDIT</a> '
             },
             {
-                "pre": '">',
-                "field": "name",
-                "post":'</a>'
+                "field": "name"
             },
             {
                 "pre": ' - ',
@@ -170,12 +169,7 @@ jQuery(document).ready(function() {
                 "field": "companyname"
             },
             {
-                "pre": ". Billable contact - ",
-                "field": "billable",
-                "post": "."
-            },
-            {
-                "pre": " ",
+                "pre": ". ",
                 "field": "email"
             }
         ]
@@ -188,25 +182,24 @@ jQuery(document).ready(function() {
     opts.result_display = [
         [
             {
-                "pre": '<a class="cl_feature_title openforedit" data-type="contractors" href="/admin/contractor/',
-                "field": "id"
+                "pre": '<a class="openforedit" data-type="contractors" href="/admin/contractor/',
+                "field": "id",
+                "post": '">EDIT</a> '
             },
             {
-                "pre": '">',
-                "field": "name",
-                "post":'</a>'
+                "field": "name"
             },
             {
                 "pre": ' - ',
-                "field": "role",
-                "post": " at "
+                "field": "role"
             },
             {
+                "pre": " at ",
                 "field": "companyname",
                 "post": "."
             },
             {
-                "pre": " ",
+                "pre": ". ",
                 "field": "email"
             }
         ]
@@ -292,6 +285,7 @@ jQuery(document).ready(function() {
         !source ? allactions() : false;
         var save = function(event) {
             event.preventDefault();
+            source ? $.fn.jtedit.options.target = source : false;
             var validdata = validate();
             validdata ? $.fn.jtedit.saveit(false,false,validdata) : false;
         }
@@ -300,8 +294,14 @@ jQuery(document).ready(function() {
             $('#new' + which).remove();
             $('#' + which + 'facet').show();
         }
+        var deleteit = function(event) {
+            $.fn.jtedit.options.target = source;
+            event.preventDefault();
+            $.fn.jtedit.deleteit();
+        }
         $('#' + which + 'newsave').bind('click',save);
         $('#' + which + 'newcancel').bind('click',cancel);
+        $('#' + which + 'newdelete').bind('click',deleteit);
         var showhelp = function() {
             $('.' + show).css({'padding-top':'10px'})
             $('.help').hide();

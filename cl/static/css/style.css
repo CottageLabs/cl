@@ -70,12 +70,12 @@ h1, h2, h3, h4, h5, h6 {
     color:#999;
 }
 .cl_feature_text{
-    height:100px;
+    height:120px;
     text-align:justify;
     overflow:hidden;
     padding-top:5px;
-    padding-bottom:5px;
-    margin-bottom:10px;
+    padding-bottom:0px;
+    margin-bottom:0px;
 }
 .cl_feature_content{
     text-align:justify;

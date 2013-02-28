@@ -264,7 +264,8 @@ def index():
 
 # show/save a particular admin item or else redirect back up to default page behaviour
 @blueprint.route('/<itype>', methods=['GET','POST'])
-@blueprint.route('/<itype>/<iid>', methods=['GET','POST'])
+#@blueprint.route('/<itype>/', methods=['GET','POST'])
+@blueprint.route('/<itype>/<iid>', methods=['GET','POST','DELETE'])
 def adminitem(itype,iid=False):
     if itype in ['project','financial','commitment','contact','contractor']:
         klass = getattr(cl.dao, itype[0].capitalize() + itype[1:] )
@@ -295,10 +296,16 @@ def adminitem(itype,iid=False):
             elif request.method == 'POST':
                 if rec is None:
                     rec = klass(**request.json)
-                rec.data = request.json
-                print rec.data
-                rec.save()
+                else:
+                    rec.data = request.json
+                for df in ['datefrom','dateto','duedate','datepaid']:
+                    if df in rec.data and len(rec.data[df]) == 0: del rec.data[df]
+                s = rec.save()
                 return ""
+            elif rec and request.method == 'DELETE':
+                rec.delete()
+                return ""
+                
         else:
             abort(404)
     else:

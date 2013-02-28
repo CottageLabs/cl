@@ -19,6 +19,7 @@ ELASTIC_SEARCH_HOST = "127.0.0.1:9200"
 ELASTIC_SEARCH_DB = "cl"
 INITIALISE_INDEX = True
 NO_QUERY_VIA_API = ['account'] # list index types that should not be queryable via the API
+PUBLIC_ACCESSIBLE_JSON = True # can not logged in people get JSON versions of pages by querying for them?
 
 # location of media storage folder
 MEDIA_FOLDER = "media"

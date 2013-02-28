@@ -110,7 +110,7 @@ class DomainObject(UserDict.IterableUserDict):
         if 'author' not in self.data:
             self.data['author'] = get_user()
 
-        r = requests.post(self.target() + self.data['id'], data=json.dumps(self.data))
+        return requests.post(self.target() + self.data['id'], data=json.dumps(self.data))
 
     @classmethod
     def pull(cls, id_):
