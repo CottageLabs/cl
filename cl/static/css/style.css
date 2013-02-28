@@ -81,6 +81,28 @@ h1, h2, h3, h4, h5, h6 {
     text-align:justify;
 }
 
+.cl_red_leader {
+    color: #ED1C24;
+    font-weight: bold;
+}
+
+.cl_black_leader {
+    color: #000000;
+    font-weight: bold;
+}
+
+.cl_news_line {
+     border-bottom: 1px dashed #cccccc;
+     padding-bottom: 5px;
+     margin-bottom: 10px;
+     text-align: justify;
+}
+
+.cl_news_line strong {
+    font-size: 110%;
+    font-weight: bold;
+}
+
 #absolute_media_gallery{
     position:fixed;
     width:400px;
