@@ -39,13 +39,14 @@ def media():
         return render_template('media/media.html', jsite_options=json.dumps(jsite), files=files, nosettings=True)
 
 
+
 @blueprint.route('/<path:path>', methods=['GET','POST'])
 def medias(path=''):
-    # TODO: this should be a setting on the nginx server
     if request.method == 'GET':
+        # NOTE: this is only an alternative for when running in debug mode - it delivers images from media folder successfully
+        # otherwise you should set your web server (nginx, apache, whatever) to serve GETs on /media/.*
         loc = mediadir + '/' + path
-        #if app.config['DEBUG'] and os.path.isfile(loc):
-        if os.path.isfile(loc):
+        if app.config['DEBUG'] and os.path.isfile(loc):
             response = make_response(open(loc).read())
             response.headers["Content-type"] = "image"
             return response

@@ -230,7 +230,7 @@ def default(path=''):
 
     if request.method == 'GET':
         if util.request_wants_json():
-            if not rec or not app.config['PUBLIC_ACCESSIBLE_JSON']:
+            if not rec or not (current_user.is_anonymous() and app.config['PUBLIC_ACCESSIBLE_JSON']):
                 abort(404)
             resp = make_response( rec.json )
             resp.mimetype = "application/json"
@@ -250,7 +250,7 @@ def default(path=''):
                 if rec.data.get('content',False) != c.text:
                     rec.data['content'] = c.text
                     rec.save()
-            content += markdown.markdown( rec.data.get('content','') )
+            content += markdown.markdown( re.sub('\*<', '<', rec.data.get('content','') ) )
 
             # if an embedded file url has been provided, embed it in the content too
             if rec.data.get('embed', False):

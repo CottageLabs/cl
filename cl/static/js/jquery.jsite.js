@@ -121,30 +121,17 @@
             event ? event.preventDefault() : ""
             var record = options.data
         
-            $('.edit_page').parent().remove();
-            $('#facetview').hide()
-            $('#topstrap').hide()
-            $('#bottom').hide()
-            $('#article').html("")
+            //var topnav = $('#topnav');
+            $('body').html("");
+            //$('body').append(topnav);
                                     
             // if collaborative edit is on, get the content from etherpad
             if ( options.collaborative ) {
-                $('#article').hide()
-                $('hr').hide()
-                $('#main').css({
-                    'position':'absolute',
-                    'z-index':1000,
-                    'width':'100%'
-                })
-                $('body > .container > .content').css({
-                    'padding-top':0,
-                    'padding-bottom':0,
-                })
-                var collab_edit = '<div id="collab_edit"></div>'
+                var collab_edit = '<div id="collab_edit"></div>';
                 $('body').append(collab_edit)
                 $('#collab_edit').css({
                     'padding':0,
-                    'margin':'40px 0 0 0',
+                    //'margin':'40px 0 0 0',
                     'position':'absolute',
                     'top':0,
                     'left':0,
@@ -166,13 +153,13 @@
                   'border'            : 0,
                   'borderStyle'       : 'solid'
                 })
-                $('#collab_edit').height( $(window).height() - 44 )
+                $('#collab_edit').height( $(window).height()- 4 )
             } else {
                 var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"> \
                     <textarea class="tinymce jtedit_value data-path="content" id="form_content" name="content" \
                     style="width:99%;min-height:300px;" placeholder="content. text, markdown or html will work."> \
                     </textarea></div></div>'
-                $('#article').append(editor)
+                $('body').append(editor)
                 if ( options.richtextedit ) {
 	                $('textarea.tinymce').tinymce({
 		                script_url : '/static/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js',
@@ -188,15 +175,6 @@
 	                })
 	            }
                 $('#form_content').val(record['content'])
-            }
-
-            if ( options.loggedin ) {
-                $('#mainnavlist').append('<li><a class="pagemedia" href="">media</a></li>')
-                var showmedia = function(event) {
-                    event.preventDefault()
-                    !$('#absolute_media_gallery').length ? $('body').media_gallery() : ""
-                }
-                $('.pagemedia').bind('click',showmedia)
             }
         }
 
