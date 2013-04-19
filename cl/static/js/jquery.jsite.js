@@ -29,14 +29,7 @@
         
 //------------------------------------------------------------------------------
         // BUILD THE PAGE DEPENDING ON SETTINGS AND PERMISSIONS
-        var makepage = function() {
-            options.loggedin ? editoptions() : "";
-            var singleedit = function(event) {
-                event.preventDefault();
-                editpage();
-            };
-            $('.edit_page').bind('click',singleedit);
-            
+        var makepage = function() {            
             if ( !options.newrecord && !options.data['editable'] ) {
                 viewpage();
             } else if ( options.editable ) {
@@ -47,17 +40,22 @@
                         <p><strong>NOTE</strong>: creating a page does not list it in the site navigation.</p> \
                         <p><strong>PLUS</strong>: You need to set some settings for new pages first...</p>';
                     $('.alert-messages').prepend(nothere);
-                    $('.edit_page').parent().next().remove();
-                    $('.edit_page').parent().remove();
                     showopts();
-                    editpage();
+                    //editpage();
                 } else if ( !options.newrecord && options.data['editable'] && options.loggedin ) {
                     editpage();
                 }
-            } else {
-                $('.edit_page').hide();
-                $('.edit_page').parent().next().hide();
             }
+
+            options.loggedin ? editoptions() : "";
+            
+            var singleedit = function(event) {
+                event.preventDefault();
+                editpage();
+                editoptions();
+            };
+            $('.edit_page').bind('click',singleedit);
+
         }
         
 
@@ -118,27 +116,30 @@
         
         // SHOW EDITABLE VERSION OF PAGE
         var editpage = function(event) {
-            event ? event.preventDefault() : ""
-            var record = options.data
+            event ? event.preventDefault() : "";
+            var record = options.data;
         
-            //var topnav = $('#topnav');
+            var topnav = $('#topnav');
+            var metaopts = $('#metaopts');
             $('body').html("");
-            //$('body').append(topnav);
+            $('body').append(topnav);
+            $('body').append(metaopts);
+            $('.edit_page').parent().remove();
                                     
             // if collaborative edit is on, get the content from etherpad
             if ( options.collaborative ) {
-                var collab_edit = '<div id="collab_edit"></div>';
-                $('body').append(collab_edit)
-                $('#collab_edit').css({
+                var article = '<div id="article"></div>';
+                $('body').append(article);
+                $('#article').css({
                     'padding':0,
-                    //'margin':'40px 0 0 0',
+                    'margin':'40px 0 0 0',
                     'position':'absolute',
                     'top':0,
                     'left':0,
                     'width':'100%',
                     'z-index':2
                 })
-                $('#collab_edit').pad({
+                $('#article').pad({
                   'padId'             : record.id,
                   'host'              : 'http://pads.cottagelabs.com',
                   'baseUrl'           : '/p/',
@@ -153,7 +154,7 @@
                   'border'            : 0,
                   'borderStyle'       : 'solid'
                 })
-                $('#collab_edit').height( $(window).height()- 4 )
+                $('#article').height( $(window).height()- 44 )
             } else {
                 var editor = '<div class="row-fluid" style="margin-bottom:20px;"><div class="span12"> \
                     <textarea class="tinymce jtedit_value data-path="content" id="form_content" name="content" \
@@ -181,11 +182,12 @@
 
         // EDIT OPTION BUTTON FUNCTIONS
         var showopts = function(event) {
-            event ? event.preventDefault() : ""
-            $('#metaopts').toggle()
+            event ? event.preventDefault() : "";
+            $('#article').toggle();
+            $('#metaopts').toggle();
         }
         var editoptions = function() {
-            $('#metaopts').remove()
+            $('#metaopts').remove();
             
             // for convenience
             var record = options.data
@@ -234,6 +236,7 @@
             
             $('#article').before(metaopts);
             $('#metaopts').hide();
+            $('.pagesettings').unbind('click',showopts);
             $('.pagesettings').bind('click',showopts);
             
             // set pre-existing values into page settings
