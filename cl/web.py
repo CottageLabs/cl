@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re, json, requests, urllib, urllib2, markdown
 from flask import Flask, jsonify, json, request, redirect, abort, make_response
 from flask import render_template, flash
@@ -250,7 +252,9 @@ def default(path=''):
                 if rec.data.get('content',False) != c.text:
                     rec.data['content'] = c.text
                     rec.save()
-            content += markdown.markdown( re.sub('\*<', '<', rec.data.get('content','') ) )
+            cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
+            cont = re.sub('\*<', '<', cont )
+            content += markdown.markdown( cont )
 
             # if an embedded file url has been provided, embed it in the content too
             if rec.data.get('embed', False):
