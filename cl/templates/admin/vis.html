@@ -376,8 +376,6 @@ Network = function() {
         }
     } else if ( d.rtype === 'contacts' ) {
         content += '<strong>Contact - ' + d.name + '</strong><br>';
-    } else if ( d.rtype === 'contractors' ) {
-        content += '<strong>Contractor - ' + d.name + '</strong><br>';
     }
     if ( d.rtype == 'people' ) {
     } else {
@@ -462,7 +460,7 @@ $(function() {
         var url = '/admin/everything?q=*' + $('#filterquery').val().replace('*','') + '*&datefrom=' + $('#datefrom').val() + '&dateto=' + $('#dateto').val();
         //var url = '/admin/everything?';
         url += '&project=' + $('#filterproject').val() + '&person=' + $('#filterperson').val();
-        url +=  '&contact=' + $('#filtercontact').val() + '&contractor=' + $('#filtercontractor').val();
+        url +=  '&contact=' + $('#filtercontact').val();
         var ignore = ''
         $('.ignore').each(function() {
             if ( !$(this).attr('checked') ) {
@@ -547,14 +545,6 @@ $(function() {
                 {% endfor %}
             </select>
         </div>
-        <div>
-            <select class="bubblefilter" id="filtercontractor">
-                <option></option>
-                {% for item in dropdowns["contractors"] %}
-                <option value="{{ item[0] }}">{{ item[1] }}{% if item[2] %} - {{ item[2] }}{% endif %}</option>
-                {% endfor %}
-            </select>
-        </div>
         <div style="width:220px;">
             <input class="bubblefilter" type="text" id="filterquery" placeholder="filter by query string" /><br>
             <input class="bubblefilter datepicker" style="width:98px;" type="text" id="datefrom" placeholder="or from date" /> 
@@ -564,12 +554,11 @@ $(function() {
             <div style="float:left;width:112px;">
                 <input class="bubblefilter ignore" type="checkbox" value="financials" checked /> financials<br>
                 <input class="bubblefilter ignore" type="checkbox" value="contacts" checked /> contacts<br>
-                <input class="bubblefilter ignore" type="checkbox" value="contractors" checked /> contractors
+                <input class="bubblefilter ignore" type="checkbox" value="people" checked /> people
             </div>
             <div style="float:left;">
                 <input class="bubblefilter ignore" type="checkbox" value="projects" checked /> projects<br>
                 <input class="bubblefilter ignore" type="checkbox" value="commitments" checked /> commitments <br>
-                <input class="bubblefilter ignore" type="checkbox" value="people" checked /> people
             </div>
         </div>
     </div>

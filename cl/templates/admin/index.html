@@ -11,7 +11,6 @@
                 <li><a href="#financials">Financials</a></li>
                 <li><a href="#commitments">Commitments</a></li>
                 <li><a href="#contacts">Contacts</a></li>
-                <li><a href="#contractors">Contractors</a></li>
                 <li><a href="/media">Media</a></li>
                 <li><a href="/sitemap">Sitemap</a></li>
                 <li><a href="/tagging">Tagging</a></li>
@@ -77,23 +76,15 @@ jQuery(document).ready(function() {
                 "post": '">EDIT</a> '
             },
             {
-                "field": "status",
-                "post": " "
-            },
-            {
                 "field": "type"
             },
             {
-                "pre": ' to ',
-                "field": "recipient"
+                "pre": " on project ",
+                "field": "project"
             },
             {
                 "pre": " due on ",
                 "field": "duedate"
-            },
-            {
-                "pre": " and paid on ",
-                "field": "datepaid"
             }
         ]
     ]
@@ -177,47 +168,15 @@ jQuery(document).ready(function() {
     $('#contactsfacet').facetview(opts);
     $('#contactsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="contacts" alt="create a new contact" title="create a new contact" href="#"><i class="icon-plus"></i> create a new contact</a>');
 
-    opts.facets = [{"field":"name.exact"}];
-    opts.search_url = '/query/contractor/_search?';
-    opts.result_display = [
-        [
-            {
-                "pre": '<a class="openforedit" data-type="contractors" href="/admin/contractor/',
-                "field": "id",
-                "post": '">EDIT</a> '
-            },
-            {
-                "field": "name"
-            },
-            {
-                "pre": ' - ',
-                "field": "role"
-            },
-            {
-                "pre": " at ",
-                "field": "companyname",
-                "post": "."
-            },
-            {
-                "pre": ". ",
-                "field": "email"
-            }
-        ]
-    ]
-    $('#contractorsfacet').facetview(opts);
-    $('#contractorsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="contractors" alt="create a new contractor" title="create a new contractor" href="#"><i class="icon-plus"></i> create a new contractor</a>');
-
     // take all new X out of page, for later insertion with jtedit when needed
     var content = {
         "projects": $('#newprojects'),
         "commitments": $('#newcommitments'),
-        "contractors": $('#newcontractors'),
         "contacts": $('#newcontacts'),
         "financials": $('#newfinancials')
     }
     $('#newprojects').remove();
     $('#newcommitments').remove();
-    $('#newcontractors').remove();
     $('#newcontacts').remove();
     $('#newfinancials').remove();
 
@@ -225,7 +184,6 @@ jQuery(document).ready(function() {
     var allactions = function() {
         var objtype = 'project';
         $('#newcommitments').length ? objtype = 'commitment' : false;
-        $('#newcontractors').length ? objtype = 'contractor' : false;
         $('#newcontacts').length ? objtype = 'contact' : false;
         $('#newfinancials').length ? objtype = 'financial' : false;
         
@@ -387,19 +345,6 @@ jQuery(document).ready(function() {
 </div>
 
 {% include "admin/contact.html" %}
-
-<hr></hr>
-
-<a name="contractors"></a>
-<div class="row-fluid">
-    <div class="span12">
-        <h2 style="margin-bottom:10px;">Contractors / suppliers</h2>
-        <div class="row-fluid facetdisplay" id="contractorsfacet">
-        </div>
-    </div>
-</div>
-
-{% include "admin/contractor.html" %}
 
 {% endblock %}
 

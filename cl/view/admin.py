@@ -38,15 +38,14 @@ def dropdowns():
         "partners": [i['_source']['id'] for i in cl.dao.Account.query(terms={"partner":"yes"},size=1000000).get('hits',{}).get('hits',[])],
         "seniors": [i['_source']['id'] for i in cl.dao.Account.query(terms={"senior":"yes"},size=1000000).get('hits',{}).get('hits',[])],
         "contacts": [(i['_source']['id'],i['_source']['name'],i['_source']['companyname']) for i in cl.dao.Contact.query(q="*",size=1000000).get('hits',{}).get('hits',[])],
-        "billables": [(i['_source']['id'],i['_source']['name'],i['_source']['companyname']) for i in cl.dao.Contact.query(terms={"billable":"yes"},size=1000000).get('hits',{}).get('hits',[])],
-        "contractors": [(i['_source']['id'],i['_source']['name'],i['_source']['companyname']) for i in cl.dao.Contractor.query(q="*",size=1000000).get('hits',{}).get('hits',[])]
+        "billables": [(i['_source']['id'],i['_source']['name'],i['_source']['companyname']) for i in cl.dao.Contact.query(terms={"billable":"yes"},size=1000000).get('hits',{}).get('hits',[])]
     }
     return dropdowns
     
 
 # this returns an object with basically everything in it, plus some extras, but can be query filtered
 # it also provides a list of all the links between the objects, cos this is for the vis
-def geteverything(q=False,person=False,project=False,contact=False,contractor=False,ignore=[],ignoreisolated=False,datefrom=False,dateto=False):
+def geteverything(q=False,person=False,project=False,contact=False,ignore=[],ignoreisolated=False,datefrom=False,dateto=False):
 
     qryobj = {'query':{'match_all':{}}}
 
@@ -69,22 +68,6 @@ def geteverything(q=False,person=False,project=False,contact=False,contractor=Fa
                 item['id'] += '_' + item['companyname']
             item['id'] = item['id'].replace(' ','_').lower()
             item["rtype"] = "contacts"
-            item['budget'] = 1000
-            everything["nodes"].append(item)
-
-    if 'contractors' not in ignore:
-        if contractor or q:
-            qryobj = {'query':{'bool':{'must':[]}}}
-        if contractor: qryobj['query']['bool']['must'].append({'term':{'id': contractor}})
-        if q: qryobj['query']['bool']['must'].append({'query_string':{'query':'*' + q.lstrip('*').rstrip('*') + '*'}})
-        contractors = [i['_source'] for i in cl.dao.Contractor.query(q=qryobj,size=10000).get('hits',{}).get('hits',[])]
-        qryobj = {'query':{'match_all':{}}}
-        for item in contractors:
-            item['id'] = item['name']
-            if item['companyname']:
-                item['id'] += '_' + item['companyname']
-            item['id'] = item['id'].replace(' ','_').lower()
-            item["rtype"] = "contractors"
             item['budget'] = 1000
             everything["nodes"].append(item)
 
@@ -243,7 +226,6 @@ def everything():
         person=request.values.get('person',False), 
         project=request.values.get('project',False), 
         contact=request.values.get('contact',False), 
-        contractor=request.values.get('contractor',False), 
         ignore=request.values.get('ignore','').split(','),
         ignoreisolated=request.values.get('ignoreisolated',False),
         datefrom=request.values.get('datefrom',False),
@@ -267,7 +249,7 @@ def index():
 #@blueprint.route('/<itype>/', methods=['GET','POST'])
 @blueprint.route('/<itype>/<iid>', methods=['GET','POST','DELETE'])
 def adminitem(itype,iid=False):
-    if itype in ['project','financial','commitment','contact','contractor']:
+    if itype in ['project','financial','commitment','contact']:
         klass = getattr(cl.dao, itype[0].capitalize() + itype[1:] )
         if not iid and request.json:
             iid = request.json.get("id",False)
