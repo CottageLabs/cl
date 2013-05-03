@@ -253,7 +253,10 @@ def default(path=''):
                     rec.data['content'] = c.text
                     rec.save()
             cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
-            cont = re.sub('\*<', '<', cont )
+            # etherpads insert asterisks (*) sometimes when they see \t tabs, bless 'em
+            cont = re.sub('\*<', '<', cont ) # it can break HTML tags
+            cont = re.sub('(^\s*\*\s*$)', '', cont) # still get stand-alone * on blank lines with tabs in them
+
             content += markdown.markdown( cont )
 
             # if an embedded file url has been provided, embed it in the content too
