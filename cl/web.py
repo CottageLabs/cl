@@ -15,6 +15,7 @@ from cl.view.media import blueprint as media
 from cl.view.admin import blueprint as admin
 from cl import auth
 from copy import deepcopy
+from datetime import datetime
 
 
 app.register_blueprint(account, url_prefix='/account')
@@ -303,7 +304,14 @@ def default(path=''):
         if url == '/search':
             search = True
 
-        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'])
+        # sort out the last updated date
+        lu = jsite.get('data', {}).get('last_updated')
+        last_updated = None
+        if lu is not None:
+            dr = datetime.strptime(lu, "%Y-%m-%d %H%M")
+            last_updated = datetime.strftime(dr, "%a %d %b %Y at %H:%M")
+        
+        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated)
 
     elif request.method == 'POST':
         if rec:

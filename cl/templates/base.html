@@ -184,7 +184,11 @@
         <div id="article" class="row-fluid">
 
         {% block content %}{% endblock %}
-
+        
+        {% if last_updated %}
+            <em>Page last modified on {{ last_updated }}</em>
+        {% endif %}
+        
         </div>
     </div>
 
