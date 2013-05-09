@@ -13,6 +13,7 @@ from cl.view.sitemap import blueprint as sitemap
 from cl.view.tagging import blueprint as tagging
 from cl.view.media import blueprint as media
 from cl.view.admin import blueprint as admin
+from cl.view.feed import blueprint as feed
 from cl import auth
 from copy import deepcopy
 from datetime import datetime
@@ -23,6 +24,7 @@ app.register_blueprint(sitemap, url_prefix='/sitemap')
 app.register_blueprint(tagging, url_prefix='/tagging')
 app.register_blueprint(media, url_prefix='/media')
 app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(feed, url_prefix="/feed")
 
 
 @login_manager.user_loader

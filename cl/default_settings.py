@@ -10,6 +10,7 @@ SERVICE_TAGLINE = ""
 HOST = "0.0.0.0"
 DEBUG = True
 PORT = 5004
+BASE_URL = "http://cottagelabs.com"
 
 # list of superuser account names
 SUPER_USER = ["test"]
@@ -30,6 +31,25 @@ MEDIA_FOLDER = "media"
 ANONYMOUS_SEARCH_FILTER = True
 SEARCH_SORT = ''
 SEARCH_SORT_ORDER = ''
+
+# Configuration for feeds.
+#
+# Maximum number of feed entries to be given in a single response.  If this is omitted, it will
+# default to 20
+MAX_FEED_ENTRIES = 20
+
+# Maximum age of feed entries (in seconds) (default value here is 3 months).  If this is omitted
+# then we will always supply up to the MAX_FEED_ENTRIES above
+MAX_FEED_ENTRY_AGE = 7776000
+
+# Licensing terms for feed content
+FEED_LICENCE = "(c) Cottage Labs LLP 2012.  All content Copyheart: http://copyheart.org"
+
+# name of the feed generator (goes in the atom:generator element)
+FEED_GENERATOR = "CottageLabs feed generator"
+
+# Larger image to use as the logo for all of the feeds
+FEED_LOGO = "http://cottagelabs.com/media/cottage_hill_bubble_small.jpg"
 
 # jsite settings
 JSITE_OPTIONS = {
