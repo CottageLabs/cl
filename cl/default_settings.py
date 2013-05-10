@@ -100,13 +100,18 @@ JSITE_OPTIONS = {
             'result_display':   [
                 [
                     {
-                        "pre": '<strong><a class="cl_black_leader" href="',
+                        "pre": '<div class="row-fluid"><div class="span9"><strong><a class="cl_black_leader" href="',
                         "field": "url"
                     },
                     {
                         "pre": '">',
                         "field": "title",
-                        "post": "</a></strong><br>"
+                        "post": "</a></strong></div>"
+                    },
+                    {
+                        "pre" : '<div class="span3"><em>',
+                        "field" : "last_updated",
+                        "post" : "</em></div>"
                     },
                     {
                         "field" : "excerpt"
