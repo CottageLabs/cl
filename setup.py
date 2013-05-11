@@ -9,7 +9,8 @@ setup(
         "Flask-Login",
         "Flask-WTF",
         "requests==1.1.0",
-        "markdown"
+        "markdown",
+        "lxml"
     ],
     url = 'http://cottagelabs.com/',
     author = 'Cottage Labs',

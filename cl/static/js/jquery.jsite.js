@@ -98,6 +98,27 @@
                 $(this).attr('data-from') ? opts.paging.from = $(this).attr('data-from') : "";
                 $(this).facetview(opts);
             });
+            
+            // display any feed elements
+            // <div class="feed" data-title="The Cottage Labs Feed" 
+            //                  data-search="author:richard" 
+            //                  data-subscribe="subscribe to the cottage labs feed"
+            //                  data-url="/people/richard/feed"></div>
+            $(".feed").each(function() {
+                var title = $(this).attr('data-title');
+                var query = $(this).attr('data-search');
+                var subscribe = $(this).attr('data-subscribe');
+                var url = $(this).attr('data-url');
+                
+                if (!url) {
+                    url = "/feed/" + title + "?q=" + query
+                }
+                
+                $(this).html(
+                    '<div class="row-fluid"><div class="span12 well" style="border-color: #ED1C24; background:#ffffff; padding: 5px 5px 5px 5px; margin: 0px 0px 0px 0px"><a href="' + url + '" style="color: #000000"><img class="span12" style="width: 26px; height: 24px; margin-right: 3px; margin-bottom: 3px;" src="/static/feed.jpg">' + subscribe + '</a></div></div>'
+                );
+                
+            });
 
             // enable commenting if necessary
             if ( options.data["comments"] && options.comments ) {
@@ -112,6 +133,8 @@
                 </script>';
                 $('#main').after(disqus);
             };
+            
+            
         };
         
         // SHOW EDITABLE VERSION OF PAGE
