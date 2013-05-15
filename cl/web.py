@@ -13,7 +13,7 @@ from cl.view.sitemap import blueprint as sitemap
 from cl.view.tagging import blueprint as tagging
 from cl.view.media import blueprint as media
 from cl.view.admin import blueprint as admin
-from cl.view.feed import blueprint as feed
+from cl.view.feed import blueprint as feed, get_feed_resp
 from cl import auth
 from copy import deepcopy
 from datetime import datetime
@@ -220,9 +220,17 @@ def default(path=''):
     else:
         jsite['loggedin'] = True
 
+    # first, some url munging - strips the "feed" suffix and any ".json" suffix,
+    # and ensures the index page is explicitly named
     url = '/' + path.lstrip('/').rstrip('/')
+    feed = False
+    if url.endswith('/feed'):
+        feed = True
+        url = url[:-5] # strip "/feed" from the end of the url
+    if url == "" : url = "/"
     if url == '/': url += 'index'
     if url.endswith('.json'): url = url.replace('.json','')
+    
     rec = cl.dao.Record.pull_by_url(url)
         
     # if no record returned by URL check if it is a duplicate
@@ -239,6 +247,16 @@ def default(path=''):
                 abort(404)
             resp = make_response( rec.json )
             resp.mimetype = "application/json"
+            return resp
+            
+        if feed:
+            if not rec:
+                abort(404)
+            title = rec.get("title", "untitled")
+            feed_query = rec.get("feed")
+            if feed_query is None or feed_query == "":
+                abort(404)
+            resp = get_feed_resp(title, feed_query, request)
             return resp
 
         content = ''
@@ -312,8 +330,13 @@ def default(path=''):
         if lu is not None:
             dr = datetime.strptime(lu, "%Y-%m-%d %H%M")
             last_updated = datetime.strftime(dr, "%a %d %b %Y at %H:%M")
+            
+        # determine if this page is enabled for feeds
+        feed_url = None
+        if "feed" in rec and rec.get("feed", "") != "":
+            feed_url = rec.get("url", "") + "/feed"
         
-        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated)
+        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated, feed_url=feed_url)
 
     elif request.method == 'POST':
         if rec:

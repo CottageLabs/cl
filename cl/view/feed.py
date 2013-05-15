@@ -13,10 +13,14 @@ def feed(title):
     if 'q' not in request.values:
         abort(404)
     
+    return get_feed_resp(title, request.values['q'], request)
+    
+
+def get_feed_resp(title, query, req):
     # build an elastic search query, which gives us all accessible, visible pages 
     # which conform to the supplied query string.  We obtain a maximum of 20 entries
     # or the amount in the configuration
-    qs = {'query': {'query_string': { 'query': "accessible:true AND visible:true AND (" + request.values['q'] + ")"}}}
+    qs = {'query': {'query_string': { 'query': "accessible:true AND visible:true AND (" + query + ")"}}}
     qs['sort'] = [{"last_updated.exact" : {"order" : "desc"}}]
     qs['size'] = app.config['MAX_FEED_ENTRIES'] if app.config['MAX_FEED_ENTRIES'] else 20
     
@@ -25,7 +29,7 @@ def feed(title):
     records = [r.get("_source") for r in resp.get("hits", {}).get("hits", []) if "_source" in r]
     
     # reconstruct the original request url (urgh, why is this always such a pain)
-    url = app.config["BASE_URL"] + request.path + "?q=" + request.values['q']
+    url = app.config["BASE_URL"] + req.path + "?q=" + query
     
     # make a new atom feed object
     af = AtomFeed(title, url)
@@ -49,7 +53,6 @@ def feed(title):
     resp = make_response(af.serialise())
     resp.mimetype = "application/atom+xml"
     return resp
-    
 
 class AtomFeed(object):
     ATOM_NAMESPACE = "http://www.w3.org/2005/Atom"

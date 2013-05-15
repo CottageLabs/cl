@@ -252,6 +252,8 @@
                             <div class="row-fluid"><div class="span3"><strong>file url:</strong></div><div class="span9"><input type="text" class="span12 page_options jtedit_value" data-path="embed" /></div></div> \
                             <h3>featured image</h3> \
                             <div class="row-fluid"><div class="span3"><strong>featured image url:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="image" /></div></div> \
+                            <h3>default feed</h3> \
+                            <div class="row-fluid"><div class="span3"><strong>feed search terms:</strong></div><div class="span9"><input type="text" class="span12 jtedit_value" data-path="feed"/></div></div> \
                         </div> \
                     </div> \
                     <div id="jtedit_space"></div> \
