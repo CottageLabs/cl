@@ -13,8 +13,10 @@ from cl.view.sitemap import blueprint as sitemap
 from cl.view.tagging import blueprint as tagging
 from cl.view.media import blueprint as media
 from cl.view.admin import blueprint as admin
+from cl.view.feed import blueprint as feed, get_feed_resp
 from cl import auth
 from copy import deepcopy
+from datetime import datetime
 
 
 app.register_blueprint(account, url_prefix='/account')
@@ -22,6 +24,7 @@ app.register_blueprint(sitemap, url_prefix='/sitemap')
 app.register_blueprint(tagging, url_prefix='/tagging')
 app.register_blueprint(media, url_prefix='/media')
 app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(feed, url_prefix="/feed")
 
 
 @login_manager.user_loader
@@ -217,9 +220,17 @@ def default(path=''):
     else:
         jsite['loggedin'] = True
 
+    # first, some url munging - strips the "feed" suffix and any ".json" suffix,
+    # and ensures the index page is explicitly named
     url = '/' + path.lstrip('/').rstrip('/')
+    feed = False
+    if url.endswith('/feed'):
+        feed = True
+        url = url[:-5] # strip "/feed" from the end of the url
+    if url == "" : url = "/"
     if url == '/': url += 'index'
     if url.endswith('.json'): url = url.replace('.json','')
+    
     rec = cl.dao.Record.pull_by_url(url)
         
     # if no record returned by URL check if it is a duplicate
@@ -237,6 +248,16 @@ def default(path=''):
             resp = make_response( rec.json )
             resp.mimetype = "application/json"
             return resp
+            
+        if feed:
+            if not rec:
+                abort(404)
+            title = rec.get("title", "untitled")
+            feed_query = rec.get("feed")
+            if feed_query is None or feed_query == "":
+                abort(404)
+            resp = get_feed_resp(title, feed_query, request)
+            return resp
 
         content = ''
 
@@ -253,7 +274,10 @@ def default(path=''):
                     rec.data['content'] = c.text
                     rec.save()
             cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
-            cont = re.sub('\*<', '<', cont )
+            # etherpads insert asterisks (*) sometimes when they see \t tabs, bless 'em
+            cont = re.sub('\*<', '<', cont ) # it can break HTML tags
+            cont = re.sub('(^\s*\*\s*$)', '', cont) # still get stand-alone * on blank lines with tabs in them
+
             content += markdown.markdown( cont )
 
             # if an embedded file url has been provided, embed it in the content too
@@ -300,7 +324,19 @@ def default(path=''):
         if url == '/search':
             search = True
 
-        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'])
+        # sort out the last updated date
+        lu = jsite.get('data', {}).get('last_updated')
+        last_updated = None
+        if lu is not None:
+            dr = datetime.strptime(lu, "%Y-%m-%d %H%M")
+            last_updated = datetime.strftime(dr, "%a %d %b %Y at %H:%M")
+            
+        # determine if this page is enabled for feeds
+        feed_url = None
+        if "feed" in rec and rec.get("feed", "") != "":
+            feed_url = rec.get("url", "") + "/feed"
+        
+        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated, feed_url=feed_url)
 
     elif request.method == 'POST':
         if rec:
