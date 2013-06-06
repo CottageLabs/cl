@@ -4,6 +4,7 @@ from flask import Blueprint, request, url_for, flash, redirect, abort, make_resp
 from flask import render_template
 from flask.ext.login import current_user
 from copy import deepcopy
+from decimal import *
 
 from cl import auth
 from cl.core import app
@@ -169,7 +170,7 @@ def geteverything(q=False,person=False,project=False,contact=False,ignore=[],ign
                         if not pb: pb = 0
                         sh = item.get('share',0)
                         if not sh: sh = 0
-                        item['budget'] = int(pb) * ( int(sh) / 100 )
+                        item['budget'] = str(Decimal(pb) * ( Decimal(sh) / 100 ))
                     else:
                         item['budget'] = 1000
                 if 'who' in item: # this one should be removed once used on clean data (keep the ones above tho)
