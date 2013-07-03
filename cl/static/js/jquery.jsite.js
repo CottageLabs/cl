@@ -335,21 +335,6 @@
         
 
 //------------------------------------------------------------------------------
-        // TWEETS
-        var tweets = function() {
-            $(".tweet").tweet({
-                username: options.twitter,
-                avatar_size: 48,
-                count: 5,
-                join_text: "auto",
-                auto_join_text_default: "",
-                auto_join_text_ed: "",
-                auto_join_text_ing: "",
-                auto_join_text_reply: "",
-                auto_join_text_url: "",
-                loading_text: "loading tweets..."
-            })
-        }
 
         // scroll to anchors with offset
         var scroller = function(event) {
@@ -426,9 +411,6 @@
             // bind anchor scroller offset fix
             $('a').bind('click',scroller);
 
-            // bind the twitter display if twitter account provided
-            options.twitter ? tweets() : false;
-            
             // add the contact us form handler
             $('#submit_contact').bind('click', contactus);
             

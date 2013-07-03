@@ -176,12 +176,13 @@ def stream(index='record',key='tags'):
     r = requests.post(t + ','.join(indices) + '/_search', json.dumps(qry))
 
     res = []
-    if request.values.get('counts',False):
-        for k in keys:
-            res = res + [[i['term'],i['count']] for i in r.json()['facets'][k]["terms"]]
-    else:
-        for k in keys:
-            res = res + [i['term'] for i in r.json()['facets'][k]["terms"]]
+    if 'facets' in r.json():
+        if request.values.get('counts',False):
+            for k in keys:
+                res = res + [[i['term'],i['count']] for i in r.json()['facets'][k]["terms"]]
+        else:
+            for k in keys:
+                res = res + [i['term'] for i in r.json()['facets'][k]["terms"]]
 
     resp = make_response( json.dumps(res) )
     resp.mimetype = "application/json"
@@ -232,7 +233,7 @@ def default(path=''):
     if url.endswith('.json'): url = url.replace('.json','')
     
     rec = cl.dao.Record.pull_by_url(url)
-        
+    
     # if no record returned by URL check if it is a duplicate
     if not rec:
         duplicates = cl.dao.Record.check_duplicate(url)
@@ -319,11 +320,6 @@ def default(path=''):
         if rec:
             title = rec.data.get('title','')
 
-        # if on the /search page, wire in the search everything box to the displayed search results
-        search = False
-        if url == '/search':
-            search = True
-
         # sort out the last updated date
         lu = jsite.get('data', {}).get('last_updated')
         last_updated = None
@@ -336,7 +332,7 @@ def default(path=''):
         if "feed" in rec and rec.get("feed", "") != "":
             feed_url = rec.get("url", "") + "/feed"
         
-        return render_template('index.html', content=content, title=title, search=search, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated, feed_url=feed_url)
+        return render_template('index.html', content=content, title=title, jsite_options=json.dumps(jsite), offline=jsite['offline'], last_updated=last_updated, feed_url=feed_url)
 
     elif request.method == 'POST':
         if rec:

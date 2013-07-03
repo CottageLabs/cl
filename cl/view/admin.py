@@ -20,15 +20,6 @@ def restrict():
     if current_user.is_anonymous():
         abort(401)
 
-'''
-projected "we expect this cost to arise during the course of the project"},
-ordered "we have received a purchase order requesting us to deliver goods or services at an agreed price"},
-invoiced "we have received an invoice for goods or services delivered to us, which we should pay when project funds are available"},
-claimed": "an expense claimed with documentary evidence by a team member"},
-reminded": "we have not been paid for an invoice we sent, so we have sent a reminder"},
-paid "the money to pay this cost has left our bank account"}
-'''
-            
 # define the dropdowns to be used in the admin pages
 def dropdowns():
     dropdowns = {

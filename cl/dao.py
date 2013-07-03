@@ -161,7 +161,7 @@ class DomainObject(UserDict.IterableUserDict):
             query = {'query': {'query_string': { 'query': q }}}
         else:
             query = {'query': {'match_all': {}}}
-
+        
         if facets:
             if 'facets' not in query:
                 query['facets'] = {}
@@ -209,7 +209,7 @@ class Record(DomainObject):
 
     @classmethod
     def pull_by_url(cls,url):
-        res = cls.query(q='url.exact:' + url)
+        res = cls.query(q={"query":{"term":{'url.exact':url}}})
         if res.get('hits',{}).get('total',0) == 1:
             return cls(**res['hits']['hits'][0]['_source'])
         else:
@@ -217,7 +217,8 @@ class Record(DomainObject):
 
     @classmethod
     def check_duplicate(cls,url):
-        res = cls.query(q='url.exact:' + url,size=1000000)
+        res = cls.query(q={"query":{"term":{'url.exact':url}}},size=1000000)
+        print res
         if res.get('hits',{}).get('total',0) > 1:
             return [i['_source'] for i in res['hits']['hits']]
         else:

@@ -59,7 +59,6 @@ JSITE_OPTIONS = {
     "datatype": "json",
     "collaborative": True,
     "comments": "cottagelabs",
-    "twitter": "cottagelabs",
     "offline": False, # set to true to disable google fonts and analytics etc useful for offline dev
     "sharethis": False,
     "editable": True,
