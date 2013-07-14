@@ -91,7 +91,8 @@ def adminitem(itype,iid=False):
                 rec = klass.pull(iid)
             if request.method == 'GET':
                 if not util.request_wants_json():
-                    rec.data['tags'] = ",".join(rec.data["tags"])
+                    if rec is not None and 'tags' in rec.data:
+                        rec.data['tags'] = ",".join(rec.data["tags"])
                     return render_template('admin/project.html', jsite_options=json.dumps(opts), offline=opts['offline'], dropdowns=dropdowns(), jdropdowns=json.dumps(dropdowns()), record=rec)
                 elif rec is not None:
                     resp = make_response( rec.json )
