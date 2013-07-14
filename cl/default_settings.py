@@ -59,14 +59,15 @@ JSITE_OPTIONS = {
     "datatype": "json",
     "collaborative": True,
     "comments": "cottagelabs",
-    "offline": False, # set to true to disable google fonts and analytics etc useful for offline dev
+    "offline": True, # set to true to disable google fonts and analytics etc useful for offline dev
     "sharethis": False,
     "editable": True,
     "richtextedit": False,
     "facetview": {
         "search_url": "/query/record/_search?",
         "datatype": "json",
-        "display_images": False
+        "display_images": False,
+        "pushstate":False
     },
     "facetview_displays": {
         "compact" : {
@@ -306,8 +307,4 @@ MAPPINGS = {
 }
 MAPPINGS['account'] = {'account':MAPPINGS['record']['record']}
 MAPPINGS['project'] = {'project':MAPPINGS['record']['record']}
-MAPPINGS['customer'] = {'customer':MAPPINGS['record']['record']}
-MAPPINGS['financial'] = {'financial':MAPPINGS['record']['record']}
-MAPPINGS['commitment'] = {'commitment':MAPPINGS['record']['record']}
-MAPPINGS['contractor'] = {'contractor':MAPPINGS['record']['record']}
 

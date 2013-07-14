@@ -97,7 +97,13 @@ def query(path='Record'):
     subpath = pathparts[0]
     if subpath.lower() in app.config['NO_QUERY_VIA_API']:
         abort(401)
-    klass = getattr(cl.dao, subpath[0].capitalize() + subpath[1:] )
+    if subpath.lower() in ['project'] and current_user.is_anonymous():
+        abort(401)
+    
+    try:
+        klass = getattr(cl.dao, subpath[0].capitalize() + subpath[1:] )
+    except:
+        abort(404)
     
     if len(pathparts) > 1 and pathparts[1] == '_mapping':
         resp = make_response( json.dumps(klass().query(endpoint='_mapping')) )
@@ -130,12 +136,13 @@ def query(path='Record'):
                 qs[item] = request.values[item]
         if 'sort' not in qs and app.config['SEARCH_SORT']:
             qs['sort'] = {app.config['SEARCH_SORT'].rstrip(app.config['FACET_FIELD']) + app.config['FACET_FIELD'] : {"order":app.config.get('SEARCH_SORT_ORDER','asc')}}
-        if app.config['ANONYMOUS_SEARCH_FILTER'] and current_user.is_anonymous():
+        if path == 'Record' and app.config['ANONYMOUS_SEARCH_FILTER'] and current_user.is_anonymous():
             terms = {'visible':True,'accessible':True}
         else:
             terms = ''
         resp = make_response( json.dumps(klass().query(q=qs, terms=terms)) )
     resp.mimetype = "application/json"
+    print "HI"
     return resp
         
         

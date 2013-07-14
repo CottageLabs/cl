@@ -49,14 +49,16 @@
     <script type="text/javascript" src="/static/vendor/facetview/vendor/linkify/1.0/jquery.linkify-1.0-min.js"></script>
     <script type="text/javascript" src="/static/vendor/facetview/jquery.facetview.js"></script>
 
+    <script type="text/javascript" src="/static/vendor/graphview/jquery.graphview.js"></script>
+
     <script type="text/javascript" src="/static/vendor/jtedit/vendor/jquery.autoResize.js"></script>
     <script type="text/javascript" src="/static/vendor/jtedit/jquery.jtedit.js"></script>
     
-    <link rel="stylesheet" href="/static/vendor/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css">
-
     <script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
-    <script src="/static/vendor/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
-    <script src="/static/js/jquery.media_gallery.js"></script>
+
+    <!-- get parsley -->
+    <!--<script type="text/javascript" src="/static/vendor/parsley/parsley.extend.min.js"></script>   --> 
+    <script type="text/javascript" src="/static/vendor/parsley/parsley.js"></script>    
 
     <script src="/static/vendor/etherpad.js"></script>
 
@@ -127,11 +129,9 @@
                             <ul id="admin_options" class="dropdown-menu">
                                 <li><a id="new_page" href="">create a new page</a></li>
                                 <li class="divider"></li>
-                                {% if not nosettings %}
                                 <li><a class="pagesettings" href="">page settings</a></li>
                                 <li><a class="edit_page" href="">edit this page</a></li>
                                 <li class="divider"></li>
-                                {% endif %}
                                 <li><a href="/admin">do admin</a></li>
                                 <li><a href="/howto">read howto</a></li>
                                 <li class="divider"></li>

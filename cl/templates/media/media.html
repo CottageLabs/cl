@@ -1,12 +1,26 @@
 {% extends "base.html" %}
+
+{% block subnav %}
+
+{% if not current_user.is_anonymous() %}
+    <div id="subnav" class="subnav">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li><a href="/admin#dashboard">Dashboard</a></li>
+                <li><a href="/admin#reports">Reports</a></li>
+                <li><a href="/admin#projects">Projects</a></li>
+                <li><a href="/media">Media</a></li>
+                <li><a href="/sitemap">Nav / Sitemap</a></li>
+                <li><a href="/tagging">Pages / Tags</a></li>
+                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
 {% block content %}
-
-<!--<div id="absolute_media_gallery">-->
-
-<link rel="stylesheet" href="/static/vendor/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css">
-
-<script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
-<script src="/static/vendor/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
 
 {% if not current_user.is_anonymous() %}
 <div id="uploadsection" class="hero-unit well" style="height:100px;">
@@ -14,73 +28,37 @@
 </div>
 {% endif %}
 
-<p>
-    <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">slideshow</button>
-    <button id="toggle-fullscreen" class="btn" data-toggle="button">fullscreen</button>
-    <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">close gallery</button>
-    <button id="start-slideshow" class="btn" data-slideshow="5000" data-target="#modal-gallery" data-selector="#gallery a[rel=gallery]">manual upload</button>
-</p>
-
-<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">{{ files|safe }}</div>
-
-<div id="modal-gallery" class="modal modal-gallery hide fade">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-        <a class="btn modal-download" target="_blank">
-            <i class="icon-download"></i>
-            <span>Download</span>
-        </a>
-        <a class="btn modal-play modal-slideshow" data-slideshow="5000">
-            <i class="icon-play"></i>
-            <span>Slideshow</span>
-        </a>
-        <a class="btn modal-next">
-            <span>Next</span>
-            <i class="icon-arrow-right"></i>
-        </a>
-        <a class="btn modal-prev">
-            <i class="icon-arrow-left"></i>
-            <span>Previous</span>
-        </a>
+<div class="row-fluid">
+    <div class="span12">
+        <table class="table table-striped table-bordered">
+            {% for file in files %}
+            <tr>
+                <td><a href="/media/{{file}}">{{file}}</a></td>
+                {% if not current_user.is_anonymous() %}
+                <td><a class="deleteme btn btn-danger" href="/media/{{file}}">delete</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </div>
 
 <script>
 
 (function ($) {
-    var result = $('#gallery'),
-        load = function (e) {
-            e = e.originalEvent;
-            e.preventDefault();
-            window.loadImage(
-                (e.dataTransfer || e.target).files[0],
-                function (img) {
-                    result.prepend(img);
-                },
-                {
-                    maxWidth: result.outerWidth(),
-                    canvas: false
-                }
-            );
-        };
     var savethis = function(event) {
-        event = event.originalEvent
-        event.preventDefault()
-        var upfile = event.dataTransfer.files[0]
-        //var fd = new FormData()
-        //fd.append('file', upfile)
+        event = event.originalEvent;
+        event.preventDefault();
+        var upfile = event.dataTransfer.files[0];
         $.ajax({
             type: 'POST', 
             url: '/media/' + upfile.name, 
             data: upfile,
             processData: false,
-            contentType: false
-        })
-    }
+            contentType: false,
+            success: function() {window.location=window.location;}
+        });
+    };
     $('#uploadsection')
         .on('dragover', function (e) {
             e = e.originalEvent;
@@ -88,49 +66,21 @@
             e.dataTransfer.dropEffect = 'copy';
         })
         .on('drop', savethis);
-    //$('#file-input').on('change', load);
+    
+    $('.deleteme')
+        .on('click', function (e) {
+            e = e.originalEvent;
+            e.preventDefault();
+            $.ajax({
+                type: 'DELETE', 
+                url: $(this).attr('href'),
+                success: function() {window.location=window.location;}
+            });
+        })
+    
 }(jQuery));
 
-$(function () {
-
-    // Start slideshow button:
-    $('#start-slideshow').button().click(function () {
-        var options = $(this).data(),
-            modal = $(options.target),
-            data = modal.data('modal');
-        if (data) {
-            $.extend(data.options, options);
-        } else {
-            options = $.extend(modal.data(), options);
-        }
-        modal.find('.modal-slideshow').find('i')
-            .removeClass('icon-play')
-            .addClass('icon-pause');
-        modal.modal(options);
-    });
-    // Toggle fullscreen button:
-    $('#toggle-fullscreen').button().click(function () {
-        var button = $(this),
-            root = document.documentElement;
-        if (!button.hasClass('active')) {
-            $('#modal-gallery').addClass('modal-fullscreen');
-            if (root.webkitRequestFullScreen) {
-                root.webkitRequestFullScreen(
-                    window.Element.ALLOW_KEYBOARD_INPUT
-                );
-            } else if (root.mozRequestFullScreen) {
-                root.mozRequestFullScreen();
-            }
-        } else {
-            $('#modal-gallery').removeClass('modal-fullscreen');
-            (document.webkitCancelFullScreen ||
-                document.mozCancelFullScreen ||
-                $.noop).apply(document);
-        }
-    });
-});
 </script>
 
-<!--</div>-->
 
 {% endblock %}

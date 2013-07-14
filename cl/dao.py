@@ -30,28 +30,13 @@ def initialise():
     if not os.path.exists('media'):
         os.makedirs('media')
         print 'created empty media directory. If you are using dropbox syncing, ensure this folder (and the content folder if desired) are symlinked into your dropbox tracked folder'
-    if not os.path.exists('content'):
-        os.makedirs('content')
-        print 'created empty content directory. If you intend to sync this with a git repo, you should recreate it using git.'
     try:
-        sitemap = json.load(open('cl/templates/sitemap/sitemap.json'))
         out = open('cl/templates/sitemap/sitenav.html')
         out.close()
-        out = open('cl/templates/sitemap/sitemap_private.html')
-        out.close()
-        out = open('cl/templates/sitemap/sitemap_public.html')
-        out.close()
     except:
-        out = open('cl/templates/sitemap/sitemap.json','w')
-        out.write('{}')
-        out.close()
         out = open('cl/templates/sitemap/sitenav.html','w')
         out.close()
-        out = open('cl/templates/sitemap/sitemap_private.html','w')
-        out.close()
-        out = open('cl/templates/sitemap/sitemap_public.html','w')
-        out.close()
-        print ("created default emtpy sitemaps")
+        print ("created default emtpy sitemap")
 
 
 def get_user():
@@ -289,6 +274,76 @@ class Account(DomainObject, UserMixin):
 class Project(DomainObject):
     __type__ = 'project'
 
+    def save_from_form(self, request):
+        rec = {
+            "notes": [],
+            "commitments": [],
+            "financials": []
+        }
+
+        for k,v in enumerate(request.form.getlist('note_date')):
+            if v is not None and len(v) > 0 and v != " ":
+                try:
+                    note = {
+                        "date": v,
+                        "author": current_user.id,
+                        "note": request.form.getlist('note_note')[k]
+                    }
+                    if len(note['date']) == 0: del note['date']
+                    rec["notes"].append(note)
+                except:
+                    pass
+        
+        for k,v in enumerate(request.form.getlist('commitment_name')):
+            if v is not None and len(v) > 0 and v != " ":
+                try:
+                    commitment = {
+                        "name": v,
+                        "datefrom": request.form.getlist('commitment_datefrom')[k],
+                        "dateto": request.form.getlist('commitment_dateto')[k],
+                        "time": request.form.getlist('commitment_time')[k],
+                        "share": request.form.getlist('commitment_share')[k]
+                    }
+                    if len(commitment['datefrom']) == 0: del commitment['datefrom']
+                    if len(commitment['dateto']) == 0: del commitment['dateto']
+                    rec['commitments'].append(commitment)
+                except:
+                    pass
+
+        for k,v in enumerate(request.form.getlist('financial_type')):
+            if v is not None and len(v) > 0 and v != " ":
+                try:
+                    financial = {
+                        "type": v,
+                        "description": request.form.getlist('financial_description')[k],
+                        "reference": request.form.getlist('financial_reference')[k],
+                        "datedue": request.form.getlist('financial_datedue')[k],
+                        "cost": request.form.getlist('financial_cost')[k],
+                        "vat": request.form.getlist('financial_vat')[k],
+                        "dateapproved": request.form.getlist('financial_dateapproved')[k]
+                    }
+                    if len(financial['datedue']) == 0: del financial['datedue']
+                    rec["financials"].append(financial)
+                except:
+                    pass
+
+        for key in request.form.keys():
+            if not key.startswith("commitment_") and not key.startswith("financial_") and not key.startswith("note_") and key not in ['submit']:
+                val = request.form[key]
+                if val == "on":
+                    rec[key] = True
+                elif val == "off":
+                    rec[key] = False
+                elif key in ["datefrom","dateto"] and len(val) == 0:
+                    pass
+                else:
+                    rec[key] = val
+
+        if self.id is not None: rec['id'] = self.id
+        self.data = rec
+        self.save()
+
+
     @property
     def commitments(self):
         return [Commitment.pull(i['_source']['id']) for i in Commitment.query(terms={'project':self.id},size=100000,sort={"start":{"order":"desc"}}).get('hits',{}).get('hits',[])]
@@ -379,27 +434,5 @@ class Project(DomainObject):
         return res
 
 
-class Financial(DomainObject):
-    __type__ = 'financial'
-
-    @classmethod
-    def find_by_ref(cls,ref):
-        '''Retrieve object by id.'''
-        if ref is None:
-            return None
-
-        return [cls(**i['_source']) for i in cls().query(terms={"ref":ref},sort={"created_date":{"order":"desc"}}).get('hits',{}).get('hits',[])]
-
-
-class Commitment(DomainObject):
-    __type__ = 'commitment'
-
-
-class Contact(DomainObject):
-    __type__ = 'contact'
-
-
-class Contractor(DomainObject):
-    __type__ = 'contractor'
 
 

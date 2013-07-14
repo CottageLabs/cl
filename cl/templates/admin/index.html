@@ -5,15 +5,12 @@
     <div id="subnav" class="subnav">
         <div class="container">
             <ul class="nav nav-pills">
-                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="/admin#dashboard">Dashboard</a></li>
                 <li><a href="#reports">Reports</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#financials">Financials</a></li>
-                <li><a href="#commitments">Commitments</a></li>
-                <li><a href="#contacts">Contacts</a></li>
                 <li><a href="/media">Media</a></li>
-                <li><a href="/sitemap">Sitemap</a></li>
-                <li><a href="/tagging">Tagging</a></li>
+                <li><a href="/sitemap">Nav / Sitemap</a></li>
+                <li><a href="/tagging">Pages / Tags</a></li>
                 {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
             </ul>
         </div>
@@ -22,30 +19,49 @@
 <script type="text/javascript" charset="utf-8">
 jQuery(document).ready(function() {
 
-    // prep facetview on each of the different types of objects
+    // do a graphview of projects
+    /*$('#graphview').graphview({
+        "target": '/query/project',
+        "ajaxtype": "GET",
+        "datatype": "JSON",
+        
+        "titlefield": "title.exact", // which field from result object is default title field
+        
+        "defaultquery": {
+            "query": {
+                "bool": {
+                    "must":[]
+                }
+            },
+            "fields": "*",
+            "partial_fields": [],
+            "from":0,
+            "size":100,
+            "facets":{
+                "commitments": {"term":{"field":"commitments.name.exact","suggest": true, "node": true}},
+                "customers": {"term":{"field":"customer.exact","suggest": true, "node": true}},
+                "funders": {"term":{"field":"funder.exact","suggest": true, "node": true}},
+                "tags": {"term":{"field":"tags.exact","suggest": true, "node": false}}
+            }
+        },
+        "afterresults": false
+    });*/
+
+    // do a facetview list of projects
     var opts = {{ jsite_options|safe }}.facetview;
     opts.sharesave_link = false;
-    var openforedit = function(event) {
-        event ? event.preventDefault() : false;
-        bubblegetthenewitem(event,source=$(this).attr('href'),which=$(this).attr('data-type'));
-    };
-    var prepopenforedit = function() {
-        $('.openforedit').unbind('click',openforedit);
-        $('.openforedit').bind('click',openforedit);
-    }
-    opts.post_search_callback = prepopenforedit;
 
     opts.facets = [{"field":"status.exact","display":"status"},{"field":"lead.exact","order":"term","display":"project leader"},{"field":"customer.exact","order":"term"}];
     opts.search_url = '/query/project/_search?';
     opts.result_display = [
         [
             {
-                "pre": '<a class="cl_feature_title openforedit" data-type="projects" href="/admin/project/',
+                "pre": '<a class="cl_feature_title" href="/admin/project/',
                 "field": "id"
             },
             {
                 "pre": '">',
-                "field": "id",
+                "field": "title",
                 "post": "</a></div>"
             }
         ],
@@ -62,216 +78,12 @@ jQuery(document).ready(function() {
                 "field": "dateto"
             }
         ]
-    ]
+    ];
     $('#projectsfacet').facetview(opts);
-    $('#projectsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="projects" alt="create a new project" title="create a new project" href="#"><i class="icon-plus"></i> create a new project</a>');
+    $('#projectsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="projects" alt="create a new project" title="create a new project" href="/admin/project/new"><i class="icon-plus"></i> create a new project</a>');
 
-    opts.facets = [{"field":"project.exact","order":"term","display":"for project"},{"field":"type.exact","display":"event type"},{"field":"status.exact","display":"event status"},{"field":"recipient.exact","display":"recipient"}];
-    opts.search_url = '/query/financial/_search?';
-    opts.result_display = [
-        [
-            {
-                "pre": '<a class="openforedit" data-type="financials" href="/admin/financial/',
-                "field": "id",
-                "post": '">EDIT</a> '
-            },
-            {
-                "field": "type"
-            },
-            {
-                "pre": " on project ",
-                "field": "project"
-            },
-            {
-                "pre": " due on ",
-                "field": "duedate"
-            }
-        ]
-    ]
-    $('#financialsfacet').facetview(opts);
-    $('#financialsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="financials" alt="create a new financial event" title="create a new financial event" href="#"><i class="icon-plus"></i> create a new financial event</a>');
 
-    opts.facets = [{"field":"name.exact","display":"name"},{"field":"project.exact","order":"term","display":"for project"}];
-    opts.search_url = '/query/commitment/_search?';
-    opts.result_display = [
-        [
-            {
-                "pre": '<a class="openforedit" data-type="commitments" href="/admin/commitment/',
-                "field": "id",
-                "post": '">EDIT</a> '
-            },
-            {
-                "pre": '<span class="cl_feature_title ">',
-                "field": "name",
-                "post": '</span>'
-            },
-            {
-                "pre": ' on <span class="cl_feature_title">',
-                "field": "project",
-                "post": '</span>'
-            }
-        ],
-        [
-            {
-                "field": "status",
-                "post": " "
-            },
-            {
-                "field": "datefrom"
-            },
-            {
-                "pre": ' to ',
-                "field": "dateto",
-                "post": ". "
-            },
-            {
-                "pre": " On ",
-                "field": "time",
-                "post": "% time"
-            },
-            {
-                "pre": " for ",
-                "field": "share",
-                "post": "% share."
-            }
-        ]
-    ]
-    $('#commitmentsfacet').facetview(opts);
-    $('#commitmentsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="commitments" alt="create a new partner commitment" title="create a new partner commitment" href="#"><i class="icon-plus"></i> create a new partner commitment</a>');
 
-    opts.facets = [{"field":"name.exact"}];
-    opts.search_url = '/query/contact/_search?';
-    opts.result_display = [
-        [
-            {
-                "pre": '<a class="openforedit" data-type="contacts" href="/admin/contact/',
-                "field": "id",
-                "post": '">EDIT</a> '
-            },
-            {
-                "field": "name"
-            },
-            {
-                "pre": ' - ',
-                "field": "role"
-            },
-            {
-                "pre": ' at ',
-                "field": "companyname"
-            },
-            {
-                "pre": ". ",
-                "field": "email"
-            }
-        ]
-    ]
-    $('#contactsfacet').facetview(opts);
-    $('#contactsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="contacts" alt="create a new contact" title="create a new contact" href="#"><i class="icon-plus"></i> create a new contact</a>');
-
-    // take all new X out of page, for later insertion with jtedit when needed
-    var content = {
-        "projects": $('#newprojects'),
-        "commitments": $('#newcommitments'),
-        "contacts": $('#newcontacts'),
-        "financials": $('#newfinancials')
-    }
-    $('#newprojects').remove();
-    $('#newcommitments').remove();
-    $('#newcontacts').remove();
-    $('#newfinancials').remove();
-
-    // things to do whenever any type of object is loaded for edit. then calls any defined on each type page
-    var allactions = function() {
-        var objtype = 'project';
-        $('#newcommitments').length ? objtype = 'commitment' : false;
-        $('#newcontacts').length ? objtype = 'contact' : false;
-        $('#newfinancials').length ? objtype = 'financial' : false;
-        
-        $('.datepicker').datepicker({"dateFormat":"dd/mm/yy", "setDate": new Date()});
-        var vals = $.fn.jtedit.options.data.tags;
-        $('.tagselect').val(vals);
-        var tagify = function(data) {
-            $('.tagselect').select2({
-                "tags":data,
-                "tokenSeparators":[","],
-                "width":"element",
-            });
-            $('.tagselect').css({
-                "margin-bottom":"8px"
-            });
-            $('.select2-choices').css({
-                "-webkit-border-radius":"3px",
-                "-moz-border-radius":"3px",
-                "border-radius":"3px",
-                "border":"1px solid #ccc"
-            });            
-        };
-        $.ajax({
-            "url": "/stream/" + objtype + "/tags?size=1000",
-            "success": function(data) {
-                tagify(data);
-            }
-        });
-        actions();
-    }
-    // create new item form on click of add new item button
-    bubblegetthenewitem = function(event,source,which) {
-        event ? event.preventDefault() : false;
-        $('.newitemdiv').remove();
-        $('.facetdisplay').show();
-        var which = which ? which : $(this).attr('data-type');
-        $('#' + which + 'facet').hide();
-        $('#' + which + 'facet').parent().parent().after(content[which]);
-        var top = $('a[name="' + which + '"]').offset().top - 80;
-        $('html, body').animate({scrollTop: top});
-        var prep = function() {
-            allactions();
-        }
-        $('#new'+which).jtedit({
-            'source': source,
-            'data':{}, 
-            'makeform': false, 
-            'actionbuttons': false,
-            'jsonbutton': false,
-            'target': '/admin/' + which.substring(0,which.length - 1),
-            'delmsg':"", 
-            'savemsg':"", 
-            "saveonupdate":false, 
-            "reloadonsave":window.location,
-            "post_source_callback":prep
-        });
-        !source ? allactions() : false;
-        var save = function(event) {
-            event.preventDefault();
-            source ? $.fn.jtedit.options.target = source : false;
-            var validdata = validate();
-            validdata ? $.fn.jtedit.saveit(false,false,validdata) : false;
-        }
-        var cancel = function(event) {
-            event.preventDefault();
-            $('#new' + which).remove();
-            $('#' + which + 'facet').show();
-        }
-        var deleteit = function(event) {
-            $.fn.jtedit.options.target = source;
-            event.preventDefault();
-            $.fn.jtedit.deleteit();
-        }
-        $('#' + which + 'newsave').bind('click',save);
-        $('#' + which + 'newcancel').bind('click',cancel);
-        $('#' + which + 'newdelete').bind('click',deleteit);
-        var showhelp = function() {
-            $('.' + show).css({'padding-top':'10px'})
-            $('.help').hide();
-            var show = $(this).attr('data-path');
-            $('.' + show).show();
-            var pad = $(this).offset().top - $('.' + show).offset().top + 'px';
-            $('.' + show).css({'padding-top':pad})
-        };
-        $('.jtedit_value').bind('focus',showhelp);
-
-    };
-    $('.newitem').bind('click',bubblegetthenewitem);
 
 });
 </script>            
@@ -282,7 +94,13 @@ jQuery(document).ready(function() {
 
 
 <a name="dashboard"></a>
-{% include "admin/dashboard.html" %}
+<div class="row-fluid" style="margin-top:40px;">
+    <div class="span12">
+        <div id="graphview"></div>
+    </div>
+</div>
+
+
 
 <hr></hr>
 
@@ -299,52 +117,11 @@ jQuery(document).ready(function() {
 <a name="projects"></a>
 <div class="row-fluid">
     <div class="span12">
-        <h2 style="margin-bottom:10px;">Projects</h2>
-        <div class="row-fluid facetdisplay" id="projectsfacet">
+        <h2 style="margin-bottom:10px;">All projects</h2>
+        <div class="row-fluid" id="projectsfacet">
         </div>
     </div>
 </div>
-
-{% include "admin/project.html" %}
-
-<hr></hr>
-
-<a name="financials"></a>
-<div class="row-fluid">
-    <div class="span12">
-        <h2 style="margin-bottom:10px;">Financial events</h2>
-        <div class="row-fluid facetdisplay" id="financialsfacet">
-        </div>
-    </div>
-</div>
-
-{% include "admin/financial.html" %}
-
-<hr></hr>
-
-<a name="commitments"></a>
-<div class="row-fluid">
-    <div class="span12">
-        <h2 style="margin-bottom:10px;">Partner commitments</h2>
-        <div class="row-fluid facetdisplay" id="commitmentsfacet">
-        </div>
-    </div>
-</div>
-
-{% include "admin/commitment.html" %}
-
-<hr></hr>
-
-<a name="contacts"></a>
-<div class="row-fluid">
-    <div class="span12">
-        <h2 style="margin-bottom:10px;">Contacts</h2>
-        <div class="row-fluid facetdisplay" id="contactsfacet">
-        </div>
-    </div>
-</div>
-
-{% include "admin/contact.html" %}
 
 {% endblock %}
 

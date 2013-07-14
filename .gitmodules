@@ -4,3 +4,6 @@
 [submodule "cl/static/vendor/jtedit"]
 	path = cl/static/vendor/jtedit
 	url = git://github.com/CottageLabs/jtedit.git
+[submodule "cl/static/vendor/graphview"]
+	path = cl/static/vendor/graphview
+	url = git@github.com:CottageLabs/graphview.git
