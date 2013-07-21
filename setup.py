@@ -1,21 +1,21 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = 'cl',
-    version = '0.4',
+    name = 'portality',
+    version = '0.7.1',
     packages = find_packages(),
     install_requires = [
         "Flask==0.8",
         "Flask-Login",
         "Flask-WTF",
         "requests==1.1.0",
-        "markdown",
-        "lxml"
+        "markdown"#,
+        #"lxml"
     ],
     url = 'http://cottagelabs.com/',
     author = 'Cottage Labs',
     author_email = 'us@cottagelabs.com',
-    description = 'The CL website',
+    description = 'A web API layer over an ES backend, with various useful plugins',
     license = 'Copyheart',
     classifiers = [
         'Development Status :: 3 - Alpha',
