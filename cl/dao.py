@@ -329,7 +329,10 @@ class Project(DomainObject):
 
         for key in request.form.keys():
             if not key.startswith("commitment_") and not key.startswith("financial_") and not key.startswith("note_") and key not in ['submit']:
-                val = request.form[key]
+                if key == 'tags':
+                    val = request.form[key].split(",")
+                else:
+                    val = request.form[key]
                 if val == "on":
                     rec[key] = True
                 elif val == "off":
