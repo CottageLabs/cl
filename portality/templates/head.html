@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" dir="ltr" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" dir="ltr" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html dir="ltr" lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>cottage labs{% if record %}{% if record.data %} | {{ record.data['title'] }}{% endif %}{% endif %}</title>
+
+    <meta name="description" content="{{ app.config['SERVICE_TAGLINE'] }}">
+    <meta name="author" content="{{ app.config['ADMIN_NAME'] }}">
+
+    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!--[if lt IE 9]>
+    <script src="/static/portality/js/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300&v2" />
+    
+    {% if record %}{% if record.data %}{% if record.data['feed'] != "" %}
+    <link rel="feed" type="application/atom+xml" href="{{record.data['url']}}/feed"/>
+    {% endif %}{% endif %}{% endif %}
+    
+    <!-- get jquery js -->
+    <script type="text/javascript" src="/static/portality/vendor/jquery-1.7.1.min.js"></script>
+
+    <!-- get bootstrap js and css -->
+    <link rel="stylesheet" href="/static/portality/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/bootstrap/css/bootstrap-responsive.min.css" />
+    <script type="text/javascript" src="/static/portality/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- get tablesorter js and css -->
+    <script type="text/javascript" src="/static/portality/vendor/tablesorter/js/jquery.tablesorter.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/portality/vendor/tablesorter/css/blue/style.css">
+
+    <!-- get select2 -->
+    <link rel="stylesheet" href="/static/portality/vendor/select2-release-3.2/select2.css">
+    <script type="text/javascript" src="/static/portality/vendor/select2-release-3.2/select2.min.js"></script>
+
+    <!-- get our js and css -->
+    <link rel="stylesheet" type="text/css" href="/static/portality/css/portality.css">
+    <script type="text/javascript" src="/static/portality/js/portality.js"></script>
+                    
+    <!-- get jquery-ui -->
+    <link rel="stylesheet" href="/static/portality/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.css">
+    <script type="text/javascript" src="/static/portality/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.min.js"></script>
+
+    <!-- get js load image -->    
+    <script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
+
+    <!-- get d3 -->
+    <script type="text/javascript" src="/static/portality/vendor/d3/d3.min.js"></script>
+
+    <!-- get linkify -->
+    <script type="text/javascript" src="/static/portality/vendor/facetview/vendor/linkify/1.0/jquery.linkify-1.0-min.js"></script>  
+
+    <!-- get facetview -->
+    <script type="text/javascript" src="/static/portality/vendor/facetview/jquery.facetview.js"></script>
+    <link rel="stylesheet" href="/static/portality/vendor/facetview/css/facetview.css">
+
+    <!-- get etherpad -->
+    <script src="/static/portality/vendor/etherpad.js"></script>
+
+    <!-- get parsley -->
+    <script type="text/javascript" src="/static/portality/vendor/parsley/parsley.js"></script>  
+
+    <!-- get graphview -->
+    <script type="text/javascript" src="/static/portality/vendor/graphview/jquery.graphview.js"></script>
+
+    <!-- get tinymce -->
+    <script type="text/javascript" src="/static/portality/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+
+    <!-- get textfill -->
+    <script type="text/javascript" src="/static/vendor/jquery.textfill.js"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
+        });
+    </script>
+
+</head>
+

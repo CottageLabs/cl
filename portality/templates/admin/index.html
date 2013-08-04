@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block subnav %}
+
+    <div id="subnav" class="subnav">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li><a href="/admin#dashboard">Dashboard</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="/media">Media</a></li>
+                <li><a href="/sitemap">Nav / Sitemap</a></li>
+                <li><a href="/tagging">Pages / Tags</a></li>
+                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
+            </ul>
+        </div>
+    </div>
+
+<script type="text/javascript" charset="utf-8">
+jQuery(document).ready(function() {
+
+    // do a graphview of projects
+    /*$('#graphview').graphview({
+        "target": '/query/project',
+        "ajaxtype": "GET",
+        "datatype": "JSON",
+        
+        "titlefield": "title.exact", // which field from result object is default title field
+        
+        "defaultquery": {
+            "query": {
+                "bool": {
+                    "must":[]
+                }
+            },
+            "fields": "*",
+            "partial_fields": [],
+            "from":0,
+            "size":100,
+            "facets":{
+                "commitments": {"term":{"field":"commitments.name.exact","suggest": true, "node": true}},
+                "customers": {"term":{"field":"customer.exact","suggest": true, "node": true}},
+                "funders": {"term":{"field":"funder.exact","suggest": true, "node": true}},
+                "tags": {"term":{"field":"tags.exact","suggest": true, "node": false}}
+            }
+        },
+        "afterresults": false
+    });*/
+
+    // do a facetview list of projects
+    var opts = {{ jsite_options|safe }}.facetview;
+    opts.sharesave_link = false;
+
+    opts.facets = [{"field":"status.exact","display":"status"},{"field":"lead.exact","order":"term","display":"project leader"},{"field":"customer.exact","order":"term"}];
+    opts.search_url = '/query/project/_search?';
+    opts.result_display = [
+        [
+            {
+                "pre": '<a class="cl_feature_title" href="/admin/project/',
+                "field": "id"
+            },
+            {
+                "pre": '">',
+                "field": "title",
+                "post": "</a></div>"
+            }
+        ],
+        [
+            {
+                "field": "status",
+                "post": " "
+            },
+            {
+                "field": "datefrom"
+            },
+            {
+                "pre": ' to ',
+                "field": "dateto"
+            }
+        ]
+    ];
+    $('#projectsfacet').facetview(opts);
+    $('#projectsfacet .facetview_search_options_container').append('<a style="margin-top:-22px;" class="btn newitem" data-type="projects" alt="create a new project" title="create a new project" href="/admin/project/new"><i class="icon-plus"></i> create a new project</a>');
+
+
+
+
+});
+</script>            
+
+{% endblock %}
+
+{% block content %}
+
+
+<a name="dashboard"></a>
+<div class="row-fluid" style="margin-top:40px;">
+    <div class="span12">
+        <div id="graphview"></div>
+    </div>
+</div>
+
+
+
+<hr></hr>
+
+<a name="reports"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">Reports</h2>
+        <p>quarterly, annual, vat, clx report... perhaps generatable from the above vis.</p>
+    </div>
+</div>
+
+<hr></hr>
+
+<a name="projects"></a>
+<div class="row-fluid">
+    <div class="span12">
+        <h2 style="margin-bottom:10px;">All projects</h2>
+        <div class="row-fluid" id="projectsfacet">
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
