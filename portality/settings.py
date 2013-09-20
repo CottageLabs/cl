@@ -1,4 +1,8 @@
-SECRET_KEY = "default-key" # make this something secret in your overriding app.cfg
+# ========================
+# MAIN SETTINGS
+
+# make this something secret in your overriding app.cfg
+SECRET_KEY = "default-key"
 
 # contact info
 ADMIN_NAME = "Cottage Labs"
@@ -6,42 +10,143 @@ ADMIN_EMAIL = "us@cottagelabs.com"
 
 # service info
 SERVICE_NAME = "Cottage Labs"
-SERVICE_TAGLINE = ""
+SERVICE_TAGLINE = "We don't sell products, we trade our skills"
 HOST = "0.0.0.0"
 DEBUG = True
 PORT = 5004
-
-# list of superuser account names
-SUPER_USER = ["test"]
 
 # elasticsearch settings
 ELASTIC_SEARCH_HOST = "http://127.0.0.1:9200" # remember the http:// or https://
 ELASTIC_SEARCH_DB = "cl"
 INITIALISE_INDEX = True # whether or not to try creating the index and required index types on startup
-NO_QUERY_VIA_API = ['account'] # list index types that should not be queryable via the API
-PUBLIC_ACCESSIBLE_JSON = True # can not logged in people get JSON versions of pages by querying for them?
+
+# list of superuser account names
+SUPER_USER = ["test"]
+
+# Can people register publicly? If false, only the superuser can create new accounts
+PUBLIC_REGISTER = False
+
+
+# ========================
+# MAPPING SETTINGS
+
+# a dict of the ES mappings. identify by name, and include name as first object name
+# and identifier for how non-analyzed fields for faceting are differentiated in the mappings
+FACET_FIELD = ".exact"
+MAPPINGS = {
+    "record" : {
+        "record" : {
+            "dynamic_templates" : [
+                {
+                    "default" : {
+                        "match" : "*",
+                        "match_mapping_type": "string",
+                        "mapping" : {
+                            "type" : "multi_field",
+                            "fields" : {
+                                "{name}" : {"type" : "{dynamic_type}", "index" : "analyzed", "store" : "no"},
+                                "exact" : {"type" : "{dynamic_type}", "index" : "not_analyzed", "store" : "yes"}
+                            }
+                        }
+                    }
+                }
+            ],
+            "properties":{
+                "datefrom":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "dateto":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "duedate":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                },
+                "datepaid":{
+                    "type": "date",
+                    "index": "not_analyzed",
+                    "format": "dd/MM/yyyy"
+                }
+            }
+        }
+    }
+}
+MAPPINGS['account'] = {'account':MAPPINGS['record']['record']}
+MAPPINGS['project'] = {'project':MAPPINGS['record']['record']}
+MAPPINGS['pages'] = {'pages':MAPPINGS['record']['record']}
+
+
+# ========================
+# QUERY SETTINGS
+
+# list index types that should not be queryable via the query endpoint
+NO_QUERY = ['account']
+
+# can anonymous users get raw JSON records via the query endpoint?
+PUBLIC_ACCESSIBLE_JSON = True 
+
+# list additional terms to impose on anonymous users of query endpoint
+# for each index type that you wish to have some
+# must be a list of objects that can be appended to an ES query.bool.must
+# for example [{'term':{'visible':True}},{'term':{'accessible':True}}]
+ANONYMOUS_SEARCH_TERMS = {
+    "pages": [{'term':{'visible':True}},{'term':{'accessible':True}}]
+}
+
+# a default sort to apply to query endpoint searches
+# for each index type that you wish to have one
+# for example {'created_date' + FACET_FIELD : {"order":"desc"}}
+DEFAULT_SORT = {
+    "pages": {'created_date' + FACET_FIELD : {"order":"desc"}}
+}
+
+
+# ========================
+# MEDIA SETTINGS
 
 # location of media storage folder
 MEDIA_FOLDER = "media"
 
-# location for where page content should be written to disk, if anywhere
-CONTENT_FOLDER = "content"
+
+# ========================
+# PAGEMANAGER SETTINGS
+
+# folder name for storing page content
+# will be added under the templates/pagemanager route
+CONTENT_FOLDER = False
 
 # etherpad endpoint if available for collaborative editing
 COLLABORATIVE = 'http://pads.cottagelabs.com'
 
+# when a page is deleted from the index should it also be removed from 
+# filesystem and etherpad (if they are available in the first place)
+DELETE_REMOVES_FS = False # True / False
+DELETE_REMOVES_EP = False # MUST BE THE ETHERPAD API-KEY OR DELETES WILL FAIL
+
 # disqus account shortname if available for page comments
 COMMENTS = 'cottagelabs'
 
-# if search filter is not false, anonymous users only see visible and accessible pages in query results
-# if search sort and order are set, all queries from /query will return with default search unless one is provided
-# placeholder image can be used in search result displays
-ANONYMOUS_SEARCH_FILTER_TERMS = {'visible':True,'accessible':True}
-SEARCH_SORT = ''
-SEARCH_SORT_ORDER = ''
 
-# Configuration for feeds.
-#
+# ========================
+# HOOK SETTINGS
+
+REPOS = {
+    "portality": {
+        "path": "/opt/portality/src/portality"
+    },
+    "content": {
+        "path": "/opt/portality/src/portality/portality/templates/pagemanager/content"
+    }
+}
+
+# ========================
+# FEED SETTINGS
+
 BASE_URL = "http://cottagelabs.com"
 
 # Maximum number of feed entries to be given in a single response.  If this is omitted, it will
@@ -61,6 +166,11 @@ FEED_GENERATOR = "CottageLabs feed generator"
 # Larger image to use as the logo for all of the feeds
 FEED_LOGO = "http://cottagelabs.com/media/cottage_hill_bubble_small.jpg"
 
+
+
+
+# ========================
+# CL SETTINGS
 
 # Facetview displays, need to be moved somewhere else, perhaps into pagemanager
 FACETVIEW_DISPLAYS = {
@@ -252,54 +362,4 @@ FACETVIEW_DISPLAYS = {
     }
 }
 
-
-# a dict of the ES mappings. identify by name, and include name as first object name
-# and identifier for how non-analyzed fields for faceting are differentiated in the mappings
-FACET_FIELD = ".exact"
-MAPPINGS = {
-    "record" : {
-        "record" : {
-            "dynamic_templates" : [
-                {
-                    "default" : {
-                        "match" : "*",
-                        "match_mapping_type": "string",
-                        "mapping" : {
-                            "type" : "multi_field",
-                            "fields" : {
-                                "{name}" : {"type" : "{dynamic_type}", "index" : "analyzed", "store" : "no"},
-                                "exact" : {"type" : "{dynamic_type}", "index" : "not_analyzed", "store" : "yes"}
-                            }
-                        }
-                    }
-                }
-            ],
-            "properties":{
-                "datefrom":{
-                    "type": "date",
-                    "index": "not_analyzed",
-                    "format": "dd/MM/yyyy"
-                },
-                "dateto":{
-                    "type": "date",
-                    "index": "not_analyzed",
-                    "format": "dd/MM/yyyy"
-                },
-                "duedate":{
-                    "type": "date",
-                    "index": "not_analyzed",
-                    "format": "dd/MM/yyyy"
-                },
-                "datepaid":{
-                    "type": "date",
-                    "index": "not_analyzed",
-                    "format": "dd/MM/yyyy"
-                }
-            }
-        }
-    }
-}
-MAPPINGS['account'] = {'account':MAPPINGS['record']['record']}
-MAPPINGS['project'] = {'project':MAPPINGS['record']['record']}
-MAPPINGS['pages'] = {'pages':MAPPINGS['record']['record']}
 

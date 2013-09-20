@@ -2,55 +2,33 @@
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-<div id="main" class="container"> 
+<div id="nav">
+    <ul>
+        <li><a id="navopts" href="#">CONTENTS</a></li>
+        <li><a href="/">homepage</a></li>
+        <li><a href="/about">abous us</a></li>
+        <li><a href="/people">our people</a></li>
+        <li><a href="/news">blog</a></li>
+        <li><a href="/casestudy">case studies</a></li>
+        <li><a href="/projects">projects</a></li>
+        <li><a href="/reports">reports</a></li>
+        <li><a href="/software">software</a></li>
+        <li><a href="/software">search</a></li>
+    </ul>
+</div>
 
-    <div id="topstrap" class="page-header visible-desktop">
-        <h1><a href="/" style="color:#333;">cottage labs</a>
-            <small><br />we don't sell products, we trade our skills</small>
-        </h1>
-    </div>
-    
-    <div id="topnav" class="navbar navbar-in-page">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <h3 class="hidden-desktop" style="padding:5px;"><a href="/">cottage labs</a></h3>
-                <div class="nav-collapse">
-                    <ul id="mainnavlist" class="nav">
-                        {% include 'sitemap/sitenav.html' ignore missing %}
-                        {% if current_user.is_anonymous() %}
-                        <li><a href="{{url_for('account.login')}}">login</a></li>
-                        {% else %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>options</strong> <b class="caret"></b></a>
-                            <ul id="admin_options" class="dropdown-menu">
-                                <li><a id="new_page" href="">create a new page</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{{record.data['url']}}/settings">page settings</a></li>
-                                <li><a href="{{record.data['url']}}/edit">edit this page</a></li>
-                                <li class="divider"></li>
-                                <li><a href="/admin">do admin</a></li>
-                                <li><a href="/howto">read howto</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{{url_for('account.index')}}{{ current_user.id }}">my account</a></li>
-                                <li><a href="{{url_for('account.logout')}}">logout</a></li>
-                            </ul>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
+<div id="topstrap" class="visible-desktop">
+    <div class="container">
+        <div style="margin:10px 20px 0 20px;">
+            <h1 style="font-weight:normal;"><a href="/" style="color:#333;">cottage labs</a>
+                <small><br>we don't sell products, we trade our skills</small>
+            </h1>
         </div>
     </div>
+</div>
 
-    {% block subnav %}{% endblock %}
-
-    <div class="content">
-
+<div>
+    <div class="container"> 
         <div class="alert-messages">
         {% with messages = get_flashed_messages(with_categories=True) %}
         {%if messages %}
@@ -63,22 +41,21 @@
         {% endif %}
         {% endwith %}
         </div>
-
-        <div id="article" class="row-fluid">
-
-        {% block content %}{% endblock %}
-        
-        {% if record.data['last_updated'] %}
-            <div class="row-fluid"><div class="span12"><em>Page last modified on {{ record.data['last_updated'] }}</em></div></div>
-        {% endif %}
-        
-        </div>
     </div>
-
 </div>
 
-{% if record.data['comments'] and app.config['COMMENTS'] %}
-<div id="comments" class="container"><div class="comments"><div class="row-fluid" id="disqus_thread"></div></div></div>
+
+<div id="main">
+    <div class="container">
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+
+{% if record %}{% if record.data %}{% if record.data['comments'] and app.config['COMMENTS'] %}
+<div id="comments"><div class="container"><div class="content"><div class="row-fluid" id="disqus_thread"></div></div></div></div>
 <script type="text/javascript">
     var disqus_shortname = "{{app.config['COMMENTS']}}";
     (function() {
@@ -87,47 +64,31 @@
         (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
     })();
 </script>
-{% endif %}
+{% endif %}{% endif %}{% endif %}
 
-<hr class="embossed" />
 
 <footer id="bottom">
     <div class="container">
-    <div class="row-fluid" style="margin-top:40px;">
-        <div class="span4">
-            <div class="well">
-            <ul class="nav nav-list">
-            {% include 'sitemap/sitenav.html' ignore missing %}
-            </ul>
+        <div class="content">
+            <div class="row-fluid" style="margin-top:40px;">
+                <div class="span12">
+                    <ul class="nav nav-list">
+                    {% include 'sitemap/sitenav.html' ignore missing %}
+                    </ul>
+
+                    <p><a href="mailto:us@cottagelabs.com" style="color:white;">us@cottagelabs.com</a></p>
+                    <p><a href="http://twitter.com/cottagelabs" style="color:white;">@cottagelabs</a></p>
+                    
+                    <p style="text-align:right;"><a href="http://copyheart.org" style="color:white;">&#9825;</a> <a href="/" style="color:white;">Cottage Labs</a> LLP 2013<br><br>
+                    Our VAT Registration number is 127710036<br>
+                    Cottage Labs is a limited liability partnership, registered in Scotland with the number SO303454</p>
+                </div>
             </div>
-            
-            <p>We don't sell products, we trade our skills</p>
-            <p>Cottage Labs does open source software development, consultancy, reporting and analysis for the higher education and research community</p>
-            <p>Cottage Labs is a limited liability partnership, registered in Scotland with the number SO303454</p>
-            <p>Our VAT Registration number is 127710036</p>
-            <p><a href="http://copyheart.org">&#9825;</a> <a href="/">Cottage Labs</a> LLP 2013</p>
         </div>
-        <div class="span8" style="text-align:right;">
-            <a name="contact"></a>
-            <div class="well">
-                <form id="contact" action="/contact" method="post" class="clearfix">
-                <textarea placeholder="If you want to contact us, just tap out a message here, and send it along with your email address. We will get back to you asap." 
-                    style="width:100%;height:200px;border:none;background-color:#f5f5f5;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;
-" name="message"></textarea>
-                <br />
-                <input placeholder="put your email address here :)" style="width:100%;border:none;background-color:#f5f5f5;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;
-" name="email" />
-                <input id="submit_contact" class="btn" style="width:100%;" name="submit" type="submit" value="send us your message" />
-                <input style="display:none;" name="not" type="text" />
-                </form>
-            </div>
-            <p>or email <a href="mailto:us@cottagelabs.com">us@cottagelabs.com</a></p>
-            <p>we are also on <a href="http://twitter.com/cottagelabs">twitter</a> and <a href="http://facebook.com/cottagelabs">facebook</a></p>
-        </div>
-    </div>
     </div>
 </footer>
 
+{% if current_user.is_anonymous() %}
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-20871671-1']);
@@ -140,6 +101,7 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+{% endif %}
 
 </body>
 </html>

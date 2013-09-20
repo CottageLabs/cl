@@ -26,8 +26,6 @@
     <!--[if lt IE 9]>
     <script src="/static/portality/js/html5.js" type="text/javascript"></script>
     <![endif]-->
-
-    <link rel="stylesheet" type="text/css" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300&v2" />
     
     {% if record %}{% if record.data %}{% if record.data['feed'] != "" %}
     <link rel="feed" type="application/atom+xml" href="{{record.data['url']}}/feed"/>
@@ -38,7 +36,7 @@
 
     <!-- get bootstrap js and css -->
     <link rel="stylesheet" href="/static/portality/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="/static/vendor/bootstrap/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/static/portality/vendor/bootstrap/css/bootstrap-responsive.min.css" />
     <script type="text/javascript" src="/static/portality/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- get tablesorter js and css -->
@@ -50,15 +48,16 @@
     <script type="text/javascript" src="/static/portality/vendor/select2-release-3.2/select2.min.js"></script>
 
     <!-- get our js and css -->
-    <link rel="stylesheet" type="text/css" href="/static/portality/css/portality.css">
     <script type="text/javascript" src="/static/portality/js/portality.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/portality/css/portality.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" />
                     
     <!-- get jquery-ui -->
     <link rel="stylesheet" href="/static/portality/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.css">
     <script type="text/javascript" src="/static/portality/vendor/jquery-ui-1.8.18.custom/jquery-ui-1.8.18.custom.min.js"></script>
 
     <!-- get js load image -->    
-    <script src="/static/vendor/JavaScript-Load-Image/load-image.js"></script>
+    <script src="/static/portality/vendor/JavaScript-Load-Image/load-image.js"></script>
 
     <!-- get d3 -->
     <script type="text/javascript" src="/static/portality/vendor/d3/d3.min.js"></script>
@@ -83,11 +82,22 @@
     <script type="text/javascript" src="/static/portality/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 
     <!-- get textfill -->
-    <script type="text/javascript" src="/static/vendor/jquery.textfill.js"></script>
+    <script type="text/javascript" src="/static/portality/vendor/jquery.textfill.js"></script>
 
     <script type="text/javascript">
         jQuery(document).ready(function () {
             $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
+            var navopts = function(event) {
+                if ( $(this).hasClass('collapsed') ) {
+                    $(this).removeClass('collapsed');
+                    $(this).parent().siblings().show();
+                } else {
+                    $(this).addClass('collapsed');
+                    $(this).parent().siblings().hide();
+                }
+            };
+            $('#navopts').bind('click',navopts);
+            $('#navopts').trigger('click');
         });
     </script>
 
