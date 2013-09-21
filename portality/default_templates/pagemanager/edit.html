@@ -11,12 +11,14 @@
         <div class="container">
             <a class="brand" href="/">{{ app.config['SERVICE_NAME'] }}</a>
             <ul class="nav">
-                <li><a href="{{record.data.url}}">Exit</a></li>
+                <li><a href="{{record.data.url}}">Back</a></li>
                 {% if app.config['COLLABORATIVE'] and padsavailable %}
-                <li><a href="{{record.data.url}}/sync">Sync</a></li>
+                <li><a id="sync" href="{{record.data.url}}/sync">Sync</a></li>
+                <li><a target="_blank" href="{{record.data.url}}/preview">Preview</a></li>
                 {% else %}
                 <li><input type="submit" name="submit" value="Save" style="background:none;border:none;color:#aaa;margin-top:7px;"></li>
                 {% endif %}
+                <li><a href="{{record.data.url}}/settings">Settings</a></li>
                 <li class="alert-messages" style="padding-bottom:0;margin-bottom:0;">
                 {% with messages = get_flashed_messages(with_categories=True) %}
                 {%if messages %}
@@ -65,6 +67,24 @@ jQuery(document).ready(function() {
         'borderStyle'       : 'solid'
     });
     $('#collab_edit').height( $(window).height() - 44 );
+    
+    var sync = function(event) {
+        event.preventDefault();
+        $.ajax({
+            'url': $(this).attr('href'),
+            'success': function() {
+                var msg = '<div id="synced" style="margin:0;" class="alert alert-success">SYNCHRONISED</div>';
+                $('.alert-messages').html(msg);
+                window.setTimeout(function() { $("#synced").remove(); }, 2000);
+            },
+            'error': function() {
+                var msg = '<div id="synced" style="margin:0;" class="alert alert-danger">ERROR</div>';
+                $('.alert-messages').html(msg);
+                window.setTimeout(function() { $("#synced").remove(); }, 2000);
+            }
+        });
+    }
+    $('#sync').bind('click',sync);
 });
 </script>
 
@@ -84,7 +104,7 @@ jQuery(document).ready(function() {
         theme_advanced_statusbar_location : "bottom",
         theme_advanced_resizing : true
     });
-    $('#form_content').height( $(window).height() - 35 );
+    $('#form_content').height( $(window).height() - 44 );
 
 });
 </script>

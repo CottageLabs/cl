@@ -5,6 +5,254 @@
 <script>
 jQuery(document).ready(function() {
 
+    var FACETVIEW_DISPLAYS = {
+        "compact" : {
+            'result_display':  [
+                [
+                    {
+                        "pre": '<a class="cl_red_leader" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a>&nbsp;"
+                    },
+                    {
+                        "field" : "excerpt"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div>',
+            'resultwrap_start': '<span>',
+            'resultwrap_end': '</span>',
+            "paging":{
+                "from":0,
+                "size":4
+            }
+        },
+        "stories" : {
+            'result_display':   [
+                [
+                    {
+                        "pre": '<div class="row-fluid"><div class="span9"><strong><a class="cl_black_leader" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></strong></div>"
+                    },
+                    {
+                        "pre" : '<div class="span3"><em>',
+                        "field" : "last_updated",
+                        "post" : "</em></div>"
+                    },
+                    {
+                        "field" : "excerpt"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div>',
+            'resultwrap_start': '<div class="cl_news_line">',
+            'resultwrap_end': '</div>',
+            "paging":{
+                "from":0,
+                "size":20
+            }
+        },
+        "features": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<a href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '"><img src="',
+                        "field": "image",
+                        "post": '"></a>'
+                    },
+                    {
+                        "pre": '<h2><a style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></h2>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<p><a style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "excerpt",
+                        "post": '</a></p>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid" id="facetview_results">',
+            'searchwrap_end': '</div>',
+            'resultwrap_start': '<div class="span4"><div class="well" style="background-color:white;height:400px;overflow:hidden;">',
+            'resultwrap_end': '</div></div>',
+            "paging":{
+                "from":0,
+                "size":4
+            }
+        },
+        "panels": {
+            "result_display": [
+                [
+                    {
+                        "pre": '<h4><a href="',
+                        "field": "url",
+                        "post": '">'
+                    },
+                    {
+                        "field": "title",
+                        "post": "</a></h4>"
+                    }
+                ],
+                [
+                    {
+                        "field": "excerpt"
+                    }
+                ],
+                [
+                    {
+                        "pre": "by ",
+                        "field": "author"
+                    },
+                    {
+                        "pre": " on ",
+                        "field": "created_date"
+                    }
+                ]
+            ],
+            "searchwrap_start": '<div id="facetview_results" class="clearfix">',
+            "searchwrap_end":"</div>",
+            "resultwrap_start":'<div class="result_box"><div class="result_info">',
+            "resultwrap_end":"</div></div>",
+            "result_box_colours":['#e7ffdf','#f7f9d0','#cacaff','#caffd8','#ffdfff','#eeeeee','#c9d2d4'],
+            "paging":{
+                "from":0,
+                "size":9
+            }
+        },
+        "list": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<div class="cl_feature_box"><span class="cl_feature_title">',
+                        "field": "title",
+                        "post": "</span></div>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_text"><span class="cl_feature_content">',
+                        "field": "excerpt",
+                        "post": '</span></div>'
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_link"><a href="',
+                        "field": "url",
+                        "post": '">read more &raquo;</a></div>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<table id="facetview_results" class="table table-bordered table-striped table-condensed">',
+            'searchwrap_end': '</table>',
+            'resultwrap_start': '<tr><td>',
+            'resultwrap_end': '</td></tr>',
+            "paging":{
+                "from":0,
+                "size":10
+            }
+        },
+        "titles": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<h4><a href="',
+                        "field": "url",
+                        "post": '">'
+                    },
+                    {
+                        "field": "title",
+                        "post": "</a></h4>"
+                    }
+                ]
+            ],
+            'searchwrap_start': '<table id="facetview_results" class="table table-bordered table-striped table-condensed">',
+            'searchwrap_end': '</table>',
+            'resultwrap_start': '<tr><td>',
+            'resultwrap_end': '</td></tr>',
+            "paging":{
+                "from":0,
+                "size":10
+            }
+        }
+    }
+
+    // put any facetviews into any facetview divs
+    var facetview_opts = {
+        "search_url": "/query/pages/_search?",
+        "datatype": "json",
+        "display_images": false,
+        "pushstate":false,
+        "paging": {
+            "from": 0,
+            "size": 10
+        }
+    };
+    var cl_feature_titles = function(event) {
+        var settings = {
+            maxFontPixels: 60,
+            minFontPixels: 20,
+            innerTag: 'a',
+            widthOnly: false,
+            callback: null,
+            complete: null,
+            explicitWidth: null,
+            explicitHeight: null
+        };
+        $('.cl_feature_box').textfill(settings);
+        settings.minFontPixels = 16;
+        $('.cl_feature_text').textfill(settings);
+        $('.cl_feature_title:odd').css("color","#ed1c24");
+        $('.row-fluid .feature_span:nth-child(4n+1)').css("margin-left",0);
+    };
+    facetview_opts.post_search_callback = cl_feature_titles;
+    var dofacetviews = function() {
+        $('.facetview').each(function() {
+            var opts = jQuery.extend(true, {}, facetview_opts); // clone the options
+            for ( var style in FACETVIEW_DISPLAYS ) {
+                $(this).hasClass('facetview-' + style) ? opts = $.extend(opts, FACETVIEW_DISPLAYS[style] ) : "";
+            };
+            $(this).hasClass('facetview-slider') ? opts.pager_slider = true : "";
+            $(this).hasClass('facetview-descending') ? opts['sort'] = [{"created_date.exact":{"order":"desc"}}] : "";
+            $(this).hasClass('facetview-ascending') ? opts['sort'] = [{"created_date.exact":{"order":"asc"}}] : "";
+            if ( $(this).hasClass('facetview-searchable') ) {
+                opts.embedded_search = true;
+            } else {
+                opts.embedded_search = false;
+            };
+            $(this).attr('data-search') ? opts.q = $(this).attr('data-search') : "";
+            $(this).attr('data-size') ? opts.paging.size = $(this).attr('data-size') : "";
+            $(this).attr('data-from') ? opts.paging.from = $(this).attr('data-from') : "";
+            $(this).facetview(opts);
+        });
+    };
+
     // do things once page is fully built
     var pageready = function() {
         dofacetviews();
@@ -33,52 +281,10 @@ jQuery(document).ready(function() {
         var src = $(this).attr('data-source').replace('.json','') + '.json';
         $.ajax({"url": src, "success": embed, "into": $(this)});
     });
+    if ( $('.dynamic').length == 0 ) {
+        dofacetviews();
+    }
 
-    // put any facetviews into any facetview divs
-    var facetview_opts = {
-        "search_url": "/query/pages/_search?",
-        "datatype": "json",
-        "display_images": false,
-        "pushstate":false
-    };
-    var cl_feature_titles = function(event) {
-        var settings = {
-            maxFontPixels: 60,
-            minFontPixels: 20,
-            innerTag: 'a',
-            widthOnly: false,
-            callback: null,
-            complete: null,
-            explicitWidth: null,
-            explicitHeight: null
-        };
-        $('.cl_feature_box').textfill(settings);
-        settings.minFontPixels = 16;
-        $('.cl_feature_text').textfill(settings);
-        $('.cl_feature_title:odd').css("color","#ed1c24");
-        $('.row-fluid .feature_span:nth-child(4n+1)').css("margin-left",0);
-    };
-    facetview_opts.post_search_callback = cl_feature_titles;
-    var dofacetviews = function() {
-        $('.facetview').each(function() {
-            var opts = jQuery.extend(true, {}, facetview_opts); // clone the options
-            for ( var style in options.facetview_displays ) {
-                $(this).hasClass('facetview-' + style) ? opts = $.extend(opts, options.facetview_displays[style] ) : "";
-            };
-            $(this).hasClass('facetview-slider') ? opts.pager_slider = true : "";
-            $(this).hasClass('facetview-descending') ? opts['sort'] = [{"created_date.exact":{"order":"desc"}}] : "";
-            $(this).hasClass('facetview-ascending') ? opts['sort'] = [{"created_date.exact":{"order":"asc"}}] : "";
-            if ( $(this).hasClass('facetview-searchable') ) {
-                opts.embedded_search = true;
-            } else {
-                opts.embedded_search = false;
-            };
-            $(this).attr('data-search') ? opts.q = $(this).attr('data-search') : "";
-            $(this).attr('data-size') ? opts.paging.size = $(this).attr('data-size') : "";
-            $(this).attr('data-from') ? opts.paging.from = $(this).attr('data-from') : "";
-            $(this).facetview(opts);
-        });
-    };
 });
 </script>
 

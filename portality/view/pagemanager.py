@@ -122,6 +122,24 @@ def settings(path='/'):
         )
 
 
+# a method for previewing etherpad updates
+@blueprint.route('/<path:path>/preview')
+def preview(path='/'):
+    if current_user.is_anonymous():
+        abort(401)
+    else:
+        if path != '/': path = '/' + path
+        rec = models.Pages.pull_by_url(path)
+        if rec is None:
+            abort(404)
+        else:
+            # get current etherpad content
+            a = app.config['COLLABORATIVE'].rstrip('/') + '/p/'
+            a += rec.id + '/export/txt'
+            c = requests.get(a)        
+            return _render_page(rec,c.text)
+
+
 @blueprint.route('/manage', methods=['GET','POST'])
 def manage():
     
@@ -219,41 +237,7 @@ def pagemanager(path=''):
             except:
                 content = rec.data.get('content',"")
 
-            # etherpads insert asterisks (*) sometimes when they see \t tabs, bless 'em
-            # and some other oddities. So strip them before markdown processing
-            cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
-            cont = re.sub('\*<', '<', cont ) # it can break HTML tags
-            cont = re.sub('(^\s*\*\s*$)', '', cont) # still get stand-alone * on blank lines with tabs in them
-
-
-            # custom content builder to look for containment breaks
-            if 'BREAK_CONTAINMENT' in content:
-                a, b = content.split('BREAK_CONTAINMENT')
-                ca = markdown.markdown(a)
-                content = ca + '</div></div></div>' + b + '<div><div><div>'
-            else:
-                content = markdown.markdown(content)
-
-            # if an embedded file url has been provided, embed it in content
-            if rec.data.get('embed', False):
-                if ( rec.data['embed'].find('/pub?') != -1 or 
-                        rec.data['embed'].find('docs.google.com') != -1 ):
-                    content += '<iframe id="embedded" src="' + rec.data['embed']
-                    content += '" width="100%" height="1000" '
-                    content += 'style="border:none;"></iframe>'
-                else:
-                    content += '<iframe id="embedded" '
-                    content += 'src="http://docs.google.com/viewer?url='
-                    content += urllib.quote_plus(rec.data['embed']) 
-                    content += '&embedded=true" width="100%" height="1000" '
-                    content += 'style="border:none;"></iframe>'
-
-            # TODO: try adding js dynamic includes server-side?
-            return render_template(
-                'pagemanager/index.html',
-                content=content,
-                record=rec
-            )
+            return _render_page(rec,content)
 
     else:
         abort(401)
@@ -377,6 +361,44 @@ longer present in ES
 
 
 '''     
-        
-        
-        
+
+
+def _render_page(rec,content):
+    # etherpads insert asterisks (*) sometimes when they see \t tabs, bless 'em
+    # and some other oddities. So strip them before markdown processing
+    cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
+    cont = re.sub('\*<', '<', cont ) # it can break HTML tags
+    cont = re.sub('(^\s*\*\s*$)', '', cont) # still get stand-alone * on blank lines with tabs in them
+
+
+    # custom content builder to look for containment breaks
+    if '<BREAK_CONTAINMENT>' in content:
+        a, b = content.split('<BREAK_CONTAINMENT>')
+        ca = markdown.markdown(a)
+        content = ca + '</div></div></div>' + b + '<div><div><div>'
+    else:
+        content = markdown.markdown(content)
+
+    # if an embedded file url has been provided, embed it in content
+    if rec.data.get('embed', False):
+        if ( rec.data['embed'].find('/pub?') != -1 or 
+                rec.data['embed'].find('docs.google.com') != -1 ):
+            content += '<iframe id="embedded" src="' + rec.data['embed']
+            content += '" width="100%" height="1000" '
+            content += 'style="border:none;"></iframe>'
+        else:
+            content += '<iframe id="embedded" '
+            content += 'src="http://docs.google.com/viewer?url='
+            content += urllib.quote_plus(rec.data['embed']) 
+            content += '&embedded=true" width="100%" height="1000" '
+            content += 'style="border:none;"></iframe>'
+
+    # TODO: try adding js dynamic includes server-side?
+    return render_template(
+        'pagemanager/index.html',
+        content=content,
+        record=rec
+    )
+
+
+

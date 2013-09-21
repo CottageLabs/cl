@@ -49,7 +49,7 @@ jQuery(document).ready(function() {
             <label for="title"><strong>navigation title:</strong></label> <input type="text" name="title" value="{{record.title}}"><br>
             <label for="url"><strong>page address:</strong></label> <input name="url" type="text" value="{{record.url}}" class="page_urls"><br>
             <label for="author"><strong>primary author:</strong></label> <input name="author" type="text" value="{{record.author}}"><br>
-            <label for="excerpt"><strong>brief summary:</strong></label> <textarea name="excerpt" value="{{record.excerpt}}"></textarea><br>
+            <label for="excerpt"><strong>brief summary:</strong></label> <textarea name="excerpt">{{record.excerpt}}</textarea><br>
             <label for="tags"><strong>tags:</strong></label> <input type="text" class="page_tags" name="tags" value="{{",".join(record.tags)}}"><br>
         </div>
         <div class="span6">

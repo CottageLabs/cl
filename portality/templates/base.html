@@ -5,15 +5,14 @@
 <div id="nav">
     <ul>
         <li><a id="navopts" href="#">CONTENTS</a></li>
-        <li><a href="/">homepage</a></li>
+        <li><a href="/">intro</a></li>
         <li><a href="/about">abous us</a></li>
-        <li><a href="/people">our people</a></li>
         <li><a href="/news">blog</a></li>
         <li><a href="/casestudy">case studies</a></li>
         <li><a href="/projects">projects</a></li>
         <li><a href="/reports">reports</a></li>
         <li><a href="/software">software</a></li>
-        <li><a href="/software">search</a></li>
+        <li><a href="/search">search</a></li>
     </ul>
 </div>
 
@@ -71,17 +70,37 @@
     <div class="container">
         <div class="content">
             <div class="row-fluid" style="margin-top:40px;">
-                <div class="span12">
-                    <ul class="nav nav-list">
-                    {% include 'sitemap/sitenav.html' ignore missing %}
-                    </ul>
+                <div class="span4">
 
-                    <p><a href="mailto:us@cottagelabs.com" style="color:white;">us@cottagelabs.com</a></p>
-                    <p><a href="http://twitter.com/cottagelabs" style="color:white;">@cottagelabs</a></p>
+                    <a name="contact"></a>
+
+                    <p style="color:white;font-weight:bold;margin-bottom:20px;">If you would like 
+                    to know more about working with us, we would be happy to hear from you.</p>
+
+                    <form id="contact" action="/contact" method="post">
+                    Write us a message:<br>
+                    <textarea style="width:100%;height:100px;border:none;background-color:#f5f5f5;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;" name="message"></textarea>
+                    <br>
+                    <br>
+                    Tell us your email so we can reply:<br>
+                    <input style="width:100%;border:none;background-color:#f5f5f5;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;
+        " name="email">
+                    <br>
+                    <br>
+                    <input id="submit_contact" class="btn" name="submit" type="submit" style="width:103%;" value="send your message">
+                    <input style="display:none;" name="not" type="text">
+                    </form>
+
+                </div>
+                <div class="span2">
+                </div>
+                <div class="span6">
+                    <p>email <a href="mailto:us@cottagelabs.com" style="color:white;">us@cottagelabs.com</a></p>
+                    <p>twitter <a href="http://twitter.com/cottagelabs" style="color:white;">@cottagelabs</a></p>
                     
-                    <p style="text-align:right;"><a href="http://copyheart.org" style="color:white;">&#9825;</a> <a href="/" style="color:white;">Cottage Labs</a> LLP 2013<br><br>
+                    <p style="text-align:right;margin-top:100px;"><a href="http://copyheart.org" style="color:white;">&#9825;</a> <a href="/" style="color:white;">Cottage Labs</a> LLP 2011 - 2013<br><br>
                     Our VAT Registration number is 127710036<br>
-                    Cottage Labs is a limited liability partnership, registered in Scotland with the number SO303454</p>
+                    Partnership registered in Scotland with the number SO303454</p>
                 </div>
             </div>
         </div>

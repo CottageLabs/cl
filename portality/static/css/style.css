@@ -57,6 +57,14 @@ p {
     color:#c9d2d4;
 }
 
+.graphlogo{
+    height:200px;
+    background-color:#333;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
 .notify_loading{
     display:none;
     margin:12px 10px 0 0;
@@ -177,3 +185,59 @@ ul.parsley-error-list li {
 }
 
 
+
+
+
+/************************************
+  * CL feature stuff that could be removed once site content is updated
+  ***********************************/
+
+.cl_feature_box{
+    height:100px;
+    text-align:justify;
+    overflow:hidden;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+.cl_feature_title{
+    font-family:impact;
+    font-weight:normal;
+    text-align:justify;
+    margin-bottom:10px;
+    line-height:0.6em;
+    font-size:24px;
+    color:#999;
+}
+.cl_feature_text{
+    height:120px;
+    text-align:justify;
+    overflow:hidden;
+    padding-top:5px;
+    padding-bottom:0px;
+    margin-bottom:0px;
+}
+.cl_feature_content{
+    text-align:justify;
+}
+
+.cl_red_leader {
+    color: #ED1C24;
+    font-weight: bold;
+}
+
+.cl_black_leader {
+    color: #000000;
+    font-weight: bold;
+}
+
+.cl_news_line {
+     border-bottom: 1px dashed #cccccc;
+     padding-bottom: 5px;
+     margin-bottom: 10px;
+     text-align: justify;
+}
+
+.cl_news_line strong {
+    font-size: 110%;
+    font-weight: bold;
+}
