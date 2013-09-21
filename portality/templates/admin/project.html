@@ -1,20 +1,7 @@
 {% extends "base.html" %}
 
-{% block subnav %}
+{% block content %}
 
-    <div id="subnav" class="subnav">
-        <div class="container">
-            <ul class="nav nav-pills">
-                <li><a href="/admin#dashboard">Dashboard</a></li>
-                <li><a href="/admin#reports">Reports</a></li>
-                <li><a href="/admin#projects">Projects</a></li>
-                <li><a href="/media">Media</a></li>
-                <li><a href="/sitemap">Sitemap</a></li>
-                <li><a href="/tagging">Tagging</a></li>
-                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
-            </ul>
-        </div>
-    </div>
 
     <script type="text/javascript">
     jQuery(document).ready(function() {
@@ -116,9 +103,6 @@
     });    
     </script>
 
-{% endblock %}
-
-{% block content %}
 
 
 <form method="POST" name="project" id="project" action="">

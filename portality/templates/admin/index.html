@@ -1,20 +1,8 @@
 {% extends "base.html" %}
 
-{% block subnav %}
 
-    <div id="subnav" class="subnav">
-        <div class="container">
-            <ul class="nav nav-pills">
-                <li><a href="/admin#dashboard">Dashboard</a></li>
-                <li><a href="#reports">Reports</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="/media">Media</a></li>
-                <li><a href="/sitemap">Nav / Sitemap</a></li>
-                <li><a href="/tagging">Pages / Tags</a></li>
-                {% if current_user.is_super %}<li><a href="/account">Users</a></li>{% endif %}
-            </ul>
-        </div>
-    </div>
+{% block content %}
+
 
 <script type="text/javascript" charset="utf-8">
 jQuery(document).ready(function() {
@@ -48,10 +36,10 @@ jQuery(document).ready(function() {
     });*/
 
     // do a facetview list of projects
-    var opts = {{ jsite_options|safe }}.facetview;
+    var opts = {};
     opts.sharesave_link = false;
 
-    opts.facets = [{"field":"status.exact","display":"status"},{"field":"lead.exact","order":"term","display":"project leader"},{"field":"customer.exact","order":"term"}];
+    opts.facets = [{"field":"status.exact","display":"status"},{"field":"lead.exact","order":"term","display":"project leader"},{"field":"customer.exact","display":"customer","order":"term"}];
     opts.search_url = '/query/project/_search?';
     opts.result_display = [
         [
@@ -88,9 +76,7 @@ jQuery(document).ready(function() {
 });
 </script>            
 
-{% endblock %}
 
-{% block content %}
 
 
 <a name="dashboard"></a>
@@ -102,17 +88,6 @@ jQuery(document).ready(function() {
 
 
 
-<hr></hr>
-
-<a name="reports"></a>
-<div class="row-fluid">
-    <div class="span12">
-        <h2 style="margin-bottom:10px;">Reports</h2>
-        <p>quarterly, annual, vat, clx report... perhaps generatable from the above vis.</p>
-    </div>
-</div>
-
-<hr></hr>
 
 <a name="projects"></a>
 <div class="row-fluid">
