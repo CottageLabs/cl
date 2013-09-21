@@ -63,7 +63,7 @@ jQuery(document).ready(function() {
                 "size":20
             }
         },
-        "features": {
+        "featurettes": {
             'result_display': [
                 [
                     {
@@ -101,6 +101,40 @@ jQuery(document).ready(function() {
             'searchwrap_end': '</div>',
             'resultwrap_start': '<div class="span4"><div class="well" style="background-color:white;height:400px;overflow:hidden;">',
             'resultwrap_end': '</div></div>',
+            "paging":{
+                "from":0,
+                "size":4
+            }
+        },
+        "features": {
+            'result_display': [
+                [
+                    {
+                        "pre": '<div class="cl_feature_box"><a class="cl_feature_title" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></div>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<div class="cl_feature_text"><a class="cl_feature_content" style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "excerpt",
+                        "post": '</a></div>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div class="row-fluid"><div class="well" style="margin-top:20px;margin-bottom:0px;"><div id="facetview_results" class="clearfix">',
+            'searchwrap_end': '</div></div></div>',
+            'resultwrap_start': '<div class="span3 feature_span">',
+            'resultwrap_end': '</div>',
             "paging":{
                 "from":0,
                 "size":4
