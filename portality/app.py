@@ -8,6 +8,7 @@ import portality.models as models
 from portality.core import app, login_manager
 
 from portality.view.account import blueprint as account
+from portality.view.nav import blueprint as nav
 from portality.view.media import blueprint as media
 from portality.view.admin import blueprint as admin
 from portality.view.graph import blueprint as graph
@@ -19,6 +20,7 @@ from portality.view.feed import blueprint as feed
 
 
 app.register_blueprint(account, url_prefix='/account')
+app.register_blueprint(nav, url_prefix='/nav')
 app.register_blueprint(media, url_prefix='/media')
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(graph, url_prefix='/graph')
