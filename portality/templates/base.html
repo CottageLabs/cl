@@ -10,15 +10,15 @@
         {% if current_user.is_anonymous() %}
         <li><a href="{{url_for('account.login')}}">login</a></li>
         {% else %}
-        <li><a href="">create a new page</a></li>
+        {% if record %}{% if record.data %}
+        <li><a href="{{record.data.url}}/settings">page settings</a></li>
+        <li><a href="{{record.data.url}}/edit">edit this page</a></li>
+        <li class="divider"></li>
+        {% endif %}{% endif %}
+        <!--<li><a href="">create a new page</a></li>-->
         <li><a href="/manage">manage pages and tags</a></li>
         <li><a href="/nav">manage navigation</a></li>
         <li><a href="/media">manage media</a></li>
-        {% if record %}{% if record.data %}
-        <li class="divider"></li>
-        <li><a href="{{record.data.url}}/settings">page settings</a></li>
-        <li><a href="{{record.data.url}}/edit">edit this page</a></li>
-        {% endif %}{% endif %}
         <li><a href="/admin">manage projects</a></li>
         <li><a href="/howto">read the howto</a></li>
         <li class="divider"></li>
