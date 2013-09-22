@@ -5,7 +5,7 @@
 
     <script type="text/javascript">
     jQuery(document).ready(function() {
-        var dropdowns = {{jdropdowns|safe}};
+        var dropdowns = {{dropdowns|tojson|safe}};
         $('#tags').select2({
             'tags':dropdowns.tags,
             'tokenSeparators':[","],
@@ -109,197 +109,165 @@
 
 <div class="row-fluid">
 
-    <div class="span6">
-        <div class="well">
+    <div class="span4">
                                             
-            <div><span class="upload_label">title:</span> <input type="text" name="title" id="title" data-required="true"
-       		{% if record %} value="{{record.data.title}}"{% endif %}
-            ></div>
+        <div><span class="upload_label">title:</span> <input type="text" style="width:200px;" name="title" id="title" data-required="true"
+   		{% if record %} value="{{record.data.title}}"{% endif %}
+        ></div>
 
-            <div><span class="upload_label">status:</span> 
-                <select name="status" id="status" data-required="true">
-                    <option
-                    {% if record %}{% if record.data.status == "draft" %} selected="selected"{% endif %}{% endif %}
-                    >draft</option>
-                    <option
-                    {% if record %}{% if record.data.status == "proposed" %} selected="selected"{% endif %}{% endif %}
-                    >proposed</option>
-                    <option
-                    {% if record %}{% if record.data.status == "abandoned" %} selected="selected"{% endif %}{% endif %}
-                    >abandoned</option>
-                    <option
-                    {% if record %}{% if record.data.status == "rejected" %} selected="selected"{% endif %}{% endif %}
-                    >rejected</option>
-                    <option
-                    {% if record %}{% if record.data.status == "accepted" %} selected="selected"{% endif %}{% endif %}
-                    >accepted</option>
-                    <option
-                    {% if record %}{% if record.data.status == "current" %} selected="selected"{% endif %}{% endif %}
-                    >current</option>
-                    <option
-                    {% if record %}{% if record.data.status == "late" %} selected="selected"{% endif %}{% endif %}
-                    >late</option>
-                    <option
-                    {% if record %}{% if record.data.status == "complete" %} selected="selected"{% endif %}{% endif %}
-                    >complete</option>
-                </select>
-            </div>
-
-            <div><span class="upload_label">description:</span> <textarea name="description" data-required="true">{% if record %}{{record.data.description}}{% endif %}</textarea></div>
-
-            <div><span class="upload_label" data-required="true">proposer</span> 
-                <select name="proposer">
-                    <option></option>
-                    {% for name in dropdowns["partners"] %}
-                    <option
-                    {% if record %}{% if record.data.proposer == name %} selected="selected"{% endif %}{% endif %}
-                    >{{ name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div><span class="upload_label">senior +1</span> 
-                <select name="seniorplusone" id="seniorplusone" class="beyonddraftreqs">
-                    <option></option>
-                    {% for name in dropdowns["seniors"] %}
-                    <option
-                    {% if record %}{% if record.data.seniorplusone == name %} selected="selected"{% endif %}{% endif %}                    
-                    >{{ name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div><span class="upload_label">additional +1</span> 
-                <select name="plusone" id="plusone" class="beyonddraftreqs">
-                    <option></option>
-                    {% for name in dropdowns["partners"] %}
-                    <option
-                    {% if record %}{% if record.data.plusone == name %} selected="selected"{% endif %}{% endif %}
-                    >{{ name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div><span class="upload_label">QC partner</span> 
-                <select name="qc" id="qc" class="beyonddraftreqs">
-                    <option></option>
-                    {% for name in dropdowns["partners"] %}
-                    <option
-                    {% if record %}{% if record.data.qc == name %} selected="selected"{% endif %}{% endif %}
-                    >{{ name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div><span class="upload_label">project lead</span>
-                <select name="lead" id="lead" class="beyonddraftreqs">
-                    <option></option>
-                    {% for name in dropdowns["partners"] %}
-                    <option
-                    {% if record %}{% if record.data.lead == name %} selected="selected"{% endif %}{% endif %}
-                    >{{ name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div><span class="upload_label">start date:</span> <input type="text" name="datefrom" id="datefrom" class="datepicker beyonddraftreqs"
-            {% if record %} value="{{record.data.datefrom}}"{% endif %}
-            ></div>
-
-            <div><span class="upload_label">end date:</span> <input type="text" name="dateto" id="dateto" class="datepicker beyonddraftreqs"
-            {% if record %} value="{{record.data.dateto}}"{% endif %}
-            ></div>
-
+        <div><span class="upload_label">status:</span> 
+            <select name="status" id="status" data-required="true" style="width:210px;">
+                <option
+                {% if record %}{% if record.data.status == "draft" %} selected="selected"{% endif %}{% endif %}
+                >draft</option>
+                <option
+                {% if record %}{% if record.data.status == "proposed" %} selected="selected"{% endif %}{% endif %}
+                >proposed</option>
+                <option
+                {% if record %}{% if record.data.status == "abandoned" %} selected="selected"{% endif %}{% endif %}
+                >abandoned</option>
+                <option
+                {% if record %}{% if record.data.status == "rejected" %} selected="selected"{% endif %}{% endif %}
+                >rejected</option>
+                <option
+                {% if record %}{% if record.data.status == "accepted" %} selected="selected"{% endif %}{% endif %}
+                >accepted</option>
+                <option
+                {% if record %}{% if record.data.status == "current" %} selected="selected"{% endif %}{% endif %}
+                >current</option>
+                <option
+                {% if record %}{% if record.data.status == "late" %} selected="selected"{% endif %}{% endif %}
+                >late</option>
+                <option
+                {% if record %}{% if record.data.status == "complete" %} selected="selected"{% endif %}{% endif %}
+                >complete</option>
+            </select>
         </div>
+
+        <div><span class="upload_label">description:</span> <textarea name="description" data-required="true" style="width:200px;">{% if record %}{{record.data.description}}{% endif %}</textarea></div>
+
+        <div><span class="upload_label" data-required="true">proposer</span> 
+            <select name="proposer" style="width:210px;">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option
+                {% if record %}{% if record.data.proposer == name %} selected="selected"{% endif %}{% endif %}
+                >{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">senior +1</span> 
+            <select name="seniorplusone" id="seniorplusone" class="beyonddraftreqs" style="width:210px;">
+                <option></option>
+                {% for name in dropdowns["seniors"] %}
+                <option
+                {% if record %}{% if record.data.seniorplusone == name %} selected="selected"{% endif %}{% endif %}                    
+                >{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">additional +1</span> 
+            <select name="plusone" id="plusone" class="beyonddraftreqs" style="width:210px;">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option
+                {% if record %}{% if record.data.plusone == name %} selected="selected"{% endif %}{% endif %}
+                >{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">QC partner</span> 
+            <select name="qc" id="qc" class="beyonddraftreqs" style="width:210px;">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option
+                {% if record %}{% if record.data.qc == name %} selected="selected"{% endif %}{% endif %}
+                >{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">project lead</span>
+            <select name="lead" id="lead" class="beyonddraftreqs" style="width:210px;">
+                <option></option>
+                {% for name in dropdowns["partners"] %}
+                <option
+                {% if record %}{% if record.data.lead == name %} selected="selected"{% endif %}{% endif %}
+                >{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div><span class="upload_label">start date:</span> <input style="width:200px;" type="text" name="datefrom" id="datefrom" class="datepicker beyonddraftreqs"
+        {% if record %} value="{{record.data.datefrom}}"{% endif %}
+        ></div>
+
+        <div><span class="upload_label">end date:</span> <input style="width:200px;" type="text" name="dateto" id="dateto" class="datepicker beyonddraftreqs"
+        {% if record %} value="{{record.data.dateto}}"{% endif %}
+        ></div>
+
     </div>
     
-    <div class="span6">
-        <div class="well">
+    <div class="span4">
 
-            <div><span class="upload_label">project tags:</span> <input type="text" name="tags" id="tags"
-            {% if record %} value="{{record.data.tags}}"{% endif %}
-            ></div>
+        <div><span class="upload_label">project tags:</span> <input style="width:200px;" type="text" name="tags" id="tags"
+        {% if record %} value="{{",".join(record.data.tags)}}"{% endif %}
+        ></div>
 
-            <div><span class="upload_label">external participants:</span> <input type="text" name="externals" id="externals"
-            {% if record %} value="{{record.data.externals}}"{% endif %}
-            ></div>
-
-            <div><span class="upload_label">customer:</span> 
-                <input type="text" name="customer" id="customer"
-                {% if record %} value="{{record.data.customer}}"{% endif %}
-                >
-            </div>
-
-            <div><span class="upload_label">funder (if not customer):</span> 
-                <input type="text" name="funder" id="funder"
-                {% if record %} value="{{record.data.funder}}"{% endif %}
-                >
-            </div>
-
-            <div><span class="upload_label">biling name and address:</span> 
-                <textarea name="billing" id="billing">{% if record %}{{record.data.billing}}{% endif %}</textarea>
-            </div>
-
-            <div><span class="upload_label">Total budget ex VAT:</span> <input type="text" name="budget" id="budget" class="beyonddraftreqs" data-type="number"
-            {% if record %} value="{{record.data.budget}}"{% endif %}
-            ></div>
-
-            <div><span class="upload_label">Total VAT to charge:</span> <input type="text" id="vat" class="beyonddraftreqs" name="vat" data-type="number"
-            {% if record %} value="{{record.data.vat}}"{% endif %}
-            ></div>
-
-            <div><span class="upload_label">Total expenses budget:</span> <input type="text" id="expenses" class="beyonddraftreqs" name="expenses" data-type="number"
-            {% if record %} value="{{record.data.expenses}}"{% endif %}
-            ></div>
-
-            <hr></hr>
-
-            <div style="margin-top:10px;">
-                <span class="upload_label"></span>
-                <input type="submit" name="submit" class="btn" style="margin:-10px 5px 20px 0;" value="save"> <input type="submit" name="submit" class="btn btn-danger" style="margin:-10px 0 20px 5px;" value="delete">
-            </div>
-
+        <div><span class="upload_label">external participants:</span> <input style="width:200px;" type="text" name="externals" id="externals"
+        {% if record %} value="{{",".join(record.data.externals)}}"{% endif %}
+        ></div>
+        <br>
+        <div><span class="upload_label">customer:</span> 
+            <input style="width:200px;" type="text" name="customer" id="customer"
+            {% if record %} value="{{record.data.customer}}"{% endif %}
+            >
         </div>
+
+        <div><span class="upload_label">funder (if not customer):</span> 
+            <input style="width:200px;" type="text" name="funder" id="funder"
+            {% if record %} value="{{record.data.funder}}"{% endif %}
+            >
+        </div>
+        <br>
+        <div><span class="upload_label">billing name and address:</span> 
+            <textarea style="width:200px;" name="billing" id="billing">{% if record %}{{record.data.billing}}{% endif %}</textarea>
+        </div>
+
+        <div><span class="upload_label">Total budget ex VAT:</span> <input style="width:200px;" type="text" name="budget" id="budget" class="beyonddraftreqs" data-type="number"
+        {% if record %} value="{{record.data.budget}}"{% endif %}
+        ></div>
+        <br>
+        <div><span class="upload_label">Total VAT to charge:</span> <input style="width:200px;" type="text" id="vat" class="beyonddraftreqs" name="vat" data-type="number"
+        {% if record %} value="{{record.data.vat}}"{% endif %}
+        ></div>
+        <br>
+        <div><span class="upload_label">Expenses budget:</span> <input style="width:200px;" type="text" id="expenses" class="beyonddraftreqs" name="expenses" data-type="number"
+        {% if record %} value="{{record.data.expenses}}"{% endif %}
+        ></div>
+
+        <hr></hr>
+
+        <div style="margin-top:10px;">
+            <span class="upload_label"></span>
+            <input type="submit" name="submit" class="btn" style="margin:-10px 5px 20px 0;" value="save"> <input type="submit" name="submit" class="btn btn-danger" style="margin:-10px 0 20px 5px;" value="delete">
+        </div>
+
     </div>
     
-</div>
-
-<hr></hr>
-
-<div class="row-fluid">
-    <div class="span12">
-        <h2>Notes</h2>
-
-        <table class="multi">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Written by</th>
-                    <th>Note</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                {% if record and record.data.notes|length > 0 %}
-                    {% for rec in record.data.notes %}
-                <tr>
-            		<td><input type="text" name="note_date" class="datepicker" value="{{rec.date}}"></td>
-            		<td><input type="text" name="note_author" class="datepicker" value="{{rec.author}}" disabled="disabled"></td>
-                    <td><textarea name="note_note" style="width:300px;height:70px;">{{rec.note}}</textarea></td>
-                </tr>
-                    {% endfor %}
-                {% else %}
-                <tr>
-            		<td><input type="text" name="note_date" class="datepicker"></td>
-            		<td>{{current_user.id}}</td>
-                    <td><textarea name="note_note" style="width:300px;height:70px;"></textarea></td>
-                </tr>
-                {% endif %}
-
-            </tbody>
-        </table>
-
+    <div class="span4">
+    <p><b>Notes</b></p>
+    {% if record and record.data.notes|length > 0 %}
+        {% for rec in record.data.notes %}
+        <p style="border-bottom:1px solid #333;font-size:0.9em;line-height:1.1em;">{{rec.date}} - {{rec.note}}</p>
+        {% endfor %}
+    {% endif %}
+    <p><textarea name="note" style="width:100%;height:70px;"></textarea></p>
     </div>
+    
 </div>
 
 <hr></hr>
@@ -331,10 +299,10 @@
                         >{{ name }}</option>
                         {% endfor %}
             		</select></td>
-            		<td><input type="text" name="commitment_datefrom" class="datepicker" value="{{rec.datefrom}}"></td>
-            		<td><input type="text" name="commitment_dateto" class="datepicker" value="{{rec.dateto}}"></td>
-                    <td><input type="text" name="commitment_time" value="{{rec.time}}"></td>
-                    <td><input type="text" name="commitment_share" value="{{rec.share}}"></td>
+            		<td><input type="text" style="width:150px;" name="commitment_datefrom" class="datepicker" value="{{rec.datefrom}}"></td>
+            		<td><input type="text" style="width:150px;" name="commitment_dateto" class="datepicker" value="{{rec.dateto}}"></td>
+                    <td><input type="text" style="width:150px;" name="commitment_time" value="{{rec.time}}"></td>
+                    <td><input type="text" style="width:150px;" name="commitment_share" value="{{rec.share}}"></td>
                 </tr>
                     {% endfor %}
                 {% else %}
@@ -345,10 +313,10 @@
                         <option>{{ name }}</option>
                         {% endfor %}
             		</select></td>
-            		<td><input type="text" name="commitment_datefrom" class="datepicker" /></td>
-            		<td><input type="text" name="commitment_dateto" class="datepicker" /></td>
-                    <td><input type="text" name="commitment_time"></td>
-                    <td><input type="text" name="commitment_share"></td>
+            		<td><input type="text" style="width:150px;" name="commitment_datefrom" class="datepicker" /></td>
+            		<td><input type="text" style="width:150px;" name="commitment_dateto" class="datepicker" /></td>
+                    <td><input type="text" style="width:150px;" name="commitment_time"></td>
+                    <td><input type="text" style="width:150px;" name="commitment_share"></td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -396,8 +364,8 @@
                         {% if rec.type == "partner" %} selected="selected"{% endif %}
                         >partner share: to be paid at a time when such funds are available on the project budget, as part or total payment of the defined partner commitments on this project</option>
                     </select></td>
-            		<td><textarea name="financial_description">{{ rec.description }}</textarea></td>
-            		<td><input type="text" name="financial_reference" style="width:150px;" value="{{ rec.reference }}"></td>
+            		<td><textarea style="width:150px;" name="financial_description">{{ rec.description }}</textarea></td>
+            		<td><input type="text" name="financial_reference" style="width:100px;" value="{{ rec.reference }}"></td>
             		<td><input type="text" name="financial_datedue" style="width:100px;" class="datepicker" value="{{ rec.datedue }}"></td>
                     <td><input type="text" name="financial_cost" style="width:100px;" value="{{ rec.cost }}"></td>
                     <td><input type="text" name="financial_vat" style="width:100px;" value="{{ rec.vat }}"></td>
@@ -414,8 +382,8 @@
                         <option value="partner">partner share: to be paid at a time when such funds are available on the project budget, as part or total payment of the defined partner commitments on this project</option>
 
                     </select></td>
-            		<td><textarea name="financial_description"></textarea></td>
-            		<td><input type="text" name="financial_reference" style="width:150px;"></td>
+            		<td><textarea style="width:150px;" name="financial_description"></textarea></td>
+            		<td><input type="text" name="financial_reference" style="width:100px;"></td>
             		<td><input type="text" name="financial_datedue" style="width:100px;" class="datepicker" /></td>
                     <td><input type="text" name="financial_cost" style="width:100px;"></td>
                     <td><input type="text" name="financial_vat" style="width:100px;"></td>

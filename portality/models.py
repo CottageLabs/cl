@@ -126,24 +126,10 @@ class Project(DomainObject):
 
     def save_from_form(self, request):
         rec = {
-            "notes": [],
             "commitments": [],
             "financials": []
         }
 
-        for k,v in enumerate(request.form.getlist('note_date')):
-            if v is not None and len(v) > 0 and v != " ":
-                try:
-                    note = {
-                        "date": v,
-                        "author": current_user.id,
-                        "note": request.form.getlist('note_note')[k]
-                    }
-                    if len(note['date']) == 0: del note['date']
-                    rec["notes"].append(note)
-                except:
-                    pass
-        
         for k,v in enumerate(request.form.getlist('commitment_name')):
             if v is not None and len(v) > 0 and v != " ":
                 try:
@@ -177,20 +163,27 @@ class Project(DomainObject):
                 except:
                     pass
 
+        self.data['commitments'] = rec['commitments']
+        self.data['financials'] = rec['financials']
+        
         for key in request.form.keys():
-            if not key.startswith("commitment_") and not key.startswith("financial_") and not key.startswith("note_") and key not in ['submit']:
+            if not key.startswith("commitment_") and not key.startswith("financial_") and key not in ['submit']:
                 val = request.form[key]
-                if val == "on":
-                    rec[key] = True
+                if key == 'note':
+                    if 'notes' not in self.data: self.data['notes'] = []
+                    if len(request.form['note']) > 0:
+                        self.data['notes'].append({'note':request.form['note'],'date':datetime.now().strftime("%d/%m/%Y")})
+                elif val == "on":
+                    self.data[key] = True
                 elif val == "off":
-                    rec[key] = False
+                    self.data[key] = False
                 elif key in ["datefrom","dateto"] and len(val) == 0:
                     pass
+                elif key in ['tags','externals'] and not isinstance(request.form[key],list):
+                    self.data[key] = request.form[key].split(',')
                 else:
-                    rec[key] = val
+                    self.data[key] = val
 
-        if self.id is not None: rec['id'] = self.id
-        self.data = rec
         self.save()
 
 
