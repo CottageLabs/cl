@@ -201,10 +201,14 @@ def pagemanager(path=''):
     url = '/' + path.lstrip('/').rstrip('/').replace('../',"")
     if url == '/': url = '/index'
     if url.endswith('.json'): url = url.replace('.json','')
+
     rec = models.Pages.pull_by_url(url)
     
     if rec is not None and rec.data.get('editable',False):
-        return redirect(url_for('.edit',path=url))
+        if current_user.is_anonymous() and not rec.data.get('accessible',True):
+            abort(401)
+        else:
+            return redirect(url_for('.edit',path=url))
     elif ( ( request.method == 'DELETE' or ( request.method == 'POST' and request.form['submit'] == 'Delete' ) ) and not current_user.is_anonymous() ):
         if rec is None:
             abort(404)
