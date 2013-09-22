@@ -34,7 +34,7 @@ def edit(path='/'):
             abort(404)
         else:
             return redirect('/' + path)
-    elif current_user.is_anonymous() and not (rec.data.get('editable',False) and rec.data.get('accessible',False)):
+    elif current_user.is_anonymous() and not (record.data.get('editable',False) and record.data.get('accessible',False)):
         abort(401)
     else:
         if app.config.get('COLLABORATIVE',False):
