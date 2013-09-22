@@ -366,9 +366,9 @@ longer present in ES
 def _render_page(rec,content):
     # etherpads insert asterisks (*) sometimes when they see \t tabs, bless 'em
     # and some other oddities. So strip them before markdown processing
-    cont = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
-    cont = re.sub('\*<', '<', cont ) # it can break HTML tags
-    cont = re.sub('(^\s*\*\s*$)', '', cont) # still get stand-alone * on blank lines with tabs in them
+    content = rec.data.get('content','').encode('utf-8').decode('utf-8').replace(u'Â','') # works. leave it.
+    content = re.sub('\*<', '<', content ) # it can break HTML tags
+    content = re.sub('(^\s*\*\s*$)', '', content) # still get stand-alone * on blank lines with tabs in them
 
 
     # custom content builder to look for containment breaks
