@@ -72,11 +72,10 @@ jQuery(document).ready(function() {
                     },
                     {
                         "pre": '"><img src="',
-                        "field": "image",
-                        "post": '"></a>'
+                        "field": "image"
                     },
                     {
-                        "pre": '<h2><a style="color:#333;" href="',
+                        "pre": '"></a><h2><a style="color:#333;" href="',
                         "field": "url"
                     },
                     {
@@ -104,6 +103,48 @@ jQuery(document).ready(function() {
             "paging":{
                 "from":0,
                 "size":4
+            }
+        },
+        "alternates": {
+            'result_display': [
+                [
+                    {
+                         "pre": '<a href="',
+                         "field": "url"
+                    },
+                    {
+                        "pre": '"><img src="',
+                        "field": "image"
+                    },
+                    {
+                        "pre": '"></a><h2><a style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "title",
+                        "post": "</a></h2>"
+                    }
+                ],
+                [
+                    {
+                        "pre": '<p><a style="color:#333;" href="',
+                        "field": "url"
+                    },
+                    {
+                        "pre": '">',
+                        "field": "excerpt",
+                        "post": '</a></p>'
+                    }
+                ]
+            ],
+            'searchwrap_start': '<div id="facetview_results">',
+            'searchwrap_end': '</div>',
+            'resultwrap_start': '<div class="alternates"><div class="container"><div class="content">',
+            'resultwrap_end': '</div></div></div>',
+            "paging":{
+                "from":0,
+                "size":20
             }
         },
         "features": {
@@ -264,6 +305,8 @@ jQuery(document).ready(function() {
         $('.cl_feature_text').textfill(settings);
         $('.cl_feature_title:odd').css("color","#ed1c24");
         $('.row-fluid .feature_span:nth-child(4n+1)').css("margin-left",0);
+        $('.row-fluid .span3:nth-child(4n+1)').css("margin-left",0);
+        $('.row-fluid .span4:nth-child(3n+1)').css("margin-left",0);
     };
     facetview_opts.post_search_callback = cl_feature_titles;
     var dofacetviews = function() {

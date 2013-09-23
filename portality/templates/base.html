@@ -2,7 +2,7 @@
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-<div id="nav">
+<div id="nav" style="z-index:1000000000;">
     <ul>
         <li><a id="navopts" href="#">CONTENTS</a></li>
         {% include 'nav/nav.html' ignore missing %}
@@ -16,8 +16,8 @@
         <li class="divider"></li>
         {% endif %}{% endif %}
         <!--<li><a href="">create a new page</a></li>-->
-        <li><a href="/manage">manage pages and tags</a></li>
-        <li><a href="/nav">manage navigation</a></li>
+        <li><a href="/manage">manage page tags</a></li>
+        <li><a href="/nav">manage nav</a></li>
         <li><a href="/media">manage media</a></li>
         <li><a href="/admin">manage projects</a></li>
         <li><a href="/howto">read the howto</a></li>
@@ -108,10 +108,15 @@
                 <div class="span2">
                 </div>
                 <div class="span6">
-                    <p>email <a href="mailto:us@cottagelabs.com" style="color:white;">us@cottagelabs.com</a></p>
-                    <p>twitter <a href="http://twitter.com/cottagelabs" style="color:white;">@cottagelabs</a></p>
+                    <p>email: <b><a href="mailto:us@cottagelabs.com" style="color:white;">us@cottagelabs.com</a></b></p>
+                    <p>twitter: <b><a href="http://twitter.com/cottagelabs" style="color:white;">@cottagelabs</a></b></p>
+                    <p>phone: <b>+44 (0) 787 661 5694</b></p>
                     
-                    <p style="text-align:right;margin-top:100px;"><a href="http://copyheart.org" style="color:white;">&#9825;</a> <a href="/" style="color:white;">Cottage Labs</a> LLP 2011 - 2013<br><br>
+                    <p style="text-align:right;margin-top:120px;">
+                    Cottage Labs LLP<br>
+                    24/6 Bruntsfield Place<br>
+                    Edinburgh EH10 4HJ<br><br>
+                    <a href="http://copyheart.org" style="color:white;">&#9825;</a> <a href="/" style="color:white;">Cottage Labs</a> LLP 2011 - 2013<br><br>
                     Our VAT Registration number is 127710036<br>
                     Partnership registered in Scotland with the number SO303454</p>
                 </div>
