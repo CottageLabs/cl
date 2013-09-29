@@ -10,6 +10,7 @@ from portality.core import app
 import portality.models as models
 
 from topia.termextract import extract
+from html2text import html2text
 
 
 blueprint = Blueprint('parser', __name__)
@@ -56,10 +57,10 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
         #browser.load(url, load_timeout=60)
         #c = browser._get_html()
         #browser.close()
-        #c = _html_text(c)
+        #c = html2text(c)
         #except:
         c = requests.get(url)
-        c = _html_text(c.text)
+        c = html2text(c.text)
     else:
         c = request.values.get('blurb',blurb)
         
@@ -86,23 +87,4 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
     resp.mimetype = "application/json"
     return resp
 
-
-def _html_text(html):
-    # first thing is to strip the style and script tags, with all their content
-    processed = re.sub("(?i)<style[ ]{0,1}.*?>.*?</style>", "", html, re.DOTALL)
-    processed = re.sub("(?i)<script[ ]{0,1}.*?>.*?</script>", "", processed, re.DOTALL)
-
-    # get rid of links and noscripts and select lists too
-    processed = re.sub("(?i)<a[ ]{0,1}.*?>.*?</a>", "", processed, re.DOTALL)
-    processed = re.sub("(?i)<noscript[ ]{0,1}.*?>.*?</noscript>", "", processed, re.DOTALL)
-    processed = re.sub("(?i)<select[ ]{0,1}.*?>.*?</select", "", processed, re.DOTALL)
-    
-    # now get rid of all of the other html tags, leaving their content behind
-    processed = re.sub("<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", "", processed, re.DOTALL)
-    
-    # finally tidy up by getting rid of all the newlines and tabs that will be all
-    # over the place
-    processed = processed.replace("\n", " ").replace("\t", " ").replace("\r", " ")
-    
-    return processed
 

@@ -12,7 +12,8 @@ setup(
         "requests==1.1.0",
         "markdown",
         "gitpython",
-        "topia.termextract"#,
+        "topia.termextract",
+        "html2text"#,
         #"lxml"
     ],
     url = 'http://cottagelabs.com/',
