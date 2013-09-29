@@ -100,16 +100,18 @@ def _html_text(html):
 
     # first thing is to strip the style and script tags, with all their content
     processed = html.replace('&amp;','')
-    processed = re.sub("(?i)<head[ ]{0,1}.*?>.*?</head>", "", processed, flags=re.DOTALL)
-    processed = re.sub("(?i)<style[ ]{0,1}.*?>.*?</style>", "", processed, flags=re.DOTALL)
-    processed = re.sub("(?i)<script[ ]{0,1}.*?>.*?</script>", "", processed, flags=re.DOTALL)
+    processed = re.sub(re.compile("(?i)<head[ ]{0,1}.*?>.*?</head>", re.DOTALL), "", processed)
+    processed = re.sub(re.compile("(?i)<style[ ]{0,1}.*?>.*?</style>", re.DOTALL), "", processed)
+    processed = re.sub(re.compile("(?i)<script[ ]{0,1}.*?>.*?</script>", re.DOTALL), "", processed)
 
     # and some other bits and pieces to ignore
-    #processed = re.sub("(?i)<a[ ]{0,1}.*?>.*?</a>", "", processed, flags=re.DOTALL)
-    processed = re.sub("(?i)<select[ ]{0,1}.*?>.*?</select>", "", processed, flags=re.DOTALL)
+    processed = re.sub(re.compile("(?i)<select[ ]{0,1}.*?>.*?</select>", re.DOTALL), "", processed)
     
     # now get rid of all of the other html tags, leaving their content behind
-    processed = re.sub("(?i)<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", "", processed, flags=re.DOTALL)
+    processed = re.sub(re.compile("(?i)<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", re.DOTALL), "", processed)
+    
+    # and remove some other things that won't look good on the output
+    processed = "".join([x for x in processed if x in string.lowercase + string.uppercase + '0123456789 '])
     
     # finally tidy up by getting rid of all the newlines and tabs that will be all
     # over the place
