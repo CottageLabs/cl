@@ -10,8 +10,7 @@ from portality.core import app
 import portality.models as models
 
 from topia.termextract import extract
-from html2text import html2text
-
+#from html2text import html2text
 
 blueprint = Blueprint('parser', __name__)
 
@@ -57,17 +56,25 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
         #browser.load(url, load_timeout=60)
         #c = browser._get_html()
         #browser.close()
-        #c = html2text(c)
         #except:
-        c = requests.get(url)
-        c = html2text(c.text)
+        loc = app.config.get('BASE_URL','http://cottagelabs.com')
+        if url.startswith(loc):
+            lloc = url.replace(loc,'')
+            if lloc == '': lloc = '/index'
+            rec = models.Pages().pull_by_url(lloc)
+            if rec is not None:
+                c = rec.data.get('content','')
+            else:
+                c = ''
+        else:
+            g = requests.get(url)
+            c = g.text
     else:
         c = request.values.get('blurb',blurb)
         
     if c:
-        # TODO: check for parameters to the extractor and pass them in 
-        # from the method signature or from the request.values
-        terms = extractor(c)
+        content = _html_text(c)
+        terms = extractor(content)
         result = {}
         for t, o, l in terms:
             if boostphrases:
@@ -75,16 +82,39 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
             else:
                 ct = o
             result[t.lower()] = ct * scale
+
         res = [ {"term":i[0],"score":i[1]} for i in sorted(result.items(), key=lambda x: x[1], reverse=True) if len(i[0].replace(' ','')) > 2 and i[0].replace(' ','') not in url and i[0][0] in string.lowercase + string.uppercase and i[0][len(i[0])-1] in string.lowercase + string.uppercase ]
-        if omitscores:
-            res = [i[0] for i in res]
-        if size is not 0:
-            res = res[:size]
+
+        if omitscores: res = [i[0] for i in res]
+        if size is not 0: res = res[:size]
+
     else:
-        res = [] # nothing to report on
+        res = []
 
     resp = make_response( json.dumps(res) )
     resp.mimetype = "application/json"
     return resp
+
+
+def _html_text(html):
+
+    # first thing is to strip the style and script tags, with all their content
+    processed = html.replace('&amp;','')
+    processed = re.sub("(?i)<head[ ]{0,1}.*?>.*?</head>", "", processed, flags=re.DOTALL)
+    processed = re.sub("(?i)<style[ ]{0,1}.*?>.*?</style>", "", processed, flags=re.DOTALL)
+    processed = re.sub("(?i)<script[ ]{0,1}.*?>.*?</script>", "", processed, flags=re.DOTALL)
+
+    # and some other bits and pieces to ignore
+    #processed = re.sub("(?i)<a[ ]{0,1}.*?>.*?</a>", "", processed, flags=re.DOTALL)
+    processed = re.sub("(?i)<select[ ]{0,1}.*?>.*?</select>", "", processed, flags=re.DOTALL)
+    
+    # now get rid of all of the other html tags, leaving their content behind
+    processed = re.sub("(?i)<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", "", processed, flags=re.DOTALL)
+    
+    # finally tidy up by getting rid of all the newlines and tabs that will be all
+    # over the place
+    processed = processed.replace("\n", " ").replace("\t", " ").replace("\r", " ")
+    
+    return processed
 
 
