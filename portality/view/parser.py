@@ -37,7 +37,7 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
     if path:
         url = path
     else:
-        request.values.get('url','')
+        url = request.values.get('url','')
 
     if url and not url.startswith('http://') and not url.startswith('https://'):
         url = 'http://' + url
@@ -89,16 +89,16 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
 
 def _html_text(html):
     # first thing is to strip the style and script tags, with all their content
-    processed = re.sub("(?i)<style[ ]{0,1}.*?>.*?</style>", "", html, flags=re.DOTALL)
-    processed = re.sub("(?i)<script[ ]{0,1}.*?>.*?</script>", "", processed, flags=re.DOTALL)
+    processed = re.sub("(?i)<style[ ]{0,1}.*?>.*?</style>", "", html, re.DOTALL)
+    processed = re.sub("(?i)<script[ ]{0,1}.*?>.*?</script>", "", processed, re.DOTALL)
 
     # get rid of links and noscripts and select lists too
-    processed = re.sub("(?i)<a[ ]{0,1}.*?>.*?</a>", "", processed, flags=re.DOTALL)
-    processed = re.sub("(?i)<noscript[ ]{0,1}.*?>.*?</noscript>", "", processed, flags=re.DOTALL)
-    processed = re.sub("(?i)<select[ ]{0,1}.*?>.*?</select", "", processed, flags=re.DOTALL)
+    processed = re.sub("(?i)<a[ ]{0,1}.*?>.*?</a>", "", processed, re.DOTALL)
+    processed = re.sub("(?i)<noscript[ ]{0,1}.*?>.*?</noscript>", "", processed, re.DOTALL)
+    processed = re.sub("(?i)<select[ ]{0,1}.*?>.*?</select", "", processed, re.DOTALL)
     
     # now get rid of all of the other html tags, leaving their content behind
-    processed = re.sub("<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", "", processed, flags=re.DOTALL)
+    processed = re.sub("<[/]{0,1}[!a-zA-Z]+[ ]{0,1}.*?>", "", processed, re.DOTALL)
     
     # finally tidy up by getting rid of all the newlines and tabs that will be all
     # over the place
