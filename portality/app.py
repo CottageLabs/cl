@@ -18,6 +18,9 @@ from portality.view.stream import blueprint as stream
 from portality.view.pagemanager import blueprint as pagemanager
 from portality.view.feed import blueprint as feed
 
+from portality.view.crawler import blueprint as crawler
+from portality.view.parser import blueprint as parser
+
 
 app.register_blueprint(account, url_prefix='/account')
 app.register_blueprint(nav, url_prefix='/nav')
@@ -29,6 +32,9 @@ app.register_blueprint(query, url_prefix='/query')
 app.register_blueprint(stream, url_prefix='/stream')
 app.register_blueprint(feed)
 app.register_blueprint(pagemanager)
+
+app.register_blueprint(crawler, url_prefix='/crawler')
+app.register_blueprint(parser, url_prefix='/parser')
 
 
 @login_manager.user_loader
