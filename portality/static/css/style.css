@@ -53,21 +53,28 @@ p {
      background-color: white;
 }
 
-.nav {
+#mainnav .nav {
+}
+#mainnav .nav {
     margin:10px 20px 0 20px;
 }
-.nav a {
+#mainnav .nav li {
+    display:inline;
+    float:left;
+    margin-right:30px;
+}
+#mainnav .nav a {
     color:#555;
     font-weight:bold;
 }
-.nav li a:hover {
+#mainnav .nav li a:hover {
     text-decoration:underline;
     color:#0088cc;
 }
-.dropdown-menu li a {
+#mainnav .dropdown-menu li a {
     font-weight:normal;
 }
-.dropdown-menu li a:hover {
+#mainnav .dropdown-menu li a:hover {
     text-decoration:none;
     color:white;
 }
