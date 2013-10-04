@@ -71,6 +71,11 @@ p {
     text-decoration:underline;
     color:#0088cc;
 }
+#mainnav .dropdown-menu li {
+    display:block;
+    float:none;
+    margin-right:0px;
+}
 #mainnav .dropdown-menu li a {
     font-weight:normal;
 }
