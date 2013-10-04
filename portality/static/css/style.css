@@ -53,6 +53,26 @@ p {
      background-color: white;
 }
 
+.nav {
+    margin:10px 20px 0 20px;
+}
+.nav a {
+    color:#555;
+    font-weight:bold;
+}
+.nav li a:hover {
+    text-decoration:underline;
+    color:#0088cc;
+}
+.dropdown-menu li a {
+    font-weight:normal;
+}
+.dropdown-menu li a:hover {
+    text-decoration:none;
+    color:white;
+}
+
+
 #nav {
     position:fixed;
     top:0;
@@ -73,6 +93,7 @@ p {
 #nav ul li a{
     color:#c9d2d4;
 }
+
 
 .graphlogo{
     height:200px;

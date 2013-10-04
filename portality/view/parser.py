@@ -23,7 +23,7 @@ extractor = extract.TermExtractor()
 
 @blueprint.route('/')
 @blueprint.route('/<path:path>')
-def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrases=False, size=0):
+def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrases=False, size=0, raw=False):
     size = int(request.values.get('size',size))
     minoccur = int(request.values.get('minoccur',minoccur))
     scale = int(request.values.get('scale',scale))
@@ -91,9 +91,12 @@ def parser(path='', blurb='', scale=3, minoccur=2, omitscores=False, boostphrase
     else:
         res = []
 
-    resp = make_response( json.dumps(res) )
-    resp.mimetype = "application/json"
-    return resp
+    if raw:
+        return res
+    else:
+        resp = make_response( json.dumps(res) )
+        resp.mimetype = "application/json"
+        return resp
 
 
 def _html_text(html):

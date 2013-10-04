@@ -87,6 +87,18 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             $('.datepicker').datepicker({"dateFormat":"dd/mm/yy"});
+
+            var fromtop = '';
+            $(window).scroll(function() {
+	            if ( $(window).scrollTop() > $('#mainnav').offset().top ) {
+	                fromtop = $('#mainnav').offset().top;
+	                $('#nav').show();
+                };
+                if ( $(window).scrollTop() < fromtop ) {
+                    $('#nav').hide();
+                };
+            });
+
             var navopts = function(event) {
                 event.preventDefault();
                 if ( $(this).hasClass('collapsed') ) {

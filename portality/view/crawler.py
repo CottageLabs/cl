@@ -12,12 +12,17 @@ import portality.models as models
 
 blueprint = Blueprint('crawler', __name__)
 
-# pass in a URL or a string and it will be parsed for keywords and they will 
-# be handed back.
+
+# take a start url. Get the content at that url and extract every web link from it
+# add every local link as a key to the return object, pointing to a list
+# for every local link, get the content of the link and add any new local links to the keys
+# whilst doing these processes, add any new external links found into the lists the keys point to
+# return the complete object list
+# track which local pages link to which other local pages? 
 
 @blueprint.route('/')
 @blueprint.route('/<url>')
-def stream(url=False, depth=0):
+def crawler(url=False, depth=0, raw=False):
 
     if not url: url = request.values.get('url',False)
     if url and not url.startswith('http://') and not url.startswith('https://'):
@@ -32,9 +37,12 @@ def stream(url=False, depth=0):
         # if found, get the sitemap and pull the content at the level
         res = _link_exrtactor(url, depth)
 
-    resp = make_response( json.dumps(res) )
-    resp.mimetype = "application/json"
-    return resp
+    if raw:
+        return res
+    else:
+        resp = make_response( json.dumps(res) )
+        resp.mimetype = "application/json"
+        return resp
 
 
 
