@@ -12,8 +12,8 @@ setup(
         "requests==1.1.0",
         "markdown",
         "gitpython",
-        "topia.termextract"#,
-        #"lxml"
+        "topia.termextract",
+        "lxml"
     ],
     url = 'http://cottagelabs.com/',
     author = 'Cottage Labs',
