@@ -1,0 +1,17 @@
+# example nginx config to ensure content can be served to getter and not cause infinte loops
+
+server {
+        listen 80;
+        server_name cottagelabs.com;
+        root /path/to/getter;
+
+        location /content {
+            try_files $uri $uri.html $uri/index $uri/index.html 404 /404 =404;
+            add_header Access-Control-Allow-Origin *;
+        }
+
+        location / {
+            try_files $uri $uri.html /index.html;
+            add_header Access-Control-Allow-Origin *;
+        }
+}
