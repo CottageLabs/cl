@@ -2,12 +2,10 @@ This is the Cottage Labs website.
 
 It is a simple static website that uses getter to allow for sort-of templating by using dynamic content loading.
 
-getter is another CL tool, see the repo for it for more info.
-
 Just put this folder on a server somehwere, install nginx, and use the provided nginx config file to have it served at 
 the domain name of your choice (obviously, assuming you also purchase that domain name and point it to your server).
 
-Codeship or similar auto-deployment could also be used so that any commit to a certain branch automatically updates the live site (and this will indeed probably be added to this repo soon).
+Codeship is used so that any commit to the master branch automatically updates the live site.
 
 All that has to go in this repo is the content that the CL site should contain. Supporting content such as images, css files, etc, can be loaded from anywhere or included in this repo.
 
