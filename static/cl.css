@@ -18,13 +18,17 @@ body {
 
 input,button,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit;margin-bottom:2px;}
 a{color:#2196f3;text-decoration:none}
-a:hover, a:focus{color:#0a6ebd;text-decoration:underline}
+a:hover, a:focus{color:#fff;text-decoration:underline}
 a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}
 
 .container-fluid{
     margin:0 auto 0 auto;
     padding-left:15px;
     padding-right:15px;
+}
+
+.container{
+    font-family: "Raleway";
 }
 
 .nav-up {
@@ -119,10 +123,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .label {
     font-size:0.9em;
-}
-.label-default {
-    color:#333;
-    background-color:#aaa;
 }
 
 .navbar {
