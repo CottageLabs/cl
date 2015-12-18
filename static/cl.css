@@ -17,7 +17,7 @@ body {
 }
 
 input,button,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit;margin-bottom:2px;}
-a{color:#555;text-decoration:none;font-weight:600;}
+a{color:#555;text-decoration:none;font-weight:700;}
 a:hover, a:focus{color:#fff;text-decoration:underline}
 a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}
 
