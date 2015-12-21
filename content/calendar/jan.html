@@ -1,0 +1,176 @@
+<div id="maincontent">
+
+    <div id="themonth" style="display:none">
+    
+        <div id="calendar-intro">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <h1 style="letter-spacing:6px;font-size:70px;">COTTAGE LABS JANUARY 2016 CALENDAR</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="puzzle">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-6">
+                        <p>"Ringing in the New Year" over in the Directory of Open Access Journals, is Dr Maiese.</p>
+                        
+                        <p>The journal he has published in uses a high quality Open Access licence - can you tell us which licence his article is published under?</p>
+                     
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="myguess">
+                                <button class="btn btn-success" id="answer">I know the answer!</button>
+                            </div>
+                        </form>
+                        <br>
+                        
+                        <div id="correct">
+                            <p><strong>Correct!</strong></p>
+                            
+                            <p>The Directory of Open Access Journals has been a key resource in Open Access for over a decade.  Cottage Labs is proud
+                            to have joined the team as the technical developers in 2013, and to have been involved in continuing to improve and promote
+                            this valuable service!</p>
+                        </div>
+                        
+                        <button class="btn btn-danger hint" id="hint1-button">give me a hint</button>
+                        <p id="hint1" class="hint"><em>Head over to <a href="https://doaj.org/search">The DOAJ search page</a> and see if you can find the article</em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint2-button">give me another hint</button>
+                        <p id="hint2" class="hint"><em>Select "Articles" from the "Journals vs Articles" facet, and put "Ringing in the New Year" into the search box</em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint3-button">give me another hint</button>
+                        <p id="hint3" class="hint"><em>The article can be found <a href="https://doaj.org/article/057cfdd30b3c4a7bb0b28d1886f0081c">here</a></em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint4-button">give me one last hint</button>
+                        <p id="hint4" class="hint"><em>Follow the link to the <a href="http://dx.doi.org/10.4161/oxim.3.1.11105">DOI</a> or to the host journal's <a href="https://doaj.org/toc/1942-0994">Table of Contents</a> in DOAJ, where you will find the licence</em></p>
+                        
+                        
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <img src="/static/calendar/jan-full.jpg" class="img img-thumbnail">
+                        Martyn, aboard President Wensleydale, Torksey, River Trent
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+    <div id="notyet" style="display:none">
+        <div id="calendar-intro">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <h1 style="letter-spacing:6px;font-size:70px;">COTTAGE LABS JANUARY 2016 CALENDAR</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="holding">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <p>This month's calendar entry isn't available yet.  Check back in January 2016!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+    $("#correct").hide();
+    
+    $("#hint1").hide();
+    $("#hint2").hide();
+    $("#hint3").hide();
+    $("#hint4").hide();
+
+    $("#hint2-button").hide();
+    $("#hint3-button").hide();
+    $("#hint4-button").hide();
+    
+    $("#hint1-button").click(function(event) {
+        event.preventDefault();
+        $("#hint1").show();
+        $("#hint1-button").hide();
+        $("#hint2-button").show();
+    });
+    
+    $("#hint2-button").click(function(event) {
+        event.preventDefault();
+        $("#hint2").show();
+        $("#hint2-button").hide();
+        $("#hint3-button").show();
+    });
+    
+    $("#hint3-button").click(function(event) {
+        event.preventDefault();
+        $("#hint3").show();
+        $("#hint3-button").hide();
+        $("#hint4-button").show();
+    });
+    
+    $("#hint4-button").click(function(event) {
+        event.preventDefault();
+        $("#hint4").show();
+        $("#hint4-button").hide();
+    });
+    
+    var allowed = [
+        "ccby", "creativecommonsattribution", "https://creativecommons.org/licenses/by/"
+    ];
+    
+    function stringStartsWith (string, prefix) {
+        return string.slice(0, prefix.length) == prefix;
+    }
+    
+    function normalise(val) {
+        val = val.toLowerCase();
+        val = val.replace("-", "");
+        while (val.indexOf(" ") > -1) {
+            val = val.replace(" ", "")
+        }
+        return val;
+    }
+    
+    $("#answer").click(function(event) {
+        event.preventDefault();
+        var val = $("#myguess").val();
+        val = normalise(val);
+        var correct = false;
+        console.log(val);
+        for (var i = 0; i < allowed.length; i++) {
+            console.log(allowed[i])
+            if (stringStartsWith(val, allowed[i])) {
+                $("#correct").show();
+                $(".hint").hide();
+                correct = true;
+            }
+        }
+        if (!correct) {
+            alert("Unlucky :(  That wasn't the right answer.  Maybe try a hint?");
+        }
+    });
+    
+    $("#themonth").show();
+    /*
+    var d = new Date();
+    if ((d.getYear() === 2016 && d.getMonth() >= 0)) {
+        $("#themonth").show();
+    } else {
+        $("#notyet").show();
+    }*/
+});
+</script>
+
