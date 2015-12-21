@@ -58,20 +58,78 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
 }
 
 .logos {
-    height:60px;
+    height:70px;
     margin:0 5px 5px 0;
     /* max-width:200px; */
 }
+
+.person {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #252e2b;
+}
+
+.person:last-of-type {
+    border-bottom: none;
+}
+
+.photo {
+    height: 120px;
+    width: 120px;
+}
+
 #maincontent { 
-    background: url(/static/bg.png) no-repeat bottom right;
+    /*background: url(/static/house.jpg) no-repeat bottom right;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
+    background-size: cover;*/
+    
     padding-top:50px;
     margin-top:-70px;
 }
 
+@media screen and (min-width: 970px) {
+    #intro {
+        min-height: 600px;
+        background-image: url('/static/house2.jpg');
+        background-repeat: no-repeat;
+        background-position: bottom right; 
+    }
+}
+
+#clients {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color:#252e2b; 
+    color:#aaa;
+}
+
+#footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color:#252e2b; 
+    color:#aaa;
+}
+
+#about {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#services {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#people {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#tagline {
+    font-family:Corben, serif;
+}
 
 #menu {
     width:300px;
