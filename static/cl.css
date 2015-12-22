@@ -195,6 +195,11 @@ h1, h2, h3, h4, h5, h6 {
     padding:13px 10px 13px 10px;
 }
 
+.calendar-image {
+    width: 100%;
+    height: 180px;
+}
+
 #calendar-intro {
     padding-bottom: 40px;
 }

@@ -44,10 +44,10 @@
                         <p id="hint2" class="hint"><em>Select "Articles" from the "Journals vs Articles" facet, and put "Ringing in the New Year" into the search box</em></p>
                         
                         <button class="btn btn-danger hint" id="hint3-button">give me another hint</button>
-                        <p id="hint3" class="hint"><em>The article can be found <a href="https://doaj.org/article/057cfdd30b3c4a7bb0b28d1886f0081c">here</a></em></p>
+                        <p id="hint3" class="hint"><em>The article can be found <a href="https://doaj.org/article/057cfdd30b3c4a7bb0b28d1886f0081c">here</a>, but you have to go one step further to find the licence.</em></p>
                         
                         <button class="btn btn-danger hint" id="hint4-button">give me one last hint</button>
-                        <p id="hint4" class="hint"><em>Follow the link to the <a href="http://dx.doi.org/10.4161/oxim.3.1.11105">DOI</a> or to the host journal's <a href="https://doaj.org/toc/1942-0994">Table of Contents</a> in DOAJ, where you will find the licence</em></p>
+                        <p id="hint4" class="hint"><em>Follow the link to the host journal's <a href="https://doaj.org/toc/1942-0994">Table of Contents</a> in DOAJ, where you will find the licence, or follow the <a href="http://dx.doi.org/10.4161/oxim.3.1.11105">DOI</a> to the publisher's version to see what they say.</em></p>
                         
                         
                         
@@ -127,8 +127,25 @@ jQuery(document).ready(function($) {
         $("#hint4-button").hide();
     });
     
-    var allowed = [
-        "ccby", "creativecommonsattribution", "https://creativecommons.org/licenses/by/"
+    
+    // oi
+    // you
+    // yes, you, looking at the page source
+    //
+    // these are the allowed answers; but if you could figure that out from the
+    // code we bet you could have figured them out from the clue, so just grab
+    // one of these strings and stick them in the input box on the page.
+    //
+    // Or, find the div with id "correct", to see what you would have seen if you'd done that
+    //
+    // plus, drop us an email at us@cottagelabs.com or a tweet to @cottagelabs to let us know how sneaky you are ;)
+    var exact = [
+        "ccby", "ccby3", "ccby3.0", "creativecommonsattribution", "creativecommonsattribution3.0", "creativecommonsattribution3",
+        "creativecommonsattributionlicense", "creativecommonsattribution3.0license", "creativecommonsattribution3license",
+        "creativecommonsattributionlicence", "creativecommonsattribution3.0licence", "creativecommonsattribution3licence"
+    ];
+    var startswith = [
+        "https://creativecommons.org/licenses/by/", "http://creativecommons.org/licenses/by/"
     ];
     
     function stringStartsWith (string, prefix) {
@@ -149,17 +166,21 @@ jQuery(document).ready(function($) {
         var val = $("#myguess").val();
         val = normalise(val);
         var correct = false;
-        console.log(val);
-        for (var i = 0; i < allowed.length; i++) {
-            console.log(allowed[i])
-            if (stringStartsWith(val, allowed[i])) {
-                $("#correct").show();
-                $(".hint").hide();
+        for (var i = 0; i < exact.length; i++) {
+            if (val === exact[i]) {
+                correct = true;
+            }
+        }
+        for (var i = 0; i < startswith.length; i++) {
+            if (stringStartsWith(val, startswith[i])) {
                 correct = true;
             }
         }
         if (!correct) {
             alert("Unlucky :(  That wasn't the right answer.  Maybe try a hint?");
+        } else {
+            $("#correct").show();
+            $(".hint").hide();
         }
     });
     
