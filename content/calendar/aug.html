@@ -1,0 +1,187 @@
+<div id="maincontent">
+
+    <div id="themonth" style="display:none">
+    
+        <div id="calendar-intro">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <h1 style="letter-spacing:6px;font-size:70px;">COTTAGE LABS AUGUST 2016 CALENDAR</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="puzzle">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-6">
+                        <p>PUZZLE HERE</p>
+                        
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="myguess">
+                                <button class="btn btn-success" id="answer">I know the answer!</button>
+                            </div>
+                        </form>
+                        <br>
+                        
+                        <div id="correct">
+                            <p><strong>Correct!</strong></p>
+                            
+                            <p>CORRECT TEXT HERE</p>
+                        </div>
+                        
+                        <button class="btn btn-danger hint" id="hint1-button">give me a hint</button>
+                        <p id="hint1" class="hint"<em>HINT 1</em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint2-button">give me another hint</button>
+                        <p id="hint2" class="hint"><em>HINT 2</em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint3-button">give me another hint</button>
+                        <p id="hint3" class="hint"<em>HINT 3</em></p>
+                        
+                        <button class="btn btn-danger hint" id="hint4-button">give me one last hint</button>
+                        <p id="hint4" class="hint"><em>HINT 4</em></p>   
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <img src="/static/calendar/aug-full.jpg" class="img img-thumbnail">
+                        Mark, during a motorbike tour of Europe, in Beaune, France
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+    <div id="notyet" style="display:none">
+        <div id="calendar-intro">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <h1 style="letter-spacing:6px;font-size:70px;">COTTAGE LABS AUGUST 2016 CALENDAR</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="holding">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-11">
+                        <p>This month's calendar entry isn't available yet.  Check back in August 2016!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+    $("#correct").hide();
+    
+    $("#hint1").hide();
+    $("#hint2").hide();
+    $("#hint3").hide();
+    $("#hint4").hide();
+
+    $("#hint2-button").hide();
+    $("#hint3-button").hide();
+    $("#hint4-button").hide();
+    
+    $("#hint1-button").click(function(event) {
+        event.preventDefault();
+        $("#hint1").show();
+        $("#hint1-button").hide();
+        $("#hint2-button").show();
+    });
+    
+    $("#hint2-button").click(function(event) {
+        event.preventDefault();
+        $("#hint2").show();
+        $("#hint2-button").hide();
+        $("#hint3-button").show();
+    });
+    
+    $("#hint3-button").click(function(event) {
+        event.preventDefault();
+        $("#hint3").show();
+        $("#hint3-button").hide();
+        $("#hint4-button").show();
+    });
+    
+    $("#hint4-button").click(function(event) {
+        event.preventDefault();
+        $("#hint4").show();
+        $("#hint4-button").hide();
+    });
+    
+    
+    // oi
+    // you
+    // yes, you, looking at the page source
+    //
+    // these are the allowed answers; but if you could figure that out from the
+    // code we bet you could have figured them out from the clue, so just grab
+    // one of these strings and stick them in the input box on the page.
+    //
+    // Or, find the div with id "correct", to see what you would have seen if you'd done that
+    //
+    // plus, drop us an email at us@cottagelabs.com or a tweet to @cottagelabs to let us know how sneaky you are ;)
+    var exact = [
+        // values that must match the normalised input exactly
+    ];
+    var startswith = [
+        // values that the normalised input must start with
+    ];
+    
+    function stringStartsWith (string, prefix) {
+        return string.slice(0, prefix.length) == prefix;
+    }
+    
+    function normalise(val) {
+        val = val.toLowerCase();
+        val = val.replace("-", "");
+        while (val.indexOf(" ") > -1) {
+            val = val.replace(" ", "")
+        }
+        return val;
+    }
+    
+    $("#answer").click(function(event) {
+        event.preventDefault();
+        var val = $("#myguess").val();
+        val = normalise(val);
+        var correct = false;
+        for (var i = 0; i < exact.length; i++) {
+            if (val === exact[i]) {
+                correct = true;
+            }
+        }
+        for (var i = 0; i < startswith.length; i++) {
+            if (stringStartsWith(val, startswith[i])) {
+                correct = true;
+            }
+        }
+        if (!correct) {
+            alert("Unlucky :(  That wasn't the right answer.  Maybe try a hint?");
+        } else {
+            $("#correct").show();
+            $(".hint").hide();
+        }
+    });
+    
+    var d = new Date();
+    if ((d.getYear() === 2016 && d.getMonth() >= 7)) {
+        $("#themonth").show();
+    } else {
+        $("#notyet").show();
+    }
+});
+</script>
+
