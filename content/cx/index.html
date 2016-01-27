@@ -23,7 +23,7 @@
             <b>https://cx.ctg.li/</b>
           </div>
           <div class="col-md-8">
-            <input type="text" class="form-control" placeholder="Your DOI here">
+            <input id="doi" type="text" class="form-control" placeholder="Your DOI here">
           </div>
         </div>
 
@@ -48,8 +48,8 @@
     <div class="col-md-12">
       <h3>Help us stay up to date, let us know where to find things</h3>
       <p>
-        We search many sources for free and legally available copies of research articles, but often no 
-        such copy exists. Did you know that even if you have given your research to be published in a closed 
+        We search many sources for free and legally available copies of research articles, but sometimes we 
+        can't find one. Did you know that even if you have given your research to be published in a closed 
         access journal, it is quite often allowed to ALSO deposit it for open access? And also, even if that is 
         not allowed, in many cases you can deposit a pre-print (the same article, just without the formatting for 
         the specific journal) and people can access that for free. So if you have a URL for an article that we cannot 
@@ -68,4 +68,15 @@
   </div>
 </div>
 
-<!-- TODO need some js to make that go button work - should send to https://api.cottagelabs.com/academic/redirect/<id> -->
+<script>
+jQuery(document).ready(function() {
+  var resolve = function() {
+    var tid = $('#doi').val();
+    if (tid) {
+      window.location = 'https://cx.ctg.li/' + tid;
+    } else {
+      alert('Please provide a DOI or PMID or PMC to resolve first.');
+    }
+  }
+  $('#resolve').bind('click',resolve);
+});
