@@ -1,0 +1,51 @@
+
+<div class="container-fluid" style="max-width:1000px;">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 style="letter-spacing:6px;font-size:70px;text-align:justify">COTTAGE LABS</h1>
+      <h2>Article resolver</h2>
+      <h3>(Like DOI and dx.doi.org, but no paywalls)</h3>
+      <h3>
+        You want an article, but it is behind a paywall. Maybe it is available for free (legally) elsewhere!
+        If it is, and we can find it, we will redirect you to the openly available version.
+        If it is not, we will provide some options for requesting access to it.
+      </h3>
+      
+      <p>Just use the DOI of any article that you want, but use cx.ctg.li/ instead of dx.doi.org/</p>
+      <p>For example:</p>
+      <p>
+        https://cx.ctg.li/ 
+        <input type="text" class="form-control" style="width:200px;" placeholder="Your DOI here">
+        <a id="resolve" class="btn btn-default" href="https://cx.ctg.li/">Resolve it</a>
+      </p>
+      
+      <h4>Bonus points...</h4>
+      <p>
+        It will also work if you put in a PubMed or PubMedCentral ID - just put them in like this:<br>
+        https://cx.ctg.li/PMID/12345678<br>
+        https://cx.ctg.li/PMC/12345678
+      </p>
+      <p>Also, just in case you get confused between cx and dx, dx.ctg.li will work too.</p>
+      
+      <h4>Help us stay up to date, let us know where to find things</h4>
+      <p>
+        We search many sources for free and legally available copies of research articles, but often no 
+        such copy exists. Did you know that even if you have given your research to be published in a closed 
+        access journal, it is quite often allowed to ALSO deposit it for open access? And also, even if that is 
+        not allowed, in many cases you can deposit a pre-print (the same article, just without the formatting for 
+        the specific journal) and people can access that for free. So if you have a URL for an article that we cannot 
+        find, please do let us know! Or if you have an article you would like to deposit, let us know that too, we 
+        will put a copy up online for you, or recommend a place where you can put it yourself if you prefer.<br>
+        <a class="btn btn-default" href="mailto:us@cottagelabs.com">let us know about your article</a>
+      </p>
+      
+      <h4>Want more?</h4>
+      <p>
+        If there are other useful ID types that it would be useful to resolve to open access versions where available, 
+        then <a href="mailto:us@cottagelabs.com">let us know</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- TODO need some js to make that go button work - should send to https://api.cottagelabs.com/academic/redirect/<id> -->

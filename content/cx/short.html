@@ -1,0 +1,37 @@
+
+<div class="container-fluid" style="max-width:1000px;">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 style="letter-spacing:6px;font-size:70px;text-align:justify">COTTAGE LABS</h1>
+      <h2>URL shortenizer</h2>
+      <h3>(Like bit.ly but ctg.li)</h3>
+      <h3>
+        You want a short URL? We get you short URL!
+      </h3>
+      
+      <p>Just provide the URL of any article that you want, but use ctg.li/ instead of dx.doi.org/</p>
+      <p>For example:</p>
+      <p>
+        https://ctg.li/ 
+        <input type="text" class="form-control" style="width:200px;" placeholder="Your URL here">
+        <a id="resolve" class="btn btn-default" href="https://cx.ctg.li/">Shorten it, randomly!</a>
+      </p>
+      
+      <p>Or try getting your own custom short address, if it is available:</p>
+      <p>
+        https://ctg.li/ 
+        <input type="text" class="form-control" style="width:200px;" placeholder="Your URL here">
+        <input type="text" class="form-control" style="width:200px;" placeholder="Your short address here">
+        <a id="resolve" class="btn btn-default" href="https://cx.ctg.li/">Shorten it, customly!</a>
+      </p>
+      
+      <p>
+        Once you press the button, we will check and confirm for you and return your short URL, then you can use 
+        that anywhere you like, and it will redirect to the full long URL.
+      </p>
+      
+    </div>
+  </div>
+</div>
+
+<!-- TODO need some js to make that go button work - should send to https://api.cottagelabs.com/academic/redirect/<id> -->
