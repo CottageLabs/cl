@@ -30,14 +30,17 @@ jQuery(document).ready(function() {
   var shorten = function(event) {
     event.preventDefault();
     $('#conf').html("");
-    var target = $('#url').val();
-    if (target) {
+    var url = $('#url').val();
+    if (url) {
       var address = $('#address').val();
       if (!address) address = 'random';
-      var url = 'http://ctg.li/' + address;
       $.ajax({
         type:'POST',
-        url:url,
+        url:'http://ctg.li/' + address,
+        data: JSON.stringify({ url: url }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        cache: false,
         success: function(data) {
           var conf = '<div class="well">';
           conf += '<p>Your shortlink has been created, and your link is:<br>';
