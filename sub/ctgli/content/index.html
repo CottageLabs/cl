@@ -13,7 +13,7 @@
           <b>ctg.li/</b> 
           <input id="url" type="text" class="form-control" placeholder="Your URL here">
           <input id="address" type="text" class="form-control" placeholder="Your shortname here">
-          <a id="shorten" class="btn btn-default btn-block" href="https://cx.ctg.li/">Shorten it!</a>
+          <a id="shorten" class="btn btn-default btn-block" href="#">Shorten it!</a>
         </p>
       </div>
       <p>(If the shortname you want is taken, we'll let you know.)</p>
@@ -27,12 +27,13 @@
 
 <script>
 jQuery(document).ready(function() {
-  var shorten = function() {
+  var shorten = function(event) {
+    event.preventDefault();
     $('#conf').html("");
     var target = $('#url').val();
     if (target) {
       var address = $('#address').val();
-      var url = 'https://api.cottagelabs.com/shortlink';
+      var url = 'http://api.cottagelabs.com/shortlink';
       if (address) url += '/' + address;
       $.ajax({
         type:'POST',
