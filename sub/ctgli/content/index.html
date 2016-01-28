@@ -41,10 +41,10 @@ jQuery(document).ready(function() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         cache: false,
-        success: function(data) {
+        success: function(data) {          
           var conf = '<div class="well">';
           conf += '<p>Your shortlink has been created, and your link is:<br>';
-          conf += '<a target="_blank" href="http://ctg.li/' + data + '">http://ctg.li/' + data + '</a><br></p>';
+          conf += '<a target="_blank" href="http://ctg.li/' + data.data + '">http://ctg.li/' + data.data + '</a><br></p>';
           conf += '</div>';
           $('#conf').html(conf);
         },
