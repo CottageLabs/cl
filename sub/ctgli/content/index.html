@@ -33,15 +33,15 @@ jQuery(document).ready(function() {
     var target = $('#url').val();
     if (target) {
       var address = $('#address').val();
-      var url = 'http://api.cottagelabs.com/shortlink';
-      if (address) url += '/' + address;
+      if (!address) address = 'random';
+      var url = 'http://ctg.li/' + address;
       $.ajax({
         type:'POST',
         url:url,
         success: function(data) {
           var conf = '<div class="well">';
           conf += '<p>Your shortlink has been created, and your link is:<br>';
-          conf += '<a target="_blank" href="' + data + '">' + data + '</a><br></p>';
+          conf += '<a target="_blank" href="http://ctg.li/' + data + '">http://ctg.li/' + data + '</a><br></p>';
           conf += '</div>';
           $('#conf').html(conf);
         },
