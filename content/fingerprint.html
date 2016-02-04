@@ -1,0 +1,33 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12" id="fp">
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript" src="http://static.cottagelabs.com/fingerprint2.js"></script>
+
+<script>
+jQuery(document).ready(function () {
+  
+  new Fingerprint2().get(function(result, components) {
+    $('#fp').append('<p><b style="color:blue;">fingerprint</b> ' + result + '</p>');
+    for ( var o in components ) {
+      var obj = components[o];
+      $('#fp').append('<p><b style="color:blue;">' + obj.key + '</b> ' + obj.value + '</p>');
+    }
+  });
+  
+  $.ajax({
+    method: 'POST',
+    url: 'http://api.cottagelabs.com/requestinfo',
+    dataType: 'JSON',
+    success: function(data) {
+      $('#fp').prepend('<p><b style="color:blue;">forwarded for</b> ' + data.data.forwarded + '</p>');
+      $('#fp').prepend('<p><b style="color:blue;">IP</b> ' + data.data.ip + '</p>');
+    }
+  });
+});
+</script>
