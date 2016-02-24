@@ -17,7 +17,11 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-6">
-                        <p>growkudos.com is a new start-up which helps academics promote their work and increase impact via social media. Take a look at <a href="https://www.growkudos.com/publications/10.1186%252F1758-2946-5-13" target="_blank">"TB mobile for target prediction" by Dr Sean Ekins <i>et al</i> (10.1186/1758-2946-5-13)</a> - a publication describing a mobile app to help identify new drugs to treat tuberculosis. This work builds on an earlier publication from 2012 about Open Drug Discovery. What is the version of the ODDT app?</p>
+                        <p>growkudos.com is a toolset which helps academics promote their work and increase publication impact via social media. 
+                           Take a look at <a href="https://www.growkudos.com/publications/10.1186%252F1758-2946-5-13" target="_blank">
+                           "TB mobile for target prediction" by Dr Sean Ekins <i>et al</i> (10.1186/1758-2946-5-13)</a> - a publication
+                           describing a mobile app to help identify new drugs to treat tuberculosis. This work builds on an earlier
+                           publication from 2012 about Open Drug Discovery. What is the version of the ODDT app?</p>
                         
                         <form class="form-inline">
                             <div class="form-group">
@@ -30,20 +34,24 @@
                         <div id="correct">
                             <p><strong>Correct!</strong></p>
                             
-                            <p>CORRECT TEXT HERE</p>
+                            <p><a href="https://www.growkudos.com/">Kudos</a> allows researchers to easily share and promote their work,
+                            and by linking to online resources, videos and apps, publications have more impact and more visibility. Kudos 
+                            is free for researchers - so why not <a href="https://www.growkudos.com/sessions/register" target="_blank">register</a> 
+                            and start promoting your work!</p>
+                            <p>Cottage Labs have been working with the Kudos team since 2014 to help develop and build the system.</p>
                         </div>
                         
                         <button class="btn btn-danger hint" id="hint1-button">give me a hint</button>
-                        <p id="hint1" class="hint"><em>HINT 1</em></p>
+                        <p id="hint1" class="hint"><em>Load <a href="https://www.growkudos.com/publications/10.1186%252F1758-2946-5-13" target="_blank">this article</a> on Kudos then look at the related publications.</em></p>
                         
                         <button class="btn btn-danger hint" id="hint2-button">give me another hint</button>
-                        <p id="hint2" class="hint"><em>HINT 2</em></p>
+                        <p id="hint2" class="hint"><em>Find the publication about a mobile app platform for drug discovery published in 2012</em></p>
                         
                         <button class="btn btn-danger hint" id="hint3-button">give me another hint</button>
-                        <p id="hint3" class="hint"><em>HINT 3</em></p>
+                        <p id="hint3" class="hint"><em>Look at the list of Resources</em></p>
                         
                         <button class="btn btn-danger hint" id="hint4-button">give me one last hint</button>
-                        <p id="hint4" class="hint"><em>HINT 4</em></p>   
+                        <p id="hint4" class="hint"><em>Click on the link Open Drug Discovery Teams on iTunes...</em></p>   
                         
                     </div>
                     <div class="col-md-4">
@@ -135,9 +143,11 @@ jQuery(document).ready(function($) {
     // plus, drop us an email at us@cottagelabs.com or a tweet to @cottagelabs to let us know how sneaky you are ;)
     var exact = [
         // values that must match the normalised input exactly
+        "0.9.16"
     ];
     var startswith = [
         // values that the normalised input must start with
+        "0.9.16"
     ];
     
     function stringStartsWith (string, prefix) {
@@ -175,13 +185,14 @@ jQuery(document).ready(function($) {
             $(".hint").hide();
         }
     });
-    
-    var d = new Date();
+	
+    $("#themonth").show();
+    /*var d = new Date();
     if ((d.getYear() === 2016 && d.getMonth() >= 2)) {
         $("#themonth").show();
     } else {
         $("#notyet").show();
-    }
+    }*/
 });
 </script>
 
