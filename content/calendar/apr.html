@@ -17,7 +17,15 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-6">
-                        <p>PUZZLE HERE</p>
+                        <p>Graphs can be a very powerful tool when used correctly. They can, however, also be misleading.</p>
+                        <p>Let's take the number of journals per subject from a selection of subjects as listed in
+                            <a href="http://www.journaltocs.ac.uk/index.php?action=browse&subAction=subj&sorType=&sorCol=1&fkHeadID=&pageb=&letter=">JournalTOCs</a>.
+                        Let's also take a look at the number of journals for the same subjects in the
+                            <a href="https://doaj.org/search?source=%7B%22query%22%3A%7B%22filtered%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22term%22%3A%7B%22_type%22%3A%22journal%22%7D%7D%5D%7D%7D%2C%22query%22%3A%7B%22match_all%22%3A%7B%7D%7D%7D%7D%2C%22from%22%3A0%2C%22size%22%3A10%7D#.Vt_18tyLSkC">
+                                DOAJ</a>. The DOAJ is considered a primary source of a journal's Oopen Access status, so for this puzzle
+                        we assume the number of journals in the DOAJ is the number of OA journals for the subject.</p>
+                        <p> With this in mind, take a look at the graph below. Which subject gives you the highest odds of picking an OA journal at random?</p>
+                        <iframe width="759" height="477" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/1osARtzOmVlhFci-BmobiSPne4l7K9eNe0AGy02DDVyc/pubchart?oid=1944150253&amp;format=interactive"></iframe>
                         
                         <form class="form-inline">
                             <div class="form-group">
@@ -34,16 +42,18 @@
                         </div>
                         
                         <button class="btn btn-danger hint" id="hint1-button">give me a hint</button>
-                        <p id="hint1" class="hint"<em>HINT 1</em></p>
+                        <p id="hint1" class="hint"<em>It's not all about the size</em></p>
                         
                         <button class="btn btn-danger hint" id="hint2-button">give me another hint</button>
-                        <p id="hint2" class="hint"><em>HINT 2</em></p>
+                        <p id="hint2" class="hint"><em>Look at the orange bars in relation to the blue ones</em></p>
                         
                         <button class="btn btn-danger hint" id="hint3-button">give me another hint</button>
-                        <p id="hint3" class="hint"<em>HINT 3</em></p>
+                        <p id="hint3" class="hint"<em>You could always calculate the probability...</em></p>
                         
                         <button class="btn btn-danger hint" id="hint4-button">give me one last hint</button>
-                        <p id="hint4" class="hint"><em>HINT 4</em></p>   
+                        <p id="hint4" class="hint"><em>Maybe this graph can help?
+                            <br>
+                            <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/1osARtzOmVlhFci-BmobiSPne4l7K9eNe0AGy02DDVyc/pubchart?oid=1025506163&amp;format=interactive"></iframe></em></p>
                         
                     </div>
                     <div class="col-md-4">
@@ -135,9 +145,11 @@ jQuery(document).ready(function($) {
     // plus, drop us an email at us@cottagelabs.com or a tweet to @cottagelabs to let us know how sneaky you are ;)
     var exact = [
         // values that must match the normalised input exactly
+            "Agriculture", "agriculture"
     ];
     var startswith = [
         // values that the normalised input must start with
+        "Agriculture", "agriculture"
     ];
     
     function stringStartsWith (string, prefix) {
@@ -175,13 +187,14 @@ jQuery(document).ready(function($) {
             $(".hint").hide();
         }
     });
-    
-    var d = new Date();
+
+    $("#themonth").show();
+    /*var d = new Date();
     if ((d.getYear() === 2016 && d.getMonth() >= 3)) {
         $("#themonth").show();
     } else {
         $("#notyet").show();
-    }
+    }*/
 });
 </script>
 
