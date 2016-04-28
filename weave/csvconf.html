@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
 	
     <!-- bootstrap styles -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="/static/css/bootstrap-3.3.6.min.css">
 
     <title>CSV as the Master Dataset - and approaches to web publishing</title>
     
@@ -71,13 +72,15 @@ h2 {
 }
 
 .evenslide {
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-top: 60px;
+	padding-bottom: 60px;
 	background: #eaeded;
 }
 
 .oddslide {
-	background: #AAA;
+	padding-top: 60px;
+	padding-bottom: 60px;
+	background: #ddd;
 }
 
 .sheetmock {
@@ -93,32 +96,32 @@ h2 {
 
 #part-1 {
 	padding: 10px;
-	background: #4d82ff;
+	background: #80a6ff;
 }
 
 #part-1-body {
 	padding: 10px;
-	background: #4d82ff;
+	background: #80a6ff;
 }
 
 #part-2 {
 	padding: 10px;
-	background: #56a7c7;
+	background: #79c3c1;
 }
 
 #part-2-body {
 	padding: 10px;
-	background: #56a7c7;
+	background: #79c3c1;
 }
 
 #part-3 {
 	padding: 10px;
-	background: #62d97e;
+	background: #72e184;
 }
 
 #part-3-body {
 	padding: 10px;
-	background: #62d97e;
+	background: #72e184;
 }
 
 #part-4 {
@@ -295,15 +298,15 @@ h2 {
 	<div class="row"><div class="col-md-10">
 		<p>When working specifically with CSVs...</p>
 		<ul>
-			<li>Excel might give you cp1252 or Windows-1252, on Windows</li>
-			<li>Excel and Numbers might give you MacRoman on OSX</li>
-			<li>Calc will hopefully give you UTF-8</li>
-			<li>Any of them could do any one of hundreds of encodings</li>
+			<li>Excel might give you <strong>cp1252</strong> or <strong>Windows-1252</strong>, on Windows</li>
+			<li>Excel and Numbers might give you <strong>MacRoman</strong> on OSX</li>
+			<li>Calc will hopefully give you <strong>UTF-8</strong></li>
+			<li>Any of them could do any one of <strong>hundreds</strong> of encodings</li>
 		</ul>
 		
 		<p>You also can't trust that you have the right encoding, even if you can parse the bits</p>
 
-		<p>Some encodings are virtually interchangeable, but the newline character is not a common link!  We actually have to check that we get a rectangular dataset to be sure.</p>
+		<p>Some encodings are virtually interchangeable, but the <strong>newline character is not a common link!</strong>  We actually have to check that we get a rectangular dataset to be sure.</p>
 		
 		</div>
 		<div class="col-md-2" style="text-align: center">
@@ -339,6 +342,7 @@ h2 {
 		<div class="col-md-4">
 		Before
 		<table class="sheetmock">
+			<tr><td colspan="2">Here is some great data!</td></tr>
 			<tr><td><strong>Col A</strong></td><td><strong>Col B</strong></td></tr>
 			<tr><td>N/A</td><td>£1,000</td></tr>
 		</table>
@@ -357,7 +361,7 @@ h2 {
 <div id="part-3">
 	<div class="row">
 		<div class="col-md-11">
-			<strong style="font-size: 200%">Make it queriable</strong>
+			<strong style="font-size: 200%">Make it queryable</strong>
 		</div>
 		<div class="col-md-1"><a href="#" class="expander" data-expand="part-3-body" data-state="closed">
 			<i class="glyphicon glyphicon-plus"></i>		
@@ -367,9 +371,9 @@ h2 {
 
 <div id="part-3-body" style="display:none">
 	<div class="row"><div class="col-md-10">
-		<p>For us, this basically means stick the JSON objects we just made into Elasticsearch</p>
+		<p>For us, this basically means stick the <strong>JSON</strong> objects we just made into <strong>Elasticsearch</strong></p>
 
-		<p>It also means analysing some of the common fields so that we can query them in common ways.  For example, unpunctuating and ascii-folding text strings, so they can be used for free-text search and sorting</p>
+		<p>It also means analysing some of the common fields so that we can query them in common ways.  For example, <strong>unpunctuating</strong> and <strong>ascii-folding</strong> text strings, so they can be used for <strong>free-text search</strong> and <strong>sorting</strong></p>
 		</div>
 		<div class="col-md-2">
 			<img src="/static/csvconf/elasticsearch-logo.png" style="width: 100%">
