@@ -1,0 +1,149 @@
+
+<style>
+  html { 
+  }
+  body {
+    background-color:#333;
+    background: url('/static/harvest.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family:Raleway;
+    font-weight:bold;
+  }
+  #footer {
+    display:none;
+  }
+  .slabtexted .slabtext {
+    display:-moz-inline-box;
+    display:inline-block;
+    white-space:nowrap;
+  }
+  .slabtextinactive .slabtext {
+    display:inline;
+    white-space:normal;
+    font-size:1em !important;
+    letter-spacing:inherit !important;
+    word-spacing:inherit !important;
+    *letter-spacing:0 !important;
+    *word-spacing:0 !important;
+  }
+  .slabtextdone .slabtext {
+    display:block;
+  }
+
+  #contact-form {
+    margin-bottom: 0;	
+  }
+
+  #contact-form p {
+    margin-bottom: 1px;	
+  }
+
+  #contact-form input,
+  #contact-form textarea {
+      border: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+      border-radius: 0;
+
+      -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    background: #555;
+      color: #c9d2d4;
+      font-size: 100%;
+      height: auto;
+      padding: 5px;
+    margin: 0 0 4px 0;
+
+      resize: none;
+  }
+
+  #contact-form input {
+      width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  #contact-form textarea {
+      width: 100%;
+    resize: vertical;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  #contact-form .submit {
+      background: #555;
+      color: #c9d2d4;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 5px 30px;
+      text-align: center;
+      vertical-align: middle;
+      width: 100%;
+
+    -webkit-transition: background 0.1s linear 0s, color 0.1s linear 0s;	
+       -moz-transition: background 0.1s linear 0s, color 0.1s linear 0s;
+       -o-transition: background 0.1s linear 0s, color 0.1s linear 0s;
+          transition: background 0.1s linear 0s, color 0.1s linear 0s;
+  }
+
+  #contact-form .submit:hover {
+      background: #c9d2d4;
+      color: #333;
+  }
+</style>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:100px;">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well" style="min-height:470px;background-color:#c9d2d4;">
+        <h1 style="font-size:80px;color:#555;" id="strap"></h1>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <p style="text-align:justify;color:#c9d2d4;">
+        From Summer 2016 Cottage Labs and our partners will be providing a 
+        collection of tools that will fill the gaps in the underlying infrastructure 
+        required for the future of open research. Be among the first to reap the benefits 
+        of all the hard work put in by researchers over the years, and gain support in planting the 
+        seeds of a better world.
+      </p>
+      <hr>
+      <form id="contact-form" class="contact-form" action="#">
+        <textarea id="contact_message" placeholder="What would you do with greater access to the fruits of our research?" name="message" style="min-height:160px;"></textarea>
+        <input id="contact_email" type="text" placeholder="What is your email address?" value="" name="email">
+        <a id="contact-submit" class="submit" href="#">Sign up now for further announcements</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+jQuery(document).ready(function() {
+  var stS = "<span class='slabtext'>",
+    stE = "</span>",
+    txt = [
+        "HARVEST",
+      "TAKING RESEARCH HOME",
+      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+        "The Harvest Programme",
+      "Coming Summer 2016 from",
+      "Cottage Labs",
+      "and our partners"
+    ]
+  $("#strap").html(stS + txt.join(stE + stS) + stE).slabText();
+  
+  //clmenu();
+
+});
+</script>

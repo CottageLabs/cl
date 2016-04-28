@@ -1,0 +1,292 @@
+
+<style>
+  html { 
+  }
+  body {
+    background-color:#333;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family:Raleway;
+    font-weight:bold;
+  }
+  #footer {
+    display:none;
+  }
+  .slabtexted .slabtext {
+    display:-moz-inline-box;
+    display:inline-block;
+    white-space:nowrap;
+  }
+  .slabtextinactive .slabtext {
+    display:inline;
+    white-space:normal;
+    font-size:1em !important;
+    letter-spacing:inherit !important;
+    word-spacing:inherit !important;
+    *letter-spacing:0 !important;
+    *word-spacing:0 !important;
+  }
+  .slabtextdone .slabtext {
+    display:block;
+  }
+
+  .contact-form {
+    margin-bottom: 0;	
+  }
+
+  .contact-form p {
+    margin-bottom: 1px;	
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+      border: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+      border-radius: 0;
+
+      -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    background: #555;
+      color: #c9d2d4;
+      font-size: 100%;
+      height: auto;
+      padding: 5px;
+    margin: 0 0 4px 0;
+
+      resize: none;
+  }
+
+  .contact-form input {
+      width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .contact-form textarea {
+      width: 100%;
+    resize: vertical;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .contact-form .submit {
+      background: #555;
+      color: #c9d2d4;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 5px;
+      text-align: center;
+      vertical-align: middle;
+      width: 100%;
+
+    -webkit-transition: background 0.1s linear 0s, color 0.1s linear 0s;	
+       -moz-transition: background 0.1s linear 0s, color 0.1s linear 0s;
+       -o-transition: background 0.1s linear 0s, color 0.1s linear 0s;
+          transition: background 0.1s linear 0s, color 0.1s linear 0s;
+  }
+
+  .contact-form .submit:hover {
+      background: #c9d2d4;
+      color: #333;
+  }
+</style>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:100px;">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well" style="background-color:#c9d2d4;min-height:220px;">
+        <h1 style="font-size:80px;color:#555;" id="strap"></h1>
+      </div>
+    </div>
+    <div class="col-md-3 col-md-offset-3">
+      <div class="well" style="background-color:#c9d2d4;height:220px;">
+        <i class="fa fa-lightbulb-o" style="font-size:190px;padding-left:30px;"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
+  <div class="row">
+    <div class="col-md-6">
+      <p style="text-align:justify;color:#c9d2d4;">
+        Lantern checks the license conditions of published research. 
+        Get an instant result about one article, identified by DOI, PMID, PMC, or title:
+      </p>
+      <form class="contact-form" action="#">
+        <input id="ident" name="ident" type="text" value="" placeholder="DOI, PMID, PMCID, or title">        
+        <a id="contact-submit" class="submit" href="#">Process this one</a>        
+      </form>
+    </div>
+    <div class="col-md-6">
+      <p style="text-align:justify;color:#c9d2d4;">
+        Or upload many in a spreadsheet (see docs) and receive an email once they are all checked:
+      </p>
+      <form class="contact-form">
+        <input type="file" name="upload" id="upload" class="form-control">
+        <input class="form-control" id="email" name="email" placeholder="Your email address" type="email" value="">
+        <div class="well" style="display:none;" id="review">
+          <p>
+            Thank you. Your file appears to have <span id="count">X</span> record rows in it, containing 
+						<span id="dois">X</span> DOIs, <span id="pmcids">X</span> PMC IDs, <span id="pmids">X</span> PubMed IDs, 
+						and <span id="titles">X</span> titles.
+						Is this correct?
+            If so, please submit for processing now:
+          </p>
+        </div> 
+        <input type="submit" class="submit" id="lanternmulti" name="submit" value="Process all, then email me">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        Lantern is part of the Harvest Programme, a service provided by Cottage Labs and our partners.
+        It utilises <a href="http://europepmc.org" target="_blank">Europe PubMed Central</a> and 
+        <a href="http://howopenisit.org">OpenArticleGauge</a> to calculate results.
+        See the <a href="https://lantern.cottagelabs.com/docs">documentation</a> for more details.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+jQuery(document).ready(function() {
+  var stS = "<span class='slabtext'>",
+    stE = "</span>",
+    txt = [
+      "LANTERN",
+      "RESEARCH ENLIGHTENED"
+    ]
+  $("#strap").html(stS + txt.join(stE + stS) + stE).slabText();
+          
+  var lanternsingle = function() {
+      var ident = $('#ident').val();
+      var tp = 'doi';
+      if ( ident.toLowerCase().indexOf('pmc') === 0 ) {
+          // could actually fail to find PMCIDs that are not prefixed with PMC
+          // no way to identify such from PMIDs, in that case. oh well.
+          tp = 'pmcid';
+      } else if ( ident.replace('/ /g','').length === 8 && ident.indexOf(' ') === -1 ) {
+          // may accidentally identify an 8 letter long title with no spaces
+          tp = 'pmid';
+      } else if ( ident.indexOf(' ') !== 0 ) {
+          // could miss some titles that contain no spaces. would be a weird title though
+          tp = 'title';
+      }
+      ident = ident.toLowerCase().replace('http','').replace('https','').replace('://','').replace('dx.doi.org/','').replace('pmc','').replace('pmid','');
+      var data = {};
+      data[tp] = ident;
+      $.ajax({
+          url: 'https://lantern.cottagelabs.com/direct-demo-form',
+          method: 'POST',
+          data: data,
+          dataType: 'JSONP',
+          success: function(data) {
+              // get the redirect address
+              alert(data);
+          }
+      });
+  }
+  $('#lanternsingle').bind('click',lanternsingle);
+
+  var file;
+  var results = [];
+	var dois = 0;
+	var pmcids = 0;
+	var pmids = 0;
+	var titles = 0;
+  var review = function() {
+    console.log(results);
+    $('#count').html(results.length);
+    $('#dois').html(dois);
+    $('#pmcids').html(pmcids);
+    $('#pmids').html(pmids);
+    $('#titles').html(titles);
+		$('#review').append(JSON.stringify(results));
+    $('#review').show();
+  }
+  var transform = function(split) {
+		console.log(file);
+		if (split === undefined) split = ',';
+    var wrap = '';
+		// could try to change the below so that other wraps could be used - look for starting character of each row, for example
+    if ( file[0] === '"') wrap = '"'; 
+    if ( file[0] === "'") wrap = "'";
+		// could add a check here for places where the wrap markers appear around something that is not a comma
+		// to identify where different split characters are being used
+    file = file.replace(/\r\n/g,'\n');
+    file = file.replace(/\n{2,}/g,'\n');
+		if (file[file.length-1] === '\n') file = file.substring(0,file.length-1);
+    var lines = file.split(wrap + "\n" + wrap);
+    var headers = lines[0].split(wrap + split + wrap);
+    if ( wrap.length > 0) {
+      for ( var h = 0; h < headers.length; h++ ) {
+        if (headers[h][0] === wrap) headers[h] = headers[h].substring(1);
+        if (headers[h][headers[h].length-1] === wrap) headers[h] = headers[h].substring(0,headers[h].length-1);
+      }
+    }
+    for (var i = 1; i < lines.length; i++) {
+  	  var obj = {};
+	    var currentline = lines[i].split(wrap + split + wrap);
+      if ( currentline.length > 0) {
+        for (var j = 0; j < headers.length; j++) {
+          if (wrap.length > 0) {
+            if (currentline[j][0] === wrap) currentline[j] = currentline[j].substring(1);
+            if (currentline[j][currentline[j].length-1] === wrap) currentline[j] = currentline[j].substring(0,currentline[j].length-1);          
+          }
+          obj[headers[j]] = currentline[j];
+        }
+				if (obj.doi) dois += 1;
+				if (obj.pmcid) pmcids += 1;
+				if (obj.pmid) pmids += 1;
+				if (obj.title) titles += 1;
+    	  results.push(obj);
+      }
+    }
+    review();
+  }
+  var prep = function(e) {
+		var f = e.target.files[0];
+		var reader = new FileReader();
+		reader.onload = (function(theFile) {
+			return function(e) {
+				file = e.target.result;
+				transform();
+			};
+		})(f);
+		reader.readAsText(f);
+  }
+  $('input[type=file]').on('change', prep);
+  
+  var success = function(data) {
+    console.log(data);
+  }
+  var error = function(data) {
+    console.log(data);
+  }
+  var submit = function() {
+    $.ajax({
+      url: 'http://dev.api.cottagelabs.com/service/lantern',
+      method: 'POST',
+      data: results,
+      success: success,
+      error: error
+    });
+  }
+  $('#lanternmulti').bind('click',submit);
+  
+  //clmenu();
+
+});
+</script>
