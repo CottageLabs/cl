@@ -1,0 +1,140 @@
+
+<style>
+  body {
+    background-color:#333;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family:Raleway;
+    font-weight:bold;
+  }
+  #footer > .container-fluid {
+    max-width:1200px;
+  }
+  .slabtexted .slabtext {
+    display:-moz-inline-box;
+    display:inline-block;
+    white-space:nowrap;
+  }
+  .slabtextinactive .slabtext {
+    display:inline;
+    white-space:normal;
+    font-size:1em !important;
+    letter-spacing:inherit !important;
+    word-spacing:inherit !important;
+    *letter-spacing:0 !important;
+    *word-spacing:0 !important;
+  }
+  .slabtextdone .slabtext {
+    display:block;
+  }
+</style>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:150px;">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well" style="min-height:470px;background-color:#c9d2d4;">
+        <h1 style="letter-spacing:6px;font-size:28px;color:#555;" id="cl"></h1>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <img src="/static/people/mark.jpg" class="img img-thumbnail" style="background-color:#c9d2d4;">
+    </div>
+  </div>
+</div>
+
+<div id="strap" style="background-color:#c9d2d4;margin-top:50px;padding-top:50px;padding-bottom:50px;">
+  <div class="container-fluid" style="max-width:1000px;">
+    <div class="row">
+      <div class="col-md-12">
+        <p style="line-height:1.6;">Mark is a founder and senior partner of Cottage Labs LLP, and a Doctor of Social Informatics. 
+        He is in charge of CL sysadmin and numerous projects, particularly enjoying those with more exploratory aims. 
+        Mark is an expert in software architecture and development methodologies, coding in python and node/js,  
+        relational/nosql databases and indexing systems, and linux OS and related server software.</p>
+        <p>His academic interests range 
+        from mental philosophy to sociology via mathematics and distributed computing systems, and his current research explores 
+        an understanding of being as a technosocial noumeno-phenomenon. The practical applications of this range from improved 
+        software development lifecycle to enhancing social decision making (to building better kitchen sinks).</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
+  <div class="row">
+    <div class="col-md-10">
+      <h3 style="color:#c9d2d4;">CODE</h3>
+      <p>Mine and CL githubs. Plus other orgs and repos I can be seen to be involved in via github</p>
+    </div>
+    <div class="col-md-2">
+      <div class="well">
+        <i class="fa fa-github" style="font-size:115px;"></i>      
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+      <h3 style="color:#c9d2d4;">WRITING</h3>
+    </div>
+    <div class="col-md-2">
+      <div class="well">
+        <i class="fa fa-pencil" style="font-size:115px;"></i>      
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+      <h3 style="color:#c9d2d4;">PROJECTS</h3>
+    </div>
+    <div class="col-md-2">
+      <div class="well">
+        <i class="fa fa-file-code-o" style="font-size:115px;"></i>      
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+<script>
+jQuery(document).ready(function() {
+  var elem = '#strap'; // element to set just below base of view screen
+  var diff = window.innerHeight - $(elem).offset().top;
+  if (diff > 0) {
+    diff += parseInt($(elem).css('margin-top').replace('px',''));
+    $(elem).css({'margin-top':diff});
+  }
+
+  var stS = "<span class='slabtext'>",
+    stE = "</span>",
+    txt = [
+      "COTTAGE",
+      "LABS",
+      "Mark MacGillivray",
+      "Founder & Senior Partner"
+    ];
+  $("#cl").html(stS + txt.join(stE + stS) + stE).slabText();
+
+  clmenu();
+});
+</script>
+
+<!--
+<div class="container-fluid" style="max-width:1000px;">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Projects I have worked on</h2>
+      <p>Artemis, Bexcellent, OARR, co-design, swap, leaps, iioa, g4he, open citations, xcri, jorum paradata, advantages of APIs, 
+      total impact, open biblio, identifiers reports, ukoln html5, bibserver, sword2, contentmine, oabutton</p>
+      
+      <p>make some pages about various projects from their write-ups linked from my people page on old site and elsewhere</p>
+      
+      <p>get software failures report: http://cottagelabs.com/reports/software-failures</p>
+      
+      <p>link to phd stuff</p>
+      
+      <p>mention other companies / orgs I have or currently work(ed) with / direct</p>
+    </div>
+  </div>
+</div>
+-->
+
+

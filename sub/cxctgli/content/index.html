@@ -1,28 +1,51 @@
 
-<div class="container-fluid" style="max-width:1000px;margin-top:0px;">
+<style>
+  body {
+    background-color:#333;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family:Raleway;
+    font-weight:bold;
+  }
+  #footer > .container-fluid {
+    max-width:1200px;
+  }
+  .slabtexted .slabtext {
+    display:-moz-inline-box;
+    display:inline-block;
+    white-space:nowrap;
+  }
+  .slabtextinactive .slabtext {
+    display:inline;
+    white-space:normal;
+    font-size:1em !important;
+    letter-spacing:inherit !important;
+    word-spacing:inherit !important;
+    *letter-spacing:0 !important;
+    *word-spacing:0 !important;
+  }
+  .slabtextdone .slabtext {
+    display:block;
+  }
+</style>
+
+<div class="container-fluid" style="max-width:1000px;">
   <div class="row">
     <div class="col-md-6">
-      <img src="http://static.cottagelabs.com/cottagelabslogo.png" style="width:100%;">
-      <h2>Open article resolver</h2>
-      <h3>(Like DOI and dx.doi.org, but no paywalls)</h3>
-      <h3>
-        You want an article, but it is behind a paywall. Maybe it is available for free (legally) elsewhere!
-        If it is, and we can find it, we will redirect you to the openly available version.
-        If it is not, we will provide some options for requesting access to it.
-      </h3>      
+      <div class="well" style="background-color:#c9d2d4;">
+        <h1 style="font-size:80px;color:#555;" id="strap"></h1>
+      </div>
     </div>
     
     <div class="col-md-6">
       <div class="well">
         <p>Just use the DOI of any article that you want, but use cx.ctg.li/ instead of dx.doi.org/</p>
-        
-        <hr>
-        
+                
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-2">
             <b>cx.ctg.li/</b>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-10">
             <input id="doi" type="text" class="form-control" placeholder="Your DOI here">
           </div>
         </div>
@@ -32,37 +55,27 @@
         </p>
       </div>
       
-      <div class="well">
-        <p>
-          This works with DOIs but also with PubMed or PubMedCentral IDs:<br>
-          <a target="_blank" href="http://cx.ctg.li/10.1186/1758-2946-3-47">cx.ctg.li/10.1186/1758-2946-3-47</a><br>
-          <a target="_blank" href="http://cx.ctg.li/PMID/21999661">cx.ctg.li/PMID/21999661</a><br>
-          <a target="_blank" href="http://cx.ctg.li/PMC/3206455">cx.ctg.li/PMC/3206455</a>
-        </p>
-        <p>(dx.ctg.li will work too)</p>
-      </div>
+      <p style="color:#c9d2d4;">
+        Works like DOIs and dx.doi.org, but avoids paywalls.<br>
+        Also works with PubMed or PubMedCentral IDs:<br>
+        <a target="_blank" href="http://cx.ctg.li/10.1186/1758-2946-3-47">cx.ctg.li/10.1186/1758-2946-3-47</a><br>
+        <a target="_blank" href="http://cx.ctg.li/PMID/21999661">cx.ctg.li/PMID/21999661</a><br>
+        <a target="_blank" href="http://cx.ctg.li/PMC/3206455">cx.ctg.li/PMC/3206455</a>
+      </p>
+      <p>(dx.ctg.li will work too)</p>
     </div>
   </div>
-  
+</div>
+
+<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
   <div class="row">
     <div class="col-md-12">
-      <h3>Help us stay up to date, let us know where to find things</h3>
       <p>
         We search many sources for free and legally available copies of research articles, but sometimes we 
         can't find one. Did you know that even if you have given your research to be published in a closed 
-        access journal, it is quite often allowed to ALSO deposit it for open access? And also, even if that is 
-        not allowed, in many cases you can deposit a pre-print (the same article, just without the formatting for 
-        the specific journal) and people can access that for free. So if you have a URL for an article that we cannot 
-        find, please do let us know! Or if you have an article you would like to deposit, let us know that too, we 
-        will put a copy up online for you, or recommend a place where you can put it yourself if you prefer.<br>
-        <a class="btn btn-default btn-block" href="mailto:us@cottagelabs.com">let us know about your article</a>
-      </p>
-      
-      <h3>Want more?</h3>
-      <p>
-        If there are other useful ID types that it would be useful to resolve to open access versions where available, 
-        then <br>
-        <a class="btn btn-default btn-block" href="mailto:us@cottagelabs.com">let us know what else would be useful</a>
+        access journal, it is very often also possible to publish a version openly. So if you have an article that we cannot 
+        find, please do let us know! We'd be happy to help check what open publishing rights you have.<br>
+        <a class="btn btn-default" href="mailto:us@cottagelabs.com">let us know about your article</a>
       </p>
     </div>
   </div>
@@ -70,6 +83,15 @@
 
 <script>
 jQuery(document).ready(function() {
+  var stS = "<span class='slabtext'>",
+    stE = "</span>",
+    txt = [
+      "COTTAGE",
+      "LABS",
+      "Open article resolver"
+    ]
+  $("#strap").html(stS + txt.join(stE + stS) + stE).slabText();
+  
   var resolve = function(event) {
     event.preventDefault();
     var tid = $('#doi').val();

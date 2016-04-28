@@ -1,10 +1,42 @@
 
 
+<style>
+  body {
+    background-color:#333;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family:Raleway;
+    font-weight:bold;
+  }
+  #footer > .container-fluid {
+    max-width:1200px;
+  }
+  .slabtexted .slabtext {
+    display:-moz-inline-box;
+    display:inline-block;
+    white-space:nowrap;
+  }
+  .slabtextinactive .slabtext {
+    display:inline;
+    white-space:normal;
+    font-size:1em !important;
+    letter-spacing:inherit !important;
+    word-spacing:inherit !important;
+    *letter-spacing:0 !important;
+    *word-spacing:0 !important;
+  }
+  .slabtextdone .slabtext {
+    display:block;
+  }
+</style>
+
+
 <div class="container-fluid" style="max-width:1000px;margin-top:0px;">
   <div class="row">
     <div class="col-md-6">
-      <img src="http://static.cottagelabs.com/cottagelabslogo.png" style="width:100%;">
-      <h2>URL shortener</h2>
+      <div class="well" style="background-color:#c9d2d4;">
+        <h1 style="font-size:80px;color:#555;" id="strap"></h1>
+      </div>
     </div>
     
     <div class="col-md-6">
@@ -19,7 +51,7 @@
               <input id="address" type="text" class="form-control" placeholder="Choose your optional short link name">          
             </div>
           </div>
-          <a id="shorten" class="btn btn-default btn-block" href="#" style="margin-top:7px;">Shorten it!</a>
+          <a id="shorten" class="btn btn-default btn-block" href="#" style="margin-top:7px;">Shorten it</a>
         </p>
       </div>
       <p>If the shortname you want is taken, we'll let you know.<br>If you don't provide one, we'll make one for you.</p>
@@ -33,6 +65,22 @@
 
 <script>
 jQuery(document).ready(function() {
+  var stS = "<span class='slabtext'>",
+    stE = "</span>",
+    txt = [
+      "COTTAGE",
+      "LABS",
+      "URL shortener"
+    ]
+  $("#strap").html(stS + txt.join(stE + stS) + stE).slabText();
+
+  var elem = '#footer'; // element to set just below base of view screen
+  var diff = window.innerHeight - $(elem).offset().top;
+  if (diff > 0) {
+    diff += parseInt($(elem).css('margin-top').replace('px',''));
+    $(elem).css({'margin-top':diff});
+  }
+
   var shorten = function(event) {
     event.preventDefault();
     $('#conf').html("");
