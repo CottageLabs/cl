@@ -1,3 +1,37 @@
+<style>
+a {
+	text-decoration: underline;
+}
+
+.step {
+	font-size: 130%;
+}
+
+.examplecsv {
+	background: #ffffff;
+	border: 1px solid #000000;
+}
+
+.examplecsv thead {
+	font-weight: bold;
+}
+
+.examplecsv td {
+	border: 1px solid #000000;
+	padding: 10px;
+}
+
+.fields tr {
+	border-bottom: 1px solid #000000;
+}
+
+.fields td {
+	vertical-align: top;
+	padding: 10px;
+}
+
+</style>
+
 <div id="simple-documentation">
     <div class="container">
         <div class="content">
@@ -9,14 +43,14 @@
             
             <p>Just upload a list of your identifiers - like DOIs - and we'll learn everything we can about them and send you the results.  You can also integrate with our <a href="">API</a>!</p>
             
-            <p><strong>Step 1</strong>: put your identifiers in a spreadsheet.  As long as the sheet has one or more of "DOI", "PMID" or "PMCID" in the header row, with the corresponding identifiers underneath it,
+            <p><strong class="step">Step 1</strong>: put your identifiers in a spreadsheet.  As long as the sheet has one or more of "DOI", "PMID" or "PMCID" in the header row, with the corresponding identifiers underneath it,
             we can can work with it.</p>
             
             <p>For example:</p>
             
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <table>
+                    <table class="examplecsv">
                         <thead>
                             <tr>
                                 <td>DOI</td>
@@ -51,18 +85,21 @@
                 
             </div>
             
-            <p>You can <a href="/template.csv">download a template here</a> if you like</p>
+            <p>You can <a href="/template.csv" download>download a template here</a> if you like</p>
             
-            <p><strong>Step 2</strong>: Save your spreadsheet as a CSV.  In Excel you can do this by choosing <strong>Save As</strong> and selecting <strong>CSV (Comma delimited)</strong> as the type.  For more information see <a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba#bmexport">Microsoft's support page</a>.</p>
+            <p><strong class="step">Step 2</strong>: Save your spreadsheet as a CSV.  In Excel you can do this by choosing <strong>Save As</strong> and selecting <strong>CSV (Comma delimited)</strong> as the type.  For more information see <a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba#bmexport">Microsoft's support page</a>.</p>
             
-            <p><strong>Step 3</strong>: <a href="/login">Sign in</a> to Lantern and upload your CSV via the upload form on your home page.</p>
+            <p><strong class="step">Step 3</strong>: <a href="/login">Sign in</a> to Lantern and upload your CSV via the upload form on your home page.</p>
             
-            <p><strong>Step 4</strong>: Wait for us to gather the results for you.  You can watch the progress bar or go off and grab a coffee.  If you've given us a LOT of identifiers maybe go home
+            <p><strong class="step">Step 4</strong>: Wait for us to gather the results for you.  You can watch the progress bar or go off and grab a coffee.  If you've given us a LOT of identifiers maybe go home
             and check back tomorrow.  Either way, we'll email you with a link to the results when your job is finished.</p>
             
-            <p><strong>Step 5</strong>: Download the results (which are also in a CSV) and then open them in your favourite spreadsheet program.  Excel will happily open CSVs for you, and allow
+            <p><strong class="step">Step 5</strong>: Download the results (which are also in a CSV) and then open them in your favourite spreadsheet program.  Excel will happily open CSVs for you, and allow
             you to re-save them as .xls files.</p>
             
+			<p>That's it!</p>
+			<br><br>
+
             <p>You'll have the following information available to you in the spreadsheet:</p>
             
             <ul>
@@ -92,11 +129,11 @@
             
             <p>When you download your results spreadsheet, there will be a lot of information in there; below you'll find details on what all of those fields mean.</p>
             
-<table>
+<table class="fields">
     <thead>
         <tr>
-            <td><strong>Field</strong></td>
-            <td><strong>Description</strong></td>
+            <td width="30%"><strong>Field</strong></td>
+            <td width="70%"><strong>Description</strong></td>
         </tr>
     </thead>
     <tbody>
@@ -280,7 +317,7 @@
 			<h2>Have we missed anything?</h2>
 
 
-			<p>Is there some aspect of the documentation that is unclear, or any other questions you have?  Don't hesitate to <a href="/contact">get in touch</a> and we'll be happy to help you out.</p>
+			<p>Is there some aspect of the documentation that is unclear, or any other questions you have?  Don't hesitate to <a href="mailto:us@cottagelabs.com">get in touch</a> and we'll be happy to help you out.</p>
 		</div>
     </div>
 </div>
