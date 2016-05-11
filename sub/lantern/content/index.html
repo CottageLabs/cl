@@ -1,10 +1,15 @@
 
+<script src="/static/lantern/lantern.js"></script>
+
 <style>
   html { 
   }
   body {
     background-color:#333;
   }
+	p {
+		color:#999;
+	}
   h1, h2, h3, h4, h5, h6 {
     font-family:Raleway;
     font-weight:bold;
@@ -93,9 +98,13 @@
   }
 
   .contact-form .submit:hover {
-      background: #c9d2d4;
+      background: #999;
       color: #333;
   }
+	
+	.ting {
+		display:none;
+	}
 </style>
 
 <div class="container-fluid" style="max-width:1000px;margin-top:100px;">
@@ -105,58 +114,61 @@
         <h1 style="font-size:80px;color:#555;" id="strap"></h1>
       </div>
     </div>
-    <div class="col-md-3 col-md-offset-3">
+    <div class="col-md-3 col-md-offset-3 notting">
       <div class="well" style="background-color:#c9d2d4;height:220px;">
-        <i class="fa fa-lightbulb-o" style="font-size:190px;padding-left:30px;"></i>
+				<p style="text-align:center;"><a href="http://test.cottagelabs.com?for=https://lantern.cottagelabs.com"><i class="fa fa-sign-in fa-5x"></i></a></p>
+				<h2 style="text-align:center;"><a href="http://test.cottagelabs.com?for=https://lantern.cottagelabs.com">Login / <br>Register</a></h2>
       </div>
     </div>
+    <div class="col-md-6 ting uploader">
+			<div class="well" style="background-color:#c9d2d4;min-height:220px;">
+				<p style="color:#333;">Provide one identifier, or upload a CSV file:</p>
+				<form class="contact-form">
+					<input id="ident" name="ident" type="text" value="" placeholder="DOI, PMID, or PMCID">
+					<input type="file" name="upload" id="upload" class="form-control">
+					<div class="well" style="display:none;" id="review">
+						<p>
+							Thank you. Your file appears to have <span id="count">X</span> record rows, containing<br>
+							<span id="idnumbers"></span><br>
+							Please submit for processing now:
+						</p>
+					</div> 
+					<input type="submit" class="submit" id="lanternmulti" name="submit" value="Submit">
+					<input type="submit" class="submit form-control disabled" id="submitting" name="submitting" value="Submitting, please wait" style="display:none;background-color:grey;color:white;font-size:1.4em;height:50px;">
+					<div id="errormsg" style="display:none;" class="alert alert-warning"></div>
+				</form>
+			</div>
+    </div>
+		<div class="col-md-6" id="poller" style="display:none;">
+			<div class="well" id="pollinfo" style="background-color:#c9d2d4;min-height:220px;">
+				
+			</div>
+		</div>
   </div>
 </div>
 
-<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
+<div class="container-fluid uploader" style="max-width:1000px;margin-top:50px;">
   <div class="row">
     <div class="col-md-6">
       <p style="text-align:justify;color:#c9d2d4;">
-        Lantern checks the license conditions of published research. 
-        Get an instant result about one article, identified by DOI, PMID, PMC, or title:
+        Lantern checks the licence conditions of published research. 
+        Search for any article identified by DOI, PMID, PMC, or title,
+        or upload many in a spreadsheet; you'll receive an email once they're all done.
       </p>
-      <form class="contact-form" action="#">
-        <input id="ident" name="ident" type="text" value="" placeholder="DOI, PMID, PMCID, or title">        
-        <a id="contact-submit" class="submit" href="#">Process this one</a>        
-      </form>
-    </div>
-    <div class="col-md-6">
-      <p style="text-align:justify;color:#c9d2d4;">
-        Or upload many in a spreadsheet (see docs) and receive an email once they are all checked:
-      </p>
-      <form class="contact-form">
-        <input type="file" name="upload" id="upload" class="form-control">
-        <input class="form-control" id="email" name="email" placeholder="Your email address" type="email" value="">
-        <div class="well" style="display:none;" id="review">
-          <p>
-            Thank you. Your file appears to have <span id="count">X</span> record rows in it, containing 
-						<span id="dois">X</span> DOIs, <span id="pmcids">X</span> PMC IDs, <span id="pmids">X</span> PubMed IDs, 
-						and <span id="titles">X</span> titles.
-						Is this correct?
-            If so, please submit for processing now:
-          </p>
-        </div> 
-        <input type="submit" class="submit" id="lanternmulti" name="submit" value="Process all, then email me">
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid" style="max-width:1000px;margin-top:50px;">
-  <div class="row">
-    <div class="col-md-12">
       <p>
-        Lantern is part of the Harvest Programme, a service provided by Cottage Labs and our partners.
-        It utilises <a href="http://europepmc.org" target="_blank">Europe PubMed Central</a> and 
-        <a href="http://howopenisit.org">OpenArticleGauge</a> to calculate results.
-        See the <a href="https://lantern.cottagelabs.com/docs">documentation</a> for more details.
+				Lantern is a service provided by <a href="http://cottagelabs.com" style="color:#c9d2d4;">Cottage Labs</a>, 
+				and is part of the <a target="_blank" style="color:#c9d2d4;" href="http://harvest.cottagelabs.com">Harvest collaboration</a>.
       </p>
     </div>
+    <div class="col-md-6 ting">
+			<p>
+				To process one article, enter the DOI, PubMed ID, or PubMedCentral ID (prefixed with PMC) in the field above, 
+				or choose a file to upload. The format must be CSV, which can be exported by spreadsheet software.
+			</p>
+			<p>
+        Read the <a href="/docs" style="color:#c9d2d4;">documentation</a> for more details.
+			</p>
+		</div>
   </div>
 </div>
 
@@ -169,7 +181,14 @@ jQuery(document).ready(function() {
       "RESEARCH ENLIGHTENED"
     ]
   $("#strap").html(stS + txt.join(stE + stS) + stE).slabText();
-          
+
+	var logged = LoginState.get("clogins");
+	if (logged) {
+		$('.ting').show();
+		$('.notting').hide();
+	}
+
+	/*
   var lanternsingle = function() {
       var ident = $('#ident').val();
       var tp = 'doi';
@@ -285,8 +304,11 @@ jQuery(document).ready(function() {
     });
   }
   $('#lanternmulti').bind('click',submit);
-  
+  */
+	
   //clmenu();
+	
 
 });
+
 </script>
