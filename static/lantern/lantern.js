@@ -57,8 +57,8 @@ jQuery(document).ready(function() {
 			}
 		}
 		console.log(lines.length);
-		if (lines.length > 5001) {
-			$('#errormsg').html('<p style="color:black;">Sorry, the maximum amount of rows you can submit in one file is 5000. Please reduce the size of your file and try again.</p>').show();
+		if (lines.length > 3001) {
+			$('#errormsg').html('<p style="color:black;">Sorry, the maximum amount of rows you can submit in one file is 3000. Please reduce the size of your file and try again.</p>').show();
 			file = undefined;
 			filename = '';
 		} else {
