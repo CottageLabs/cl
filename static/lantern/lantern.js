@@ -200,7 +200,7 @@ jQuery(document).ready(function() {
 			}
 			var payload = {list:results,name:filename,email:email};
 			$.ajax({
-				url: apibseurl + '/service/lantern',
+				url: apibaseurl + '/service/lantern',
 				method: 'POST',
 				data: JSON.stringify(payload),
 				dataType: 'JSON',
