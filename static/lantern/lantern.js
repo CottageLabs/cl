@@ -16,15 +16,15 @@ jQuery(document).ready(function() {
     console.log(pmids);
     console.log(titles);
 		if ( $('#review').length ) {
-			$('#count').html(results.length);
-			var numbers = '';
-			if (dois > 0) numbers += dois + ' DOIs<br>';
-			if (pmcids > 0) numbers += pmcids + ' PMC IDs<br>';
-			if (pmids > 0) numbers += pmids + ' PubMed IDs<br>';
-			if (titles > 0) numbers += titles + ' titles<br>';
-			$('#idnumbers').html(numbers);
-			//$('#review').append(JSON.stringify(results));
-			$('#review').show();
+			var msg = '<p style="color:black;">Thank you. Your file appears to have ';
+			msg += results.length;
+			msg += ' record rows, containing<br>';
+			if (dois > 0) msg += dois + ' DOIs<br>';
+			if (pmcids > 0) msg += pmcids + ' PMC IDs<br>';
+			if (pmids > 0) msg += pmids + ' PubMed IDs<br>';
+			if (titles > 0) msg += titles + ' titles<br>';
+			msg += 'Please submit for processing now:</p>';
+			$('#review').html(msg).show();
 		}
   }
   var transform = function(split,wrap) {
@@ -55,46 +55,52 @@ jQuery(document).ready(function() {
 			}
 		}
 		console.log(lines.length);
-		var headers = [];
-		var hline = lines.shift();
-		var hlines = hline.split(split);
-		var hl = '';
-		for ( var h in hlines ) {
-			if (hl.length > 0) hl += ',';
-			hl += hlines[h];
-			if ( hl.split(wrap).length % 2 !== 0 ) {
-				hl = hl.replace(wrapreplace,'').replace(/(^\s*)|(\s*$)/g,''); // strip whitespace leading and ending header names
-				//hl = hl.toLowerCase().replace(/ /g,'_').replace(/[^a-z0-9_]/g,'');; // could do additional header cleaning here
-				headers.push(hl);
-				hl = '';
-			}
-		}
-		console.log(headers);
-		
-    for (var i = 0; i < lines.length; i++) {
-			var obj = {};
-			var currentline = lines[i].split(split);
-			var cl = '';
-			var counter = 0;
-			var lengths = 0;
-			for ( var col in currentline ) {
-				if (cl.length > 0) cl += ',';
-				cl += currentline[col];
-				if ( cl.split(wrap).length % 2 !== 0 ) {
-					cl = cl.replace(wrapreplace,'');
-					obj[headers[counter]] = cl;
-					if (lengths === 0) lengths = cl.length;
-					cl = '';
-					counter += 1;
+		if (lines.length > 5001) {
+			$('#errormsg').html('<p style="color:black;">Sorry, the maximum amount of rows you can submit in one file is 5000. Please reduce the size of your file and try again.</p>').show();
+			file = undefined;
+			filename = '';
+		} else {
+			var headers = [];
+			var hline = lines.shift();
+			var hlines = hline.split(split);
+			var hl = '';
+			for ( var h in hlines ) {
+				if (hl.length > 0) hl += ',';
+				hl += hlines[h];
+				if ( hl.split(wrap).length % 2 !== 0 ) {
+					hl = hl.replace(wrapreplace,'').replace(/(^\s*)|(\s*$)/g,''); // strip whitespace leading and ending header names
+					//hl = hl.toLowerCase().replace(/ /g,'_').replace(/[^a-z0-9_]/g,'');; // could do additional header cleaning here
+					headers.push(hl);
+					hl = '';
 				}
 			}
-			if (obj.doi || obj.DOI) dois += 1;
-			if (obj.pmcid || obj.PMCID) pmcids += 1;
-			if (obj.pmid || obj.PMID) pmids += 1;
-			if (obj.title || obj['Article title']) titles += 1;
-			if (lengths) results.push(obj);
+			console.log(headers);
+
+			for (var i = 0; i < lines.length; i++) {
+				var obj = {};
+				var currentline = lines[i].split(split);
+				var cl = '';
+				var counter = 0;
+				var lengths = 0;
+				for ( var col in currentline ) {
+					if (cl.length > 0) cl += ',';
+					cl += currentline[col];
+					if ( cl.split(wrap).length % 2 !== 0 ) {
+						cl = cl.replace(wrapreplace,'');
+						obj[headers[counter]] = cl;
+						if (lengths === 0) lengths = cl.length;
+						cl = '';
+						counter += 1;
+					}
+				}
+				if (obj.doi || obj.DOI) dois += 1;
+				if (obj.pmcid || obj.PMCID) pmcids += 1;
+				if (obj.pmid || obj.PMID) pmids += 1;
+				if (obj.title || obj['Article title']) titles += 1;
+				if (lengths) results.push(obj);
+			}
+			review();
 		}
-    review();
   }
   var prep = function(e) {
 		var f = e.target.files[0];
@@ -113,7 +119,7 @@ jQuery(document).ready(function() {
 	var error = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-		$('#errormsg').html('<p>Sorry, there has been an error with your submission. Please try again.</p><p>If you continue go receive an error, please contact us@cottagelabs.com with the following error information:</p><p>' + JSON.stringify(data) + '</p>').show();
+		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.</p><p>If you continue go receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:</p><p>' + JSON.stringify(data) + '</p>').show();
     console.log(data);
   }
 
@@ -146,7 +152,9 @@ jQuery(document).ready(function() {
 	}
 	
 	if (window.location.hash) {
-		$('.uploader').hide();
+		setTimeout(function() {$('.uploader').hide();},200);
+		$('#poller').show();
+		$('#pollinfo').html('<p>One moment please, retrieving job status...</p>');
 		hash = window.location.hash.replace('#','');
 		console.log(hash);
 		poll(hash);
@@ -171,8 +179,8 @@ jQuery(document).ready(function() {
 			email = logged.email;
 		} catch(err) {}
 		if (!email) email = $('#email').val();
-		if (!email) {
-			$('#errormsg').html('You must provide an email address in order to submit a job. Please do so, and try again.').show();
+		if (!email || !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
+			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record, and if not logged in an email address, in order to submit. Please provide more information and try again.</p>').show();
 		} else {
 			$('#lanternmulti').hide();
 			$('#submitting').show();
