@@ -1,6 +1,8 @@
 jQuery(document).ready(function() {
 	$('#footer').hide();
 	
+	var apibaseurl = '//api.cottagelabs.com';
+	
   var file;
 	var filename = '';
   var results = [];
@@ -132,8 +134,8 @@ jQuery(document).ready(function() {
 		$('#poller').show();
 		if ( !data.data ) data.data = 0;
 		var status = '<p>Your job is ' + data.data + '% complete.</p>';
-		status += '<p><a href="//dev.api.cottagelabs.com/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
-		status += '<p style="text-align:center;padding-top:10px;"><a href="//dev.api.cottagelabs.com/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
+		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
+		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
 		if (data.data !== 100) setTimeout(poll,10000);
 		$('#pollinfo').html(status);
 	}
@@ -143,7 +145,7 @@ jQuery(document).ready(function() {
 		}
 		if ( hash ) {
 			$.ajax({
-				url: '//dev.api.cottagelabs.com/service/lantern/' + hash + '/progress',
+				url: apibaseurl + '/service/lantern/' + hash + '/progress',
 				method: 'GET',
 				success: polling,
 				error: error
@@ -198,7 +200,7 @@ jQuery(document).ready(function() {
 			}
 			var payload = {list:results,name:filename,email:email};
 			$.ajax({
-				url: '//dev.api.cottagelabs.com/service/lantern',
+				url: apibseurl + '/service/lantern',
 				method: 'POST',
 				data: JSON.stringify(payload),
 				dataType: 'JSON',
