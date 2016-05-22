@@ -114,6 +114,18 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
     color:#aaa;
 }
 
+#footer a {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#footer a:hover {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
 #about {
     padding-top: 20px;
     padding-bottom: 20px;
