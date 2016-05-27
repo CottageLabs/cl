@@ -17,8 +17,8 @@ body {
 }
 
 input,button,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit;margin-bottom:2px;}
-a{color:#555;text-decoration:none;font-weight:700;}
-a:hover, a:focus{color:blue;text-decoration:underline}
+a{color:#555;text-decoration:underline;font-weight:700;}
+a:hover, a:focus{color:#555;text-decoration:none}
 a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}
 
 .container-fluid{
@@ -142,7 +142,8 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
 }
 
 #tagline {
-    font-family:Corben, serif;
+	font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+/*    font-family:Corben, serif;*/
 }
 
 #menu {
@@ -189,8 +190,9 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family:Corben, serif;
-    color:#444;
+	font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+/*    font-family:Corben, serif; */
+    color:#555;
 }
 h3, h4 {
   margin-top:20px;
