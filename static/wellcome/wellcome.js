@@ -176,10 +176,14 @@ jQuery(document).ready(function() {
 		$('#errormsg').html("").hide();
 		e.preventDefault();
 		var email;
-		try {
-			var logged = LoginState.get("clogins");
-			email = logged.email;
-		} catch(err) {}
+        // REVIEW LATER: this seems to be broken when used from
+        // wellcome.test.cottagelabs.com , but that's sort of OK since
+        // this is the Wellcome-specific UI which has no accounts to
+        // speak of anyway.
+		//try {
+		//	var logged = LoginState.get("clogins");
+		//	email = logged.email;
+		//} catch(err) {}
 		if (!email) email = $('#email').val();
 		if (!email || !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
 			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record, and if not logged in an email address, in order to submit. Please provide more information and try again.</p>').show();
