@@ -133,7 +133,8 @@ jQuery(document).ready(function() {
 		$('.uploader').hide();
 		$('#poller').show();
 		if ( !data.data ) data.data = 0;
-		var status = '<p>Your job is ' + data.data + '% complete.</p>';
+		var pc = (Math.floor(data.data * 10))/10;
+		var status = '<p>Your job is ' + pc + '% complete.</p>';
 		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
 		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
 		if (data.data !== 100) setTimeout(poll,10000);
