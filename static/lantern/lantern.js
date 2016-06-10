@@ -133,7 +133,8 @@ jQuery(document).ready(function() {
 		$('.uploader').hide();
 		$('#poller').show();
 		if ( !data.data ) data.data = 0;
-		var status = '<p>Your job is ' + data.data + '% complete.</p>';
+		var pc = (Math.floor(data.data * 10))/10;
+		var status = '<p>Your job is ' + pc + '% complete.</p>';
 		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
 		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
 		if (data.data !== 100) setTimeout(poll,10000);
@@ -160,6 +161,28 @@ jQuery(document).ready(function() {
 		hash = window.location.hash.replace('#','');
 		console.log(hash);
 		poll(hash);
+	} else {
+		try {
+			var logged = LoginState.get("clogins");
+			var email = logged.email;
+			$.ajax({
+				url: apibaseurl + '/service/lantern/jobs/' + email,
+				method: 'GET',
+				success: function(data) {
+					if (data.data.total) {
+						var info = '<p>Your previous jobs:</p>';
+						for ( var j in data.data.jobs ) {
+							var job = data.data.jobs[j];
+							info += '<a class="btn btn-default btn-block" href="/#' + job._id + '">';
+							info += job.name && job.name.length > 0 ? job.name : '#' + job._id;
+							info += '</a>';
+						}
+						$('#howto').append($('#lanternintro').html());
+						$('#lanternintro').html(info);
+					}
+				}
+			});
+		} catch(err) {}
 	}
 	
   var success = function(data) {
