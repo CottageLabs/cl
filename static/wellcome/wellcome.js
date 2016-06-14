@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+	document.title = 'Wellcome compliance tool';
 	$('#footer').hide();
 	
 	var apibaseurl = '//dev.api.cottagelabs.com';
@@ -132,12 +133,15 @@ jQuery(document).ready(function() {
 		console.log(data);
 		$('.uploader').hide();
 		$('#poller').show();
-		if ( !data.data ) data.data = 0;
-		var pc = (Math.floor(data.data * 10))/10;
-		var status = '<p>Your job is ' + pc + '% complete.</p>';
+		var progress = !data.data || !data.data.progress ? 0 : data.data.progress;
+		var pc = (Math.floor(progress * 10))/10;
+		var status = '<p>Job ';
+		status += data.data && data.data.name ? data.data.name : '#' + data.data._id;
+		status += '</p>';
+		status += '<p>Your job is ' + pc + '% complete.</p>';
 		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
 		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
-		if (data.data !== 100) setTimeout(poll,10000);
+		if (data.data.progress !== 100) setTimeout(poll,10000);
 		$('#pollinfo').html(status);
 	}
 	poll = function(hash) {

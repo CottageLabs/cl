@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+	document.title = 'CL Lantern';
 	$('#footer').hide();
 	
 	var apibaseurl = '//api.cottagelabs.com';
@@ -132,12 +133,15 @@ jQuery(document).ready(function() {
 		console.log(data);
 		$('.uploader').hide();
 		$('#poller').show();
-		if ( !data.data ) data.data = 0;
-		var pc = (Math.floor(data.data * 10))/10;
-		var status = '<p>Your job is ' + pc + '% complete.</p>';
+		var progress = !data.data || !data.data.progress ? 0 : data.data.progress;
+		var pc = (Math.floor(progress * 10))/10;
+		var status = '<p>Job ';
+		status += data.data && data.data.name ? data.data.name : '#' + data.data._id;
+		status += '</p>';
+		status += '<p>Your job is ' + pc + '% complete.</p>';
 		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
 		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
-		if (data.data !== 100) setTimeout(poll,10000);
+		if (data.data.progress !== 100) setTimeout(poll,10000);
 		$('#pollinfo').html(status);
 	}
 	poll = function(hash) {
@@ -170,16 +174,35 @@ jQuery(document).ready(function() {
 				method: 'GET',
 				success: function(data) {
 					if (data.data.total) {
-						var info = '<p>Your previous jobs:</p>';
+						var info = '<p>Your jobs:</p>';
 						for ( var j in data.data.jobs ) {
 							var job = data.data.jobs[j];
-							info += '<a class="btn btn-default btn-block" href="/#' + job._id + '">';
+							info += '<a class="btn btn-default btn-block" target="_blank" href="//lantern.cottagelabs.com/#' + job._id + '">';
 							info += job.name && job.name.length > 0 ? job.name : '#' + job._id;
 							info += '</a>';
 						}
-						$('#howto').append($('#lanternintro').html());
-						$('#lanternintro').html(info);
+						$('#previousjobs').html(info);
 					}
+				}
+			});
+			$.ajax({
+				url: apibaseurl + '/service/lantern/quota/' + email,
+				method: 'GET',
+				success: function(data) {
+					var info = '<p>You can submit up to ' + data.data.max + ' IDs in a 30 day period.</p>';
+					info += '<p>You have submitted ' + data.data.count + ' IDs in the last 30 days.';
+					if (data.data.allowed) {
+						info += '<p>You can submit up to ' + data.data.available + ' more IDs now.</p>';
+					} else {
+						info += "<p>Sorry, your quota is currently exceeded - you can't submit more IDs at the moment. Please check back tomorrow.</p>";
+					}
+					if ( data.data.max === 100) {
+						info += '<p><a class="btn btn-primary btn-block btn-lg" id="showpremium" href="#premium">Increase your quota<br>Learn more about Lantern Premium</a></p>';
+					}
+					$('#quotainfo').html(info);
+					$('#showpremium').bind('click',function(e) {
+						$('#premium').show();
+					});
 				}
 			});
 		} catch(err) {}
