@@ -115,7 +115,7 @@ jQuery(document).ready(function() {
 				transform();
 			};
 		})(f);
-		reader.readAsText(f);
+		reader.readAsBinaryString(f);
   }
   $('input[type=file]').on('change', prep);
 
