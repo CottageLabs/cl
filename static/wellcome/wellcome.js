@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
 	document.title = 'Wellcome compliance tool';
 	$('#footer').hide();
 	
-	var apibaseurl = '//dev.api.cottagelabs.com';
+	var apibaseurl = '//api.cottagelabs.com';
 	
   var file;
 	var filename = '';
@@ -115,7 +115,7 @@ jQuery(document).ready(function() {
 				transform();
 			};
 		})(f);
-		reader.readAsText(f);
+		reader.readAsBinaryString(f);
   }
   $('input[type=file]').on('change', prep);
 

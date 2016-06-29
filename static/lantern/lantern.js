@@ -122,7 +122,7 @@ jQuery(document).ready(function() {
 	var error = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.</p><p>If you continue go receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:</p><p>' + JSON.stringify(data) + '</p>').show();
+		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.<br>If you continue to receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:<br>' + JSON.stringify(data) + '</p>').show();
     console.log(data);
   }
 
