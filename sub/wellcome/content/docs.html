@@ -41,6 +41,8 @@
 
 <p>Simply export a CSV from your favourite spreadsheet program (e.g. Excel), and upload it. We will then go off and inspect all the identifiers and gather together your compliance information. You will be able to monitor the progress from your upload page, and download the results at any point during the run, or at the end when it is finished. We will also email you the completed spreadsheet when it is done.</p>
 
+<p>Please note results will be cached for <strong>one day</strong>. For example, if the licence information for an article you have run through this tool changes in Europe PMC or on the publisher's website, it would take up to 24 hours before running the same article would show you the new licence.</p>
+
 <p>Below are some detailed documentation on the input spreadsheet format and the format in which you will receive the results.</p>
 
         </div>
@@ -134,7 +136,7 @@ exported by Excel by default) should still work, though you may notice character
         </tr>
 		<tr>
             <td><strong>Publisher</strong></td>
-            <td>The Publisher of the Journal in which the article was published.</td>
+            <td>The Publisher of the Journal in which the article was published. First we will attempt to get this information from Crossref, if the article has a DOI that you have uploaded or that we have found. If you have uploaded (or we have discovered) an ISSN, and we could not determine the publisher from Crossref, then we will try to get it from DOAJ Journal metadata. If it's not there, we'll finally try Sherpa Romeo Journal policy metadata before giving up.</td>
         </tr>
 		<tr>
             <td><strong>Journal title</strong></td>
@@ -146,7 +148,7 @@ exported by Excel by default) should still work, though you may notice character
         </tr>
 		<tr>
             <td><strong>Article title</strong></td>
-            <td>The title of the article.</td>
+            <td>The title of the article. If you upload an article title we will not override it with titles we may discover in Crossref or CORE (in that order of preference).</td>
         </tr>
 		<tr>
             <td><strong>Publication Date</strong></td>
@@ -156,25 +158,29 @@ exported by Excel by default) should still work, though you may notice character
             <td><strong>Electronic Publication Date</strong></td>
             <td>The date the publisher made the article available online.  The date will be in the form YYYY-MM-DD (e.g. 2011-03-21).  If no electronic publication date can be found this column will contain the text "Unavailable".</td>
         </tr>
+		<tr>
+            <td><strong>Author(s)</strong></td>
+            <td>List of the article's authors. First, we look for this information in Europe Pubmed Central. Then we check CrossRef. Finally we check CORE.</td>
+        </tr>
         <tr>
             <td><strong>Fulltext in EPMC?</strong></td>
-            <td>Does the fulltext of the article appear in some form in <a href="http://europepmc.org">EPMC</a>?  This is equivalent to the EPMC metadata record asserting <strong>inEPMC: Y</strong></td>
+            <td>Does the fulltext of the article appear in some form in <a href="http://europepmc.org">Europe PMC</a>?  This is equivalent to the Europe PMC metadata record asserting <strong>inEPMC: Y</strong></td>
         </tr>
         <tr>
             <td><strong>XML Fulltext?</strong></td>
-            <td>Does the XML version of the fulltext of the article appear in <a href="http://europepmc.org">EPMC</a>?  This will be a subset of those where the fulltext appears in some form (some are PDF only), and all OA-subset articles SHOULD have this content available.</td>
+            <td>Is the XML version of the fulltext of the article freely available in <a href="http://europepmc.org">Europe PMC</a>? This will be a subset of those articles where the fulltext appears in some form. All articles in the <a href="http://europepmc.org/downloads/openaccess">Open Access subset</a> SHOULD have this content available.</td>
         </tr>
         <tr>
             <td><strong>Author Manuscript?</strong></td>
-            <td>Is the copy of the paper in <a href="http://europepmc.org">EPMC</a> the Accepted Authors Manuscript (AAM)?  If the XML fulltext is present in EPMC then this information will be lifted from there, otherwise we page-scrape the EPMC web page for the article to detect whether it is the author manuscript</td>
+            <td>Is the copy of the paper in <a href="http://europepmc.org">Europe PMC</a> the Accepted Authors Manuscript (AAM)?  If the XML fulltext is present in Europe PMC then this information will be lifted from there, otherwise we page-scrape the Europe PMC web page for the article to detect whether it is the author manuscript</td>
         </tr>
 		<tr>
             <td><strong>Ahead of Print?</strong></td>
-            <td>Was the article published electronically before it was released in print.  For journals which release both electronic and print versions, this will be either TRUE or FALSE.  For journals which do not have print versions, this will be "not applicable".  If we are unable to determine either the status of the journal or the status of the article this will be "unknown".</td>
+            <td>Some journals release articles “ahead of print” before assigning them to an issue and depositing them in Europe PMC. If the full text of an article is not in Europe PMC this field will tell you whether the article has only been published ahead of print (TRUE), or whether it has been assigned to an issue (FALSE). If the full text is in Europe PMC this will be "not applicable". If we are unable to determine the status of the article this will be "unknown". We determine Ahead of Print? information by looking at Pubmed metadata (so the article must have a PMID that you supply to us or that we discover via other identifiers you have supplied). Currently we follow <a href="http://www.ncbi.nlm.nih.gov/pubmed/INSERT_PMID_HERE?report=xml">http://www.ncbi.nlm.nih.gov/pubmed/INSERT_PMID_HERE?report=xml</a> and we look for a "PublicationStatus" element with a value "aheadofprint".</td>
         </tr>
         <tr>
             <td><strong>Open Access?</strong></td>
-            <td>Is the article in the <a href="http://europepmc.org">EPMC</a> Open Access subset?  This is equivalent to the EPMC metadata record asserting <strong>isOpenAccess: Y</strong></td>
+            <td>Is the article in the <a href="http://europepmc.org">Europe PMC</a> Open Access subset?  This is equivalent to the Europe PMC metadata record asserting <strong>isOpenAccess: Y</strong></td>
         </tr>
 		<tr>
             <td><strong>Journal Type</strong></td>
@@ -203,7 +209,7 @@ exported by Excel by default) should still work, though you may notice character
 
 <ul>
 <li>IF full-text is in Europe PMC AND it is an author manuscript THEN compliance = TRUE</li>
-<li>IF full-text is in Europe PMC AND the licence (in any location) is CC BY or CC0 THEN compliance = TRUE</li>
+<li>IF full-text is in Europe PMC AND the licence in Europe PMC is CC BY or CC0 THEN compliance = TRUE</li>
 </ul>
             </td>
         </tr>
@@ -216,7 +222,7 @@ exported by Excel by default) should still work, though you may notice character
 
 <ul>
 <li>IF full-text is in Europe PMC AND it is an author manuscript THEN compliance = TRUE</li>
-<li>IF full-text is in Europe PMC AND the licence as present in Europe PMC is CC BY or CC0 AND the article is in the open access subset THEN compliance = TRUE</li>
+<li>IF full-text is in Europe PMC AND the licence in Europe PMC is CC BY or CC0 AND the article is in the open access subset THEN compliance = TRUE</li>
 </ul>
             </td>
         </tr>
@@ -229,17 +235,17 @@ exported by Excel by default) should still work, though you may notice character
 		<tr>
             <td><strong>EPMC Licence</strong></td>
             <td>
-                <p>What licence, if any, were we able to detect for the article in EPMC.  If this field shows "unknown" you should also check the Publisher Licence column for information.</p>
+                <p>What licence, if any, were we able to detect for the article in Europe PMC.  If this field shows "unknown" you should also check the Publisher Licence column for information.</p>
             </td>
         </tr>
         <tr>
             <td><strong>EPMC Licence Source</strong></td>
             <td>
-                <p>Where in EPMC did we find the licence information contained in the <strong>EPMC Licence</strong> column?</p>
+                <p>Where in Europe PMC did we find the licence information contained in the <strong>EPMC Licence</strong> column?</p>
                 <ol>
-					<li><strong>epmc_xml_permissions</strong> - Detected in the EPMC Fulltext XML under the permissions section</li>
-                    <li><strong>epmc_xml</strong> - Detected elsewhere in the EPMC Fulltext XML</li>
-                    <li><strong>epmc</strong> - Detected on the EPMC web page (via page scraping)</li>
+					<li><strong>epmc_xml_permissions</strong> - Detected in the Europe PMC Fulltext XML under the permissions section</li>
+                    <li><strong>epmc_xml</strong> - Detected elsewhere in the Europe PMC Fulltext XML</li>
+                    <li><strong>epmc</strong> - Detected on the Europe PMC web page (via page scraping)</li>
 					<li><strong>unknown</strong> - We were unable to determine a licence for this article</li>
                 </ol>
             </td>
@@ -279,3 +285,10 @@ exported by Excel by default) should still work, though you may notice character
     </div>
 </div>
 
+
+<script>
+jQuery(document).ready(function() {
+	document.title = 'Wellcome compliance tool';
+	$('#footer').hide();
+});
+</script>
