@@ -1,0 +1,149 @@
+<style>
+
+body {
+	margin-top: 0px;
+}
+
+a {
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #555;
+	text-decoration: none;
+}
+
+.step {
+	font-size: 130%;
+}
+
+.examplecsv {
+	background: #ffffff;
+	border: 1px solid #000000;
+	width: 100%;
+	margin-bottom: 30px;
+}
+
+.examplecsv thead {
+	font-weight: bold;
+}
+
+.examplecsv td {
+	border: 1px solid #000000;
+	padding: 10px;
+}
+
+.fields tr {
+	border-bottom: 1px solid #000000;
+}
+
+.fields td {
+	vertical-align: top;
+	padding: 10px;
+}
+
+#topstrap {
+	background: #252e2b;
+}
+
+#topstrap h1 {
+	color: #ffffff;
+	font-family:Raleway;
+    font-weight:bold;
+}
+
+#topstrap a {
+	color: #ffffff;
+	text-decoration:none;
+}
+
+#topstrap a:hover {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+</style>
+
+<div id="topstrap">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1><a href="/">LANTERN</a></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="simple-documentation">
+    <div class="container">
+        <div class="content">
+			<h2>Lantern API</h2>
+			
+			<p>The Lantern API gives you the ability to create new requests for compliance information, and to query those requests to monitor their progress, and to query your account for information about all your requests.</p>
+
+			<p>The <strong>base url</strong> for the API is: <a href="https://api.lantern.cottagelabs.com">https://api.lantern.cottagelabs.com</a></p>
+
+			<p>The following table summarises the API endpoints available to you:</p>
+
+			<table>
+				<thead>
+					<tr>
+						<td>Endpoint</td>
+						<td>Method</td>
+						<td>Summary</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>/</td>
+						<td>GET</td>
+						<td>Confirms that the service is present</td>
+					</tr>
+					<tr>
+						<td>/</td>
+						<td>POST</td>
+						<td>Allows you to create a new job by sending a suitable JSON document</td>
+					</tr>
+					<tr>
+						<td>/:job</td>
+						<td>GET</td>
+						<td>Information about the given :job as JSON</td>
+					</tr>
+					<tr>
+						<td>/:job/original</td>
+						<td>GET</td>
+						<td>Returns the original data uploaded when you created the :job</td>
+					</tr>
+					<tr>
+						<td>/:job/progress</td>
+						<td>GET</td>
+						<td>Information about the progress of the :job</td>
+					</tr>
+					<tr>
+						<td>/:job/todo</td>
+						<td>GET</td>
+						<td>Information about the items in the request which are still pending</td>
+					</tr>
+					<tr>
+						<td>/:job/results</td>
+						<td>GET</td>
+						<td>Returns the results of the job, as JSON or CSV (specify ?format=csv)</td>
+					</tr>
+					<tr>
+						<td>/jobs/:email</td>
+						<td>GET</td>
+						<td>Information for all jobs under the specified account address</td>
+					</tr>
+					<tr>
+						<td>/quota/:email</td>
+						<td>GET</td>
+						<td>Information about the quota for the specified account address</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
+</div>
