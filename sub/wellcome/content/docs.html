@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/static/wellcome/wellcome.css">
+<title>OA Compliancy tool</title>
 
 <style>
 	html, body {
@@ -7,12 +8,21 @@
 	h1 {
 		font-family:"Times New Roman";
 	}
+
+.fields tr {
+	border-bottom: 1px solid #000000;
+}
+
+.fields td {
+	vertical-align: top;
+	padding: 10px;
+}
 </style>
 
-<div class="navbar navbar-fixed-top" style="background-color:white;border-bottom:4px solid grey;">
+<div class="navbar navbar-fixed-top" style="background-color:white;border-bottom:4px solid black;">
 	<div class="container-fluid" style="max-width:1200px;">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/"><img src="http://www.wellcome.ac.uk/stellent/groups/corporatesite/@policy_communications/documents/web_document/WTP051585.jpg" width="150"><img></a>
+			<a class="navbar-brand" href="/"><img src="/static/wellcome/wellcome.jpg" style="width:50px;margin-top:-15px;"><img></a>
 			<ul class="nav navbar-nav">
 				<li><a href="/" style="font-size:1em;">Upload</a></li>
 				<li><a href="/docs" style="font-size:1em;">Documentation</a></li>
@@ -150,6 +160,10 @@ exported by Excel by default) should still work, though you may notice character
             <td><strong>Electronic Publication Date</strong></td>
             <td>The date the publisher made the article available online.  The date will be in the form YYYY-MM-DD (e.g. 2011-03-21).  If no electronic publication date can be found this column will contain the text "Unavailable".</td>
         </tr>
+		<tr>
+            <td><strong>Author(s)</strong></td>
+            <td>List of the article's authors. First, we look for this information in Europe Pubmed Central. Then we check CrossRef. Finally we check CORE.</td>
+        </tr>
         <tr>
             <td><strong>Fulltext in EPMC?</strong></td>
             <td>Does the fulltext of the article appear in some form in <a href="http://europepmc.org">Europe PMC</a>?  This is equivalent to the Europe PMC metadata record asserting <strong>inEPMC: Y</strong></td>
@@ -197,7 +211,7 @@ exported by Excel by default) should still work, though you may notice character
 
 <ul>
 <li>IF full-text is in Europe PMC AND it is an author manuscript THEN compliance = TRUE</li>
-<li>IF full-text is in Europe PMC AND the licence (in any location) is CC BY or CC0 THEN compliance = TRUE</li>
+<li>IF full-text is in Europe PMC AND the licence in Europe PMC is CC BY or CC0 THEN compliance = TRUE</li>
 </ul>
             </td>
         </tr>
@@ -210,7 +224,7 @@ exported by Excel by default) should still work, though you may notice character
 
 <ul>
 <li>IF full-text is in Europe PMC AND it is an author manuscript THEN compliance = TRUE</li>
-<li>IF full-text is in Europe PMC AND the licence as present in Europe PMC is CC BY or CC0 AND the article is in the open access subset THEN compliance = TRUE</li>
+<li>IF full-text is in Europe PMC AND the licence in Europe PMC is CC BY or CC0 AND the article is in the open access subset THEN compliance = TRUE</li>
 </ul>
             </td>
         </tr>
@@ -273,16 +287,6 @@ exported by Excel by default) should still work, though you may notice character
     </div>
 </div>
 
-<div id="closer">
-    <div class="container">
-        <div class="content">
-			<h2>Have we missed anything?</h2>
-
-
-			<p>Is there some aspect of the documentation that is unclear, or any other questions you have?  Don't hesitate to <a href="mailto:us@cottagelabs.com">get in touch</a> and we'll be happy to help you out.</p>
-		</div>
-    </div>
-</div>
 
 <script>
 jQuery(document).ready(function() {

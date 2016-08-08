@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-	document.title = 'CL Lantern';
+	document.title = 'Wellcome compliance tool';
 	$('#footer').hide();
 	
 	var apibaseurl = '//api.cottagelabs.com';
@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
 				if (obj.doi || obj.DOI) dois += 1;
 				if (obj.pmcid || obj.PMCID) pmcids += 1;
 				if (obj.pmid || obj.PMID) pmids += 1;
-				if (obj.title || obj['Article title'] || obj['Article Title']) titles += 1;
+				if (obj.title || obj['Article title']) titles += 1;
 				if (lengths) results.push(obj);
 			}
 			review();
@@ -127,7 +127,7 @@ jQuery(document).ready(function() {
 	var error = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.<br>If you continue to receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:<br>' + JSON.stringify(data) + '</p>').show();
+		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.</p><p>If you continue go receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:</p><p>' + JSON.stringify(data) + '</p>').show();
     console.log(data);
   }
 
@@ -171,47 +171,6 @@ jQuery(document).ready(function() {
 		hash = window.location.hash.replace('#','');
 		console.log(hash);
 		poll(hash);
-	} else {
-		try {
-			var logged = LoginState.get("clogins");
-			var email = logged.email;
-			$.ajax({
-				url: apibaseurl + '/service/lantern/jobs/' + email,
-				method: 'GET',
-				success: function(data) {
-					if (data.data.total) {
-						var info = '<p>Your jobs:</p>';
-						for ( var j in data.data.jobs ) {
-							var job = data.data.jobs[j];
-							info += '<a class="btn btn-default btn-block" target="_blank" href="//lantern.cottagelabs.com/#' + job._id + '">';
-							info += job.name && job.name.length > 0 ? job.name : '#' + job._id;
-							info += '</a>';
-						}
-						$('#previousjobs').html(info);
-					}
-				}
-			});
-			$.ajax({
-				url: apibaseurl + '/service/lantern/quota/' + email,
-				method: 'GET',
-				success: function(data) {
-					var info = '<p>You can submit up to ' + data.data.max + ' IDs in a 30 day period.</p>';
-					info += '<p>You have submitted ' + data.data.count + ' IDs in the last 30 days.';
-					if (data.data.allowed) {
-						info += '<p>You can submit up to ' + data.data.available + ' more IDs now.</p>';
-					} else {
-						info += "<p>Sorry, your quota is currently exceeded - you can't submit more IDs at the moment. Please check back tomorrow.</p>";
-					}
-					if ( data.data.max === 100) {
-						info += '<p><a class="btn btn-primary btn-block btn-lg" id="showpremium" href="#premium">Increase your quota<br>Learn more about Lantern Premium</a></p>';
-					}
-					$('#quotainfo').html(info);
-					$('#showpremium').bind('click',function(e) {
-						$('#premium').show();
-					});
-				}
-			});
-		} catch(err) {}
 	}
 	
   var success = function(data) {
@@ -228,10 +187,14 @@ jQuery(document).ready(function() {
 		$('#errormsg').html("").hide();
 		e.preventDefault();
 		var email;
-		try {
-			var logged = LoginState.get("clogins");
-			email = logged.email;
-		} catch(err) {}
+        // REVIEW LATER: this seems to be broken when used from
+        // wellcome.test.cottagelabs.com , but that's sort of OK since
+        // this is the Wellcome-specific UI which has no accounts to
+        // speak of anyway.
+		//try {
+		//	var logged = LoginState.get("clogins");
+		//	email = logged.email;
+		//} catch(err) {}
 		if (!email) email = $('#email').val();
 		if (!email || !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
 			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record, and if not logged in an email address, in order to submit. Please provide more information and try again.</p>').show();
@@ -252,7 +215,7 @@ jQuery(document).ready(function() {
 			}
 			var payload = {list:results,name:filename,email:email};
 			$.ajax({
-				url: apibaseurl + '/service/lantern',
+				url: apibaseurl + '/service/lantern?wellcome=true',
 				method: 'POST',
 				data: JSON.stringify(payload),
 				dataType: 'JSON',
