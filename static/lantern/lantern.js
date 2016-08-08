@@ -90,7 +90,7 @@ jQuery(document).ready(function() {
 					cl += currentline[col];
 					if ( cl.split(wrap).length % 2 !== 0 ) {
 						cl = cl.replace(wrapreplace,'');
-						obj[headers[counter]] = cl;
+						if (headers[counter] && headers[counter].length > 0) obj[headers[counter]] = cl;
 						if (lengths === 0) lengths = cl.length;
 						cl = '';
 						counter += 1;
@@ -99,14 +99,19 @@ jQuery(document).ready(function() {
 				if (obj.doi || obj.DOI) dois += 1;
 				if (obj.pmcid || obj.PMCID) pmcids += 1;
 				if (obj.pmid || obj.PMID) pmids += 1;
-				if (obj.title || obj['Article title']) titles += 1;
+				if (obj.title || obj['Article title'] || obj['Article Title']) titles += 1;
 				if (lengths) results.push(obj);
 			}
 			review();
 		}
   }
   var prep = function(e) {
-		var f = e.target.files[0];
+		var f;
+		if( window.FormData === undefined ) {
+			f = (e.files || e.dataTransfer.files);
+		} else {
+			f = e.target.files[0];
+		}
 		filename = f.name;
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
@@ -138,6 +143,7 @@ jQuery(document).ready(function() {
 		var status = '<p>Job ';
 		status += data.data && data.data.name ? data.data.name : '#' + data.data._id;
 		status += '</p>';
+		if (data.data && data.data.new === true) status += '<p>Your job is new, and is still being loaded into the system. For large jobs this may take a couple of minutes.</p>';
 		status += '<p>Your job is ' + pc + '% complete.</p>';
 		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
 		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
