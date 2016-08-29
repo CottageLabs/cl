@@ -166,15 +166,15 @@ exported by Excel by default) should still work, though you may notice character
         </tr>
         <tr>
             <td><strong>Fulltext in EPMC?</strong></td>
-            <td>Does the fulltext of the article appear in some form in <a href="http://europepmc.org">Europe PMC</a>?  This is equivalent to the Europe PMC metadata record asserting <strong>inEPMC: Y</strong></td>
+            <td>Does the fulltext of the article appear in some form in <a href="http://europepmc.org">Europe PMC</a>?  This is equivalent to the Europe PMC metadata record asserting <strong>inEPMC: Y</strong> .</td>
         </tr>
         <tr>
             <td><strong>XML Fulltext?</strong></td>
-            <td>Is the XML version of the fulltext of the article freely available in <a href="http://europepmc.org">Europe PMC</a>? This will be a subset of those articles where the fulltext appears in some form. All articles in the <a href="http://europepmc.org/downloads/openaccess">Open Access subset</a> SHOULD have this content available.</td>
+            <td>Is the XML version of the fulltext of the article freely available in <a href="http://europepmc.org">Europe PMC</a>? This will be a subset of those articles where the fulltext appears in some form. All articles in the <a href="http://europepmc.org/downloads/openaccess">Open Access subset</a> SHOULD have this content available. We check by attempting to fetch <a href="http://www.ebi.ac.uk/europepmc/webservices/rest/INSERT_PMCID_HERE/fullTextXML">http://www.ebi.ac.uk/europepmc/webservices/rest/INSERT_PMCID_HERE/fullTextXML</a> .</td>
         </tr>
         <tr>
             <td><strong>Author Manuscript?</strong></td>
-            <td>Is the copy of the paper in <a href="http://europepmc.org">Europe PMC</a> the Accepted Authors Manuscript (AAM)?  If the XML fulltext is present in Europe PMC then this information will be lifted from there, otherwise we page-scrape the Europe PMC web page for the article to detect whether it is the author manuscript</td>
+            <td>Is the copy of the paper in <a href="http://europepmc.org">Europe PMC</a> the Accepted Authors Manuscript (AAM)?  If the XML fulltext is present in Europe PMC then this information will be lifted from there, otherwise we page-scrape the Europe PMC web page for the article to detect whether it is the author manuscript.</td>
         </tr>
 		<tr>
             <td><strong>Ahead of Print?</strong></td>
@@ -182,12 +182,12 @@ exported by Excel by default) should still work, though you may notice character
         </tr>
         <tr>
             <td><strong>Open Access?</strong></td>
-            <td>Is the article in the <a href="http://europepmc.org">Europe PMC</a> Open Access subset?  This is equivalent to the Europe PMC metadata record asserting <strong>isOpenAccess: Y</strong></td>
+            <td>Is the article in the <a href="http://europepmc.org">Europe PMC</a> Open Access subset?  This is equivalent to the Europe PMC metadata record asserting <strong>isOpenAccess: Y</strong> .</td>
         </tr>
 		<tr>
             <td><strong>Journal Type</strong></td>
             <td>
-                <p>Whether this is a hybrid or pure Open Access journal.  Determined by whether the journal is present in the <a href="http://doaj.org">DOAJ</a></p>
+                <p>Whether this is a hybrid or pure Open Access journal.  Determined by whether the journal is present in the <a href="http://doaj.org">DOAJ</a>.</p>
             </td>
         </tr>
 		<tr>
@@ -256,27 +256,27 @@ exported by Excel by default) should still work, though you may notice character
             <td><strong>Grant {X}</strong></td>
             <td>
                 <p>Grant Number associated with this article.</p>
-				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Agency {X}" and "PI {X}" columns</p>
+				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Agency {X}" and "PI {X}" columns.</p>
             </td>
         </tr>
 		<tr>
             <td><strong>Agency {X}</strong></td>
             <td>
                 <p>Agency responsible for funding this article</p>
-				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Grant {X}" and "PI {X}" columns</p>
+				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Grant {X}" and "PI {X}" columns.</p>
             </td>
         </tr>
 		<tr>
             <td><strong>PI {X}</strong></td>
             <td>
                 <p>The Principal Investigator of the grant associated with this article</p>
-				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Grant {X}" and "Agency {X}" columns</p>
+				<p>This is a repeated column, where {X} is a number used to identify the column, and to associate it with the related "Grant {X}" and "Agency {X}" columns.</p>
             </td>
         </tr>
         <tr>
             <td><strong>Compliance Processing Output</strong></td>
             <td>
-                <p>This field contains detailed logging and provenance information for the processing run, allowing you to understand on a case-by-case basis how the decisions and analysis were made</p>
+                <p>This field contains detailed logging and provenance information for the processing run, allowing you to understand on a case-by-case basis how the decisions and analysis were made.</p>
             </td>
         </tr>
 
