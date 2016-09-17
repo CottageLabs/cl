@@ -30,6 +30,7 @@ jQuery(document).ready(function() {
 			$('#review').html(msg).show();
 		}
   }
+	
   var transform = function(split,wrap) {
 		results = [];
 		dois = 0;
@@ -105,6 +106,34 @@ jQuery(document).ready(function() {
 			review();
 		}
   }
+	
+	function readBinaryStringFromBlob(blob, callback, ie) {
+		var reader = new FileReader();
+		if(!ie) {
+			reader.addEventListener("loadend", function () {
+				file = reader.result;
+				transform();
+			});
+			try {
+				reader.readAsBinaryString(blob);
+			} catch (err) {
+				readBinaryStringFromBlob(blob, callback, true);
+			}
+		} else {
+			reader.addEventListener("loadend", function () {
+				var binary = "";
+				var bytes = new Uint8Array(reader.result);
+				var length = bytes.byteLength;
+				for (var i = 0; i < length; i++) {
+					binary += String.fromCharCode(bytes[i]);
+				}
+				file = binary;
+				callback();
+			});
+			reader.readAsArrayBuffer(blob);
+		}
+	}
+	
   var prep = function(e) {
 		var f;
 		if( window.FormData === undefined ) {
@@ -113,14 +142,15 @@ jQuery(document).ready(function() {
 			f = e.target.files[0];
 		}
 		filename = f.name;
-		var reader = new FileReader();
+		/*var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
 				file = e.target.result;
 				transform();
 			};
 		})(f);
-		reader.readAsBinaryString(f);
+		reader.readAsBinaryString(f);*/
+		readBinaryStringFromBlob(f,transform);
   }
   $('input[type=file]').on('change', prep);
 
@@ -195,7 +225,7 @@ jQuery(document).ready(function() {
 				url: apibaseurl + '/service/lantern/quota/' + email,
 				method: 'GET',
 				success: function(data) {
-					var info = '<p>You can submit up to ' + data.data.max + ' IDs in a 30 day period.</p>';
+					var info = '<p>You can submit up to ' + (data.data.max + data.data.additional) + ' IDs in a 30 day period.</p>';
 					info += '<p>You have submitted ' + data.data.count + ' IDs in the last 30 days.';
 					if (data.data.allowed) {
 						info += '<p>You can submit up to ' + data.data.available + ' more IDs now.</p>';
