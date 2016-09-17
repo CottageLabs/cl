@@ -1,4 +1,3 @@
-
 html{
     font-size:12px;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
@@ -25,10 +24,6 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
     margin:0 auto 0 auto;
     padding-left:15px;
     padding-right:15px;
-}
-
-.container{
-    font-family: "Raleway";
 }
 
 .nav-up {
@@ -89,6 +84,11 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
     margin-top:-70px;
 }
 
+#maincontent h1 {
+    font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 300%;
+}
+
 @media screen and (min-width: 970px) {
     #intro {
         min-height: 600px;
@@ -142,8 +142,10 @@ a:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-of
 }
 
 #tagline {
-	font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
-/*    font-family:Corben, serif;*/
+    font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 30px;
+    font-weight:bold;
+    text-align:right;
 }
 
 #menu {
@@ -236,4 +238,74 @@ h5, h6 {
 
 #notyet {
     margin-bottom: 100px;
+}
+
+.darkrow {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #252e2b;
+    color: #aaa;
+}
+
+.darkrow h2, .darkrow h3 {
+    color: #aaa;
+    margin-top: 0px;
+}
+
+.darkrow a {
+    color: #aaa;
+}
+
+.lightrow {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.lightrow h2 {
+    margin-top: 0px;
+}
+
+.lastrow {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #bbc4c6;
+    color: #252e2b;
+}
+
+#header {
+    background: #252e2b;
+}
+
+#header h1 {
+    color: #ffffff;
+    font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:bold;
+}
+
+#header a {
+    color: #ffffff;
+    text-decoration:none;
+}
+
+#header a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-cl {
+    border: 1px solid #555;
+    background: #555;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 130%;
+}
+
+.btn-cl:hover {
+    border: 1px solid #555;
+    background: #555;
+    color: #cccccc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 130%;
 }
