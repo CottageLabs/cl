@@ -1,0 +1,144 @@
+<style>
+
+body {
+  font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin-top: 0px;
+}
+
+a {
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #555;
+  text-decoration: none;
+}
+
+.darkrow {
+  padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #252e2b;
+    color: #aaa;
+}
+
+#footer {
+    margin-top: 0px;
+}
+
+.darkrow h2 {
+  color: #aaa;
+  margin-top: 0px;
+}
+
+.introduction {
+  padding-bottom: 20px;
+}
+
+#topstrap {
+  background: #252e2b;
+}
+
+#topstrap h1 {
+  color: #ffffff;
+  font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight:bold;
+}   
+
+#topstrap a {
+  color: #ffffff;
+  text-decoration:none;
+} 
+
+#topstrap a:hover {
+  color: #ffffff; 
+  text-decoration: none;
+} 
+
+#maincontent {
+  padding-top: 30px;
+  margin-top: 0px;
+} 
+
+#maincontent h1 {
+  font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 300%;
+} 
+
+#tagline {
+  font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 200%;
+  font-weight: bold;
+} 
+
+#case_studies {
+  margin-top: 30px;
+} 
+
+#case_studies .container {
+  margin-bottom: 30px;
+}
+
+#postcard {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  margin-top: 50px;
+} 
+
+#components {
+  margin-top: 50px;
+} 
+
+#components .row {
+  margin-bottom: 30px;
+}
+
+</style>
+
+<div id="topstrap">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1><a href="/">Cottage Labs</a></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="maincontent">
+  <div class="introduction">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+        <div style="border-bottom: 1px solid #333; padding-bottom: 30px;">
+                <h1 style="font-size:80px;text-align:justify">DATA PROTECTION POLICY</h1>
+                <p id="tagline" style="font-size: 30px; font-weight:bold; text-align:right">Your data is safe within the applications we write and host.</p>
+        </div>  
+        
+                <div class="row">
+                    <div class="col-lg-11 col-md-10 col-sm-12 col-xs-12">
+
+                      <p style="text-align:justify">All our services are deployed on server machines that are maintained by server provision companies following national and international standards for the delivery of such service. Our current service provider is Digital Ocean, and we use their London and Amsterdam datacentres (within UK and EU data protection law jurisdictions) which are ISO9001:2008, ISO27001, and SSAE16 / ISAE 3402 certified. We also use their Amsterdam datacentre on occasion to reduce risk of failure at one location, and it is ISO9001, ISO27001, and SSAE16 Type II certified.</p>
+
+                      <p style="text-align:justify">Additional offsite backups are also performed to ensure service recoverability. This involves copying all of the data on the servers supporting the service, encrypting it using the AES256 algorithm, and storing it in our Amazon S3 (or Glacier, as applicable) data storage account using their Ireland datacentre which is also ISO27001 certified.</p>
+
+                      <p style="text-align:justify"><strong>Large media repository and media processing applications</strong>: On occasion we might be contracted to maintain systems that process an unusually large amount of binary data (when compared to other existing web applications). Examples we have encountered currently comprise only some digital repository deployments but would extend to any real-time or batch media streaming and processing applications and similar systems. These systems may have requirements which make the usual S3/Glacier archival process impractical, or may have more specific archival and backup requirements. We will undertake a review of any such requirements and commit to ensuring the safety and security of the data in a manner applicable to these use cases. For example, large content pools (video, audio, PDF) could be stored within the same data center where the application servers reside, using Network Attached Storage (or equivalent) in a redundant setup, with regular differential off-site backups. We always work with customers to provide a solution with the right redundancy / cost balance that they need. In these cases we perform an in-depth risk assesment, make risk handling and recovery strategies very clear to the customer, and present them with a range of adequate options to choose from on a sliding data safety / cost scale.</p>
+
+                      <p style="text-align:justify">Command line access to the servers running the service and its supporting index is only allowed to the members of Cottage Labs LLP that have specific server and/or service maintenance responsibilities. Access to servers is restricted via firewall solely to ports required to provide the service and access the machines, those being ports 22, 80 and 443. SSH access via port 22 is also further secured by exclusively accepting only encrypted private key authentication (no password authentication is allowed). Servers are maintained and kept up to date with the latest security releases. Containerised applications using Docker or other container systems will run on secure servers competently provisioned and managed by our current service provider (described above).</p>
+
+                      <p style="text-align:justify">Running services which we have written or performed an in-depth audit of will expose service data only to those users with an authorised service account. Management of such accounts is under the control of customers' staff via the service administration user interface. The administration interface and any other service endpoint that provides access to stored data will always be restricted only to the secure https port 443 rather than the unencrypted http port 80. The https certificate used for these connections is typically a TLS certificate encrypted and renewed every three months to use latest and best encryption standards available. We also ensure a timely fully automated reaction to (unlikely) revocation events.</p>
+
+                    </div>  
+                </div>
+
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
