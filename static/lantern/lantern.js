@@ -1,54 +1,56 @@
-jQuery(document).ready(function() {
-	document.title = 'CL Lantern';
-	$('#footer').hide();
 	
-	var apibaseurl = '//api.cottagelabs.com';
-	
-  var file;
-	var filename = '';
-  var results = [];
-	var dois = 0;
-	var pmcids = 0;
-	var pmids = 0;
-	var titles = 0;
-  var review = function() {
+	var lantern = {
+		apibaseurl: 'https://dev.api.cottagelabs.com',
+		file: undefined,
+		filename: '',
+		results: [],
+		dois: 0,
+		pmcids: 0,
+		pmids: 0,
+		titles: 0,
+		done: false,
+		poll: undefined,
+		hash: undefined
+	};
+
+  lantern.review = function() {
 		//console.log(results);
-    console.log(results.length);
-    console.log(dois);
-    console.log(pmcids);
-    console.log(pmids);
-    console.log(titles);
+    //console.log(results.length);
+    //console.log(dois);
+    //console.log(pmcids);
+    //console.log(pmids);
+    //console.log(titles);
 		if ( $('#review').length ) {
 			var msg = '<p style="color:black;">Thank you. Your file appears to have ';
-			msg += results.length;
+			msg += lantern.results.length;
 			msg += ' record rows, containing<br>';
-			if (dois > 0) msg += dois + ' DOIs<br>';
-			if (pmcids > 0) msg += pmcids + ' PMC IDs<br>';
-			if (pmids > 0) msg += pmids + ' PubMed IDs<br>';
-			if (titles > 0) msg += titles + ' titles<br>';
+			if (lantern.dois > 0) msg += lantern.dois + ' DOIs<br>';
+			if (lantern.pmcids > 0) msg += lantern.pmcids + ' PMC IDs<br>';
+			if (lantern.pmids > 0) msg += lantern.pmids + ' PubMed IDs<br>';
+			if (lantern.titles > 0) msg += lantern.titles + ' titles<br>';
 			msg += 'Please submit for processing now:</p>';
 			$('#review').html(msg).show();
 		}
   }
-  var transform = function(split,wrap) {
-		results = [];
-		dois = 0;
-		pmcids = 0;
-		pmids = 0;
-		titles = 0;
+  
+	lantern.transform = function(split,wrap) {
+		lantern.results = [];
+		lantern.dois = 0;
+		lantern.pmcids = 0;
+		lantern.pmids = 0;
+		lantern.titles = 0;
 		if (split === undefined) split = ',';
 		if (wrap === undefined) wrap = '"';
 		var wrapreplace = new RegExp(wrap,"g");
 		// could try to look for split and wrap chars in file somehow - looking at first char is no good because systems/people sometimes only use the wraps 
 		// when they must, like when surrounding content with a comma, but do not bother at other times
 		
-    file = file.replace(/\r\n/g,'\n'); // switch MS line breaks to unix
-    file = file.replace(/\n{2,}/g,'\n'); // get rid of any blank lines
-    file = file.replace(/\n*$/g,''); // remove newlines at end of file
+    lantern.file = lantern.file.replace(/\r\n/g,'\n'); // switch MS line breaks to unix
+    lantern.file = lantern.file.replace(/\n{2,}/g,'\n'); // get rid of any blank lines
+    lantern.file = lantern.file.replace(/\n*$/g,''); // remove newlines at end of file
 		
 		var lines = [];
-		var fls = file.split('\n');
-		console.log(fls.length);
+		var fls = lantern.file.split('\n');
 		var il = '';
 		for ( var f in fls ) {
 			il += fls[f];
@@ -57,11 +59,10 @@ jQuery(document).ready(function() {
 				il = '';
 			}
 		}
-		console.log(lines.length);
 		if (lines.length > 3001) {
 			$('#errormsg').html('<p style="color:black;">Sorry, the maximum amount of rows you can submit in one file is 3000. Please reduce the size of your file and try again.</p>').show();
-			file = undefined;
-			filename = '';
+			lantern.file = undefined;
+			lantern.filename = '';
 		} else {
 			var headers = [];
 			var hline = lines.shift();
@@ -77,7 +78,6 @@ jQuery(document).ready(function() {
 					hl = '';
 				}
 			}
-			console.log(headers);
 
 			for (var i = 0; i < lines.length; i++) {
 				var obj = {};
@@ -96,46 +96,42 @@ jQuery(document).ready(function() {
 						counter += 1;
 					}
 				}
-				if (obj.doi || obj.DOI) dois += 1;
-				if (obj.pmcid || obj.PMCID) pmcids += 1;
-				if (obj.pmid || obj.PMID) pmids += 1;
-				if (obj.title || obj['Article title'] || obj['Article Title']) titles += 1;
-				if (lengths) results.push(obj);
+				if (obj.doi || obj.DOI) lantern.dois += 1;
+				if (obj.pmcid || obj.PMCID) lantern.pmcids += 1;
+				if (obj.pmid || obj.PMID) lantern.pmids += 1;
+				if (obj.title || obj['Article title'] || obj['Article Title']) lantern.titles += 1;
+				if (lengths) lantern.results.push(obj);
 			}
-			review();
+			lantern.review();
 		}
   }
-  var prep = function(e) {
+	
+  lantern.prep = function(e) {
 		var f;
 		if( window.FormData === undefined ) {
 			f = (e.files || e.dataTransfer.files);
 		} else {
 			f = e.target.files[0];
 		}
-		filename = f.name;
+		lantern.filename = f.name;
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				file = e.target.result;
-				transform();
+				lantern.file = e.target.result;
+				lantern.transform();
 			};
 		})(f);
 		reader.readAsBinaryString(f);
   }
-  $('input[type=file]').on('change', prep);
 
-	var error = function(data) {
+	lantern.error = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
 		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.<br>If you continue to receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:<br>' + JSON.stringify(data) + '</p>').show();
-    console.log(data);
   }
 
-	var done = false;
-	var poll, hash;
-	var polling = function(data) {
-		console.log('poll returned');
-		console.log(data);
+	lantern.polling = function(data) {
+		//console.log('poll returned');
 		$('.uploader').hide();
 		$('#poller').show();
 		var progress = !data.data || !data.data.progress ? 0 : data.data.progress;
@@ -145,96 +141,43 @@ jQuery(document).ready(function() {
 		status += '</p>';
 		if (data.data && data.data.new === true) status += '<p>Your job is new, and is still being loaded into the system. For large jobs this may take a couple of minutes.</p>';
 		status += '<p>Your job is ' + pc + '% complete.</p>';
-		status += '<p><a href="' + apibaseurl + '/service/lantern/' + hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
-		status += '<p style="text-align:center;padding-top:10px;"><a href="' + apibaseurl + '/service/lantern/' + hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
-		if (data.data.progress !== 100) setTimeout(poll,10000);
+		status += '<p><a href="' + lantern.apibaseurl + '/service/lantern/' + lantern.hash + '/results?format=csv" class="btn btn-default btn-block">Download your results</a></p>';
+		status += '<p style="text-align:center;padding-top:10px;"><a href="' + lantern.apibaseurl + '/service/lantern/' + lantern.hash + '/original" style="font-weight:normal;">or download your original spreadsheet</a></p>';
+		if (data.data.progress !== 100) setTimeout(lantern.poll,10000);
 		$('#pollinfo').html(status);
 	}
-	poll = function(hash) {
+	
+	lantern.poll = function(hash) {
 		if (hash === undefined) {
-			hash = window.location.hash.replace('#','');
+			lantern.hash = window.location.hash.replace('#','');
+			hash = lantern.hash
 		}
 		if ( hash ) {
 			$.ajax({
-				url: apibaseurl + '/service/lantern/' + hash + '/progress',
+				url: lantern.apibaseurl + '/service/lantern/' + hash + '/progress?apikey='+clogin.apikey,
 				method: 'GET',
-				success: polling,
-				error: error
+				success: lantern.polling,
+				error: lantern.error
 			});		
 		}
 	}
-	
-	if (window.location.hash) {
-		setTimeout(function() {$('.uploader').hide();},200);
-		$('#poller').show();
-		$('#pollinfo').html('<p>One moment please, retrieving job status...</p>');
-		hash = window.location.hash.replace('#','');
-		console.log(hash);
-		poll(hash);
-	} else {
-		try {
-			var logged = LoginState.get("clogins");
-			var email = logged.email;
-			$.ajax({
-				url: apibaseurl + '/service/lantern/jobs/' + email,
-				method: 'GET',
-				success: function(data) {
-					if (data.data.total) {
-						var info = '<p>Your jobs:</p>';
-						for ( var j in data.data.jobs ) {
-							var job = data.data.jobs[j];
-							info += '<a class="btn btn-default btn-block" target="_blank" href="//lantern.cottagelabs.com/#' + job._id + '">';
-							info += job.name && job.name.length > 0 ? job.name : '#' + job._id;
-							info += '</a>';
-						}
-						$('#previousjobs').html(info);
-					}
-				}
-			});
-			$.ajax({
-				url: apibaseurl + '/service/lantern/quota/' + email,
-				method: 'GET',
-				success: function(data) {
-					var info = '<p>You can submit up to ' + data.data.max + ' IDs in a 30 day period.</p>';
-					info += '<p>You have submitted ' + data.data.count + ' IDs in the last 30 days.';
-					if (data.data.allowed) {
-						info += '<p>You can submit up to ' + data.data.available + ' more IDs now.</p>';
-					} else {
-						info += "<p>Sorry, your quota is currently exceeded - you can't submit more IDs at the moment. Please check back tomorrow.</p>";
-					}
-					if ( data.data.max === 100) {
-						info += '<p><a class="btn btn-primary btn-block btn-lg" id="showpremium" href="#premium">Increase your quota<br>Learn more about Lantern Premium</a></p>';
-					}
-					$('#quotainfo').html(info);
-					$('#showpremium').bind('click',function(e) {
-						$('#premium').show();
-					});
-				}
-			});
-		} catch(err) {}
-	}
-	
-  var success = function(data) {
+		
+  lantern.success = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-    console.log(data);
+    //console.log(data);
 		try {
 			window.history.pushState("", "poll", '#' + data.data.job);
 		} catch (err) {}
-		hash = data.data.job;
-		poll(data.data.job);
+		lantern.hash = data.data.job;
+		lantern.poll(data.data.job);
   }
-  var submit = function(e) {
+  
+	lantern.submit = function(e) {
 		$('#errormsg').html("").hide();
 		e.preventDefault();
-		var email;
-		try {
-			var logged = LoginState.get("clogins");
-			email = logged.email;
-		} catch(err) {}
-		if (!email) email = $('#email').val();
-		if (!email || !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
-			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record, and if not logged in an email address, in order to submit. Please provide more information and try again.</p>').show();
+		if ( !(( $('#ident').length && $('#ident').val().length ) || lantern.filename) ) {
+			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record in order to submit. Please provide more information and try again.</p>').show();
 		} else {
 			$('#lanternmulti').hide();
 			$('#submitting').show();
@@ -248,20 +191,74 @@ jQuery(document).ready(function() {
 				} else {
 					pl.pmid = vl;
 				}
-				results = [pl];
+				lantern.results = [pl];
 			}
-			var payload = {list:results,name:filename,email:email};
+			var payload = {list:lantern.results,name:lantern.filename};
+			try { payload.email = $('#email').val(); } catch(err) {} // wellcome
 			$.ajax({
-				url: apibaseurl + '/service/lantern',
+				url: lantern.apibaseurl + '/service/lantern?apikey='+clogin.apikey,
 				method: 'POST',
 				data: JSON.stringify(payload),
-				dataType: 'JSON',
+				dataType: 'JSON', // TODO sort issue here, the POST invalidates preflight without jsonp but with jsonp we don't get back a jsonp object
 				contentType: "application/json; charset=utf-8",
-				success: success,
-				error: error
+				success: lantern.success,
+				error: lantern.error
 			});
 		}
   }
-  $('#lanternmulti').bind('click',submit);
   
-});
+	lantern.startup = function() {
+	  $('input[type=file]').on('change', lantern.prep);
+	  $('#lanternmulti').bind('click',lantern.submit);
+		document.title = 'CL Lantern';
+		$('#footer').hide();
+		if (window.location.hash) {
+			setTimeout(function() {$('.uploader').hide();},200);
+			$('#poller').show();
+			$('#pollinfo').html('<p>One moment please, retrieving job status...</p>');
+			lantern.hash = window.location.hash.replace('#','');
+			lantern.poll(lantern.hash);
+		} else {
+			try {
+				$.ajax({
+					url: lantern.apibaseurl + '/service/lantern/jobs/' + clogin.user.email + '?apikey='+clogin.apikey,
+					method: 'GET',
+					success: function(data) {
+						if (data.data.total) {
+							var info = '<p>Your jobs:</p>';
+							for ( var j in data.data.jobs ) {
+								var job = data.data.jobs[j];
+								info += '<a class="btn btn-default btn-block" target="_blank" href="//lantern.cottagelabs.com/#' + job._id + '">';
+								info += job.name && job.name.length > 0 ? job.name : '#' + job._id;
+								var date = new Date(job.createdAt).toUTCString();
+								info += ' on ' + date.substring(0,date.length-7);
+								info += '</a>';
+							}
+							$('#previousjobs').html(info);
+						}
+					}
+				});
+				$.ajax({
+					url: lantern.apibaseurl + '/service/lantern/quota/' + clogin.user.email + '?apikey='+clogin.apikey,
+					method: 'GET',
+					success: function(data) {
+						var info = '<p>You can submit up to ' + data.data.max + ' IDs in a 30 day period.</p>';
+						info += '<p>You have submitted ' + data.data.count + ' IDs in the last 30 days.';
+						if (data.data.allowed) {
+							info += '<p>You can submit up to ' + data.data.available + ' more IDs now.</p>';
+						} else {
+							info += "<p>Sorry, your quota is currently exceeded - you can't submit more IDs at the moment. Please check back tomorrow.</p>";
+						}
+						if ( data.data.max === 100) {
+							info += '<p><a class="btn btn-primary btn-block btn-lg" id="showpremium" href="#premium">Increase your quota<br>Learn more about Lantern Premium</a></p>';
+						}
+						info += '<p>If you wish to use the <a href="/api">API</a> to submit jobs, your API key is ' + clogin.apikey + '</p>';
+						$('#quotainfo').html(info);
+						$('#showpremium').bind('click',function(e) {
+							$('#premium').show();
+						});
+					}
+				});
+			} catch(err) {}
+		}
+	}

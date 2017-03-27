@@ -1,8 +1,6 @@
 jQuery(document).ready(function() {
-	document.title = 'Wellcome compliance tool';
-	$('#footer').hide();
 	
-	var apibaseurl = '//api.cottagelabs.com';
+	var apibaseurl = '//dev.api.cottagelabs.com';
 	
   var file;
 	var filename = '';
@@ -11,13 +9,14 @@ jQuery(document).ready(function() {
 	var pmcids = 0;
 	var pmids = 0;
 	var titles = 0;
+	
   var review = function() {
 		//console.log(results);
-    console.log(results.length);
-    console.log(dois);
-    console.log(pmcids);
-    console.log(pmids);
-    console.log(titles);
+    //console.log(results.length);
+    //console.log(dois);
+    //console.log(pmcids);
+    //console.log(pmids);
+    //console.log(titles);
 		if ( $('#review').length ) {
 			var msg = '<p style="color:black;">Thank you. Your file appears to have ';
 			msg += results.length;
@@ -30,6 +29,7 @@ jQuery(document).ready(function() {
 			$('#review').html(msg).show();
 		}
   }
+	
   var transform = function(split,wrap) {
 		results = [];
 		dois = 0;
@@ -48,7 +48,6 @@ jQuery(document).ready(function() {
 		
 		var lines = [];
 		var fls = file.split('\n');
-		console.log(fls.length);
 		var il = '';
 		for ( var f in fls ) {
 			il += fls[f];
@@ -57,7 +56,6 @@ jQuery(document).ready(function() {
 				il = '';
 			}
 		}
-		console.log(lines.length);
 		if (lines.length > 3001) {
 			$('#errormsg').html('<p style="color:black;">Sorry, the maximum amount of rows you can submit in one file is 3000. Please reduce the size of your file and try again.</p>').show();
 			file = undefined;
@@ -77,7 +75,6 @@ jQuery(document).ready(function() {
 					hl = '';
 				}
 			}
-			console.log(headers);
 
 			for (var i = 0; i < lines.length; i++) {
 				var obj = {};
@@ -99,12 +96,13 @@ jQuery(document).ready(function() {
 				if (obj.doi || obj.DOI) dois += 1;
 				if (obj.pmcid || obj.PMCID) pmcids += 1;
 				if (obj.pmid || obj.PMID) pmids += 1;
-				if (obj.title || obj['Article title']) titles += 1;
+				if (obj.title || obj['Article title'] || obj['Article Title']) titles += 1;
 				if (lengths) results.push(obj);
 			}
 			review();
 		}
   }
+	
   var prep = function(e) {
 		var f;
 		if( window.FormData === undefined ) {
@@ -122,20 +120,17 @@ jQuery(document).ready(function() {
 		})(f);
 		reader.readAsBinaryString(f);
   }
-  $('input[type=file]').on('change', prep);
 
 	var error = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.</p><p>If you continue go receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:</p><p>' + JSON.stringify(data) + '</p>').show();
-    console.log(data);
+		$('#errormsg').html('<p style="color:black;">Sorry, there has been an error with your submission. Please try again.<br>If you continue go receive an error, please contact us@cottagelabs.com attaching a copy of your file and with the following error information:<br>' + JSON.stringify(data) + '</p>').show();
   }
 
 	var done = false;
 	var poll, hash;
 	var polling = function(data) {
-		console.log('poll returned');
-		console.log(data);
+		//console.log('poll returned');
 		$('.uploader').hide();
 		$('#poller').show();
 		var progress = !data.data || !data.data.progress ? 0 : data.data.progress;
@@ -150,13 +145,14 @@ jQuery(document).ready(function() {
 		if (data.data.progress !== 100) setTimeout(poll,10000);
 		$('#pollinfo').html(status);
 	}
+	
 	poll = function(hash) {
 		if (hash === undefined) {
 			hash = window.location.hash.replace('#','');
 		}
 		if ( hash ) {
 			$.ajax({
-				url: apibaseurl + '/service/lantern/' + hash + '/progress',
+				url: apibaseurl + '/service/lantern/' + hash + '/progress?apikey='+clogin.apikey,
 				method: 'GET',
 				success: polling,
 				error: error
@@ -164,40 +160,22 @@ jQuery(document).ready(function() {
 		}
 	}
 	
-	if (window.location.hash) {
-		setTimeout(function() {$('.uploader').hide();},200);
-		$('#poller').show();
-		$('#pollinfo').html('<p>One moment please, retrieving job status...</p>');
-		hash = window.location.hash.replace('#','');
-		console.log(hash);
-		poll(hash);
-	}
-	
   var success = function(data) {
 		$('#lanternmulti').show();
 		$('#submitting').hide();
-    console.log(data);
+    //console.log(data);
 		try {
 			window.history.pushState("", "poll", '#' + data.data.job);
 		} catch (err) {}
 		hash = data.data.job;
 		poll(data.data.job);
   }
+	
   var submit = function(e) {
 		$('#errormsg').html("").hide();
 		e.preventDefault();
-		var email;
-        // REVIEW LATER: this seems to be broken when used from
-        // wellcome.test.cottagelabs.com , but that's sort of OK since
-        // this is the Wellcome-specific UI which has no accounts to
-        // speak of anyway.
-		//try {
-		//	var logged = LoginState.get("clogins");
-		//	email = logged.email;
-		//} catch(err) {}
-		if (!email) email = $('#email').val();
-		if (!email || !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
-			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record, and if not logged in an email address, in order to submit. Please provide more information and try again.</p>').show();
+		if ( !(( $('#ident').length && $('#ident').val().length ) || filename) ) {
+			$('#errormsg').html('<p style="color:black;">You must provide at least an ID or a file with at least one record in order to submit. Please provide more information and try again.</p>').show();
 		} else {
 			$('#lanternmulti').hide();
 			$('#submitting').show();
@@ -213,7 +191,8 @@ jQuery(document).ready(function() {
 				}
 				results = [pl];
 			}
-			var payload = {list:results,name:filename,email:email};
+			var payload = {list:results,name:filename};
+			try { payload.email = $('#email').val(); } catch(err) {}
 			$.ajax({
 				url: apibaseurl + '/service/lantern?wellcome=true',
 				method: 'POST',
@@ -225,6 +204,21 @@ jQuery(document).ready(function() {
 			});
 		}
   }
-  $('#lanternmulti').bind('click',submit);
-  
+
+	var startup = function() {
+	  $('input[type=file]').on('change', prep);
+	  $('#lanternmulti').bind('click',submit);
+		document.title = 'Wellcome compliance tool';
+		$('#footer').hide();
+		if (window.location.hash) {
+			setTimeout(function() {$('.uploader').hide();},200);
+			$('#poller').show();
+			$('#pollinfo').html('<p>One moment please, retrieving job status...</p>');
+			hash = window.location.hash.replace('#','');
+			console.log(hash);
+			poll(hash);
+		}
+	}
+	
+
 });
