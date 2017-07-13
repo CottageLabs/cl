@@ -182,27 +182,20 @@ body {
                         publisher's re-use licence, whether it is in a repository (and which ones), its status in
                         <a href="http://europepmc.org">EuropePMC</a>, embargo and self-archiving policies, as well as grant and P.I. information.</p>
 
-                    <p>It's free to sign up, and you can check up to 100 articles per month at no cost.  You can
+                    <p>Use it for free for individual articles, or sign-up to upload spreadsheets and generate reports.  You can
                         <a href="https://lantern.cottagelabs.com">try it now</a> or <a href="mailto:lantern@cottagelabs.com?subject=More information about Lantern">contact us</a>
                         if you want more information.</p>
 
                     <p style="text-align:center;"><a class="btn btn-cl" href="https://lantern.cottagelabs.com">Go To Lantern <i class="glyphicon glyphicon-circle-arrow-right"></i></a></p>
 
-                    <!--
-                    <p style="text-align:center;">
-                        <a class="btn btn-cl" href="#ways">Ways to use Lantern <i class="glyphicon glyphicon-circle-arrow-down"></i></a>
-                        <a class="btn btn-cl" href="#start">Getting Started <i class="glyphicon glyphicon-circle-arrow-down"></i></a>
-                        <a class="btn btn-cl" href="#premium">Upgrade to Premium <i class="glyphicon glyphicon-circle-arrow-down"></i></a>
-                    </p> -->
 
                     <div id="readmore" style="display: none">
                         <div class="row" style="padding-top: 20px;"><div class="col-md-6">
                             <p>Using Lantern is incredibly easy:</p>
-                            <p><strong>Step 1</strong>: Put your DOIs and PubMed IDs in a spreadsheet</p>
-                            <p><strong>Step 2</strong>: Upload your spreadsheet to Lantern</p>
-                            <p><strong>Step 3</strong>: Put your feed up, and wait for us to email you</p>
-                            <p><strong>Step 4</strong>: Download the results</p>
-                            <p><strong>Step 5</strong>: Discover how compliant your authors are!</p>
+                            <p><strong>Step 1</strong>: Make a list of your identifiers. This can be as a comma-separated list, or as a CSV.</p>
+                            <p><strong>Step 2</strong>: Copy your identifier list into the input box or use the "upload a file" link on our <a href="/">front page</a>.</p>
+                            <p><strong>Step 3</strong>: Take a break, put your feet up and let us do all the work.</p>
+                            <p><strong>Step 4</strong>: Go to your finished report page. Here you can view a summary of the results, and download the full report as a CSV</p>
                         </div>
 
                         <div class="col-md-6">
@@ -210,10 +203,11 @@ body {
                             <ul>
                                 <li>The publsiher's re-use licence</li>
                                 <li>Is it in a repository (and which ones)?</li>
-                                <li>EuropePMC status</li>
+                                <li>Information from EuropePMC</li>
                                 <li>Embargo and Self-Archiving policies</li>
                                 <li>Grant and PI information</li>
                                 <li>Some basic bibliographic data</li>
+                                <li>and more ...</li>
                             </ul>
                             <p>Find out more with our <a href="https://lantern.cottagelabs.com/docs">full documentation</a></p>
                         </div></div>
@@ -233,42 +227,17 @@ body {
             <div class="row">
                 <div class="col-md-4">
                     <h2>Some of our users</h2>
-                    <p>You can read their stories below</p>
                 </div>
                 <div class="col-md-8">
                     <a href="http://brunel.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/brunel.png" alt="Brunel University" title="Brunel University"></a>
-                    <a href="http://jisc.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/jisc.png" alt="Jisc" title="Jisc"></a>
                     <a href="http://cam.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/cambridge.jpg" alt="University of Cambridge" title="University of Cambridge"></a>
                     <a href="http://wellcome.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/wellcome2.jpg" alt="Wellcome Trust" title="Wellcome Trust"></a>
-                    <a href="http://www.wiley.com/"><img class="logos img img-thumbnail" src="/static/logos/wiley-black.png" alt="Wiley" title="Wiley"></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="lightrow">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <img class="img img-thumbnail" src="/static/lantern/monitor_report.png">
-                </div>
-                <div class="col-md-6">
-                    <h2>Jisc Monitor UK</h2>
-                    <p>Monitor UK is a service provided by Jisc to UK education and research for aggregating and analysing Open Access publication and its associated costs.  Institutions
-                    contribute data either directly by spreadsheet or API, or using the sister service Monitor Local.  Graphical reports are then provided for the stakeholders
-                    in the sector.</p>
-
-                    <p>The reports rely on the presence of compliance information which may not always be present in the data provided by organisations.  Monitor UK can
-                    connect to the organisation's Lantern account directly and enhance their records in the aggregation, improving the quality of the reports.  This enables, for example, reporting
-                    on the distribution of spend between Hybrid and Pure OA publishers, which is of interest to many funders.</p>
-
-                    <p>In the long term, this integration with Lantern will ensure higher quality reporting for the sector, and the opportunity for improved strategic decision making.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="darkrow" style="padding-bottom: 30px;">
+    <div class="lightrow" style="padding-bottom: 30px;">
         <div class="container">
             <div class="content">
                 <div class="row">
@@ -278,215 +247,123 @@ body {
                     </div>
                 </div>
 
-
-                <div id="part-1">
-                    <div class="row">
-                        <div class="col-md-11">
-                            <a name="spreadsheet" data-trigger="part-1-body"></a>
-                            <strong style="font-size: 200%">By Uploading a Spreadsheet</strong>
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5>By entering identifiers into our web form</h5>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="web_form" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
                         </div>
-                        <div class="col-md-1"><a href="#" class="expander" data-expand="part-1-body" data-state="closed">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </a></div>
+                    </div>
+
+                    <div id="web_form" style="display:none">
+                        <p>If you have a small number of identifiers to check, you can just type or paste them into the web form on the <a href="https://lantern.cottagelabs.com">front page</a>.</p>
+
+                        <p>Once you've submitted the form, we'll start working on the
+                            report straight away.  We'll take you to the report page on our site, and you can watch the progress live, and we'll also send you an email with a link to the page.</p>
+
+                        <p>When it's finished
+                            we'll send you another email.  If you've only uploaded a few identifiers, it won't take very long!</p>
+
                     </div>
                 </div>
 
-                <div id="part-1-body" style="display:none">
-                    <div class="row"><div class="col-md-12">
-                        <p>If you want to upload spreadsheets from your computer, you should use our file upload option on the <a href="https://lantern.cottagelabs.com">front page</a>.  Just export a CSV
-                        from your favourite spreadsheet program, such as Excel, and then upload it to be processed.</p>
-
-                        <p>The content of your CSVs will need to look something like this, with up to 3 columns, one for each article identifier type we accept:</p>
-
-                        <table class="examplecsv">
-                            <thead>
-                            <tr>
-                                <td>DOI</td>
-                                <td>PMID</td>
-                                <td>PMCID</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>10.abc/123</td>
-                                <td>78543277</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>10.jkl/8999/1</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>78024443</td>
-                                <td>PMC75220165</td>
-                            </tr>
-                            <tr>
-                                <td>...</td>
-                                <td>...</td>
-                                <td>...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <p>Once you've uploaded it, you'll get an email with a link for you to check our process with.  Then when we're done (which could take a few hours
-                        if you've given us a lot of rows) we'll email you with a link to download the results.  Full details of the content of the
-                        results can be found in our <a href="https://lantern.cottagelabs.com/docs">documentation</a>.</p>
-                    </div></div>
-                </div>
-
-                <div id="part-2">
-                    <div class="row">
-                        <div class="col-md-11">
-                            <a name="api" data-trigger="part-2-body"></a>
-                            <strong style="font-size: 200%">Via our API</strong>
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5>By Uploading a Spreadsheet</h5>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="csv_upload" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
                         </div>
-                        <div class="col-md-1"><a href="#" class="expander" data-expand="part-2-body" data-state="closed">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </a></div>
+                    </div>
+
+                    <div id="csv_upload" style="display: none">
+                        <p>If you want to upload spreadsheets from your computer, you can use our file upload option on the <a href="https://lantern.cottagelabs.com">front page</a> (when you are logged in).</p>
+
+                        <p>Just export a CSV from your favourite spreadsheet program, such as Excel, and then upload it to be processed.</p>
+
+                        <p>The content of your CSVs will need to look something like this, with up to 3 columns, one for each identifier type we accept:</p>
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <table class="examplecsv">
+                                    <thead>
+                                    <tr>
+                                        <td><strong>DOI</strong></td>
+                                        <td><strong>PMID</strong></td>
+                                        <td><strong>PMCID</strong></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>10.abc/123</td>
+                                        <td>78543277</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10.jkl/8999/1</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>78024443</td>
+                                        <td>PMC75220165</td>
+                                    </tr>
+                                    <tr>
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td>...</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p>Once you've uploaded it, you'll get an email with a link for you to check our process with. Then when we're done
+                            (which could take a few hours if you've given us a lot of rows) we'll email you with a link to download the results.</p>
+
+                        <p>Full details of the content of the results can be found in our <a href="https://lantern.cottagelabs.com/docs">documentation</a>.</p>
                     </div>
                 </div>
 
-                <div id="part-2-body" style="display:none">
-                    <div class="row"><div class="col-md-12">
-                        <p>For organisations who want to see Lantern integrated into existing systems, such as your repository, CRIS or other publications or compliance
-                        management system, we offer a fully-featured API option.  With it you are able to:</p>
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5>Via our API</h5>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="api" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="api" style="display:none">
+
+                        <p>For organisations who want to see Lantern integrated into existing systems, such as your repository, CRIS or other publications or
+                            compliance management system, we offer a fully-featured API option. With it you are able to:</p>
 
                         <ul>
                             <li>Send batches of article identifiers for processing</li>
                             <li>Monitor existing jobs that you created</li>
                             <li>Download partial or complete result sets</li>
-                            <li>Check information about your user account, such as your quota</li>
+                            <li>Check information about your user account, such as your credit amount</li>
+                            <li>Get more granular access to the data that Lantern gathers than the spreadsheet upload does. Full information about it is available in our API documentation</li>
                         </ul>
 
-                        <p>The API also gives you more granular access to the data that Lantern gathers than the spreadsheet upload does.  Full information about it is
-                        available in our <a href="https://lantern.cottagelabs.com/api">API documentation</a></p>
-
-                    </div></div>
-                </div>
-
-                <div id="part-3">
-                    <div class="row">
-                        <div class="col-md-11">
-                            <a name="monitoruk"  data-trigger="part-3-body"></a>
-                            <strong style="font-size: 200%">Using Monitor UK</strong>
-                        </div>
-                        <div class="col-md-1"><a href="#" class="expander" data-expand="part-3-body" data-state="closed">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </a></div>
+                        <p>Access to the API is provided with our organisational account, which you can read more about <a href="https://lantern.cottagelabs.com/organisations">here</a></p>
                     </div>
                 </div>
 
-                <div id="part-3-body" style="display:none">
-                    <div class="row"><div class="col-md-12">
-                        <p>Monitor UK is a service provided by Jisc to UK education and research for aggregating and analysing Open Access publication and its associated costs.</p>
-
-                        <p>If you represent a UK educational organisation or funder, you may be eligible to use Monitor UK, and to sign up to Lantern through your Jisc membership.</p>
-
-                        <p>If you are already using Monitor UK, simply add your Lantern user credentials to your account page there. Monitor UK will then begin sending us any
-                        articles that are missing key information, gathering the results back and automatically enhancing your records.  This will allow Jisc to improve the quality of the reporting
-                        it provides to you and the sector.</p>
-
-                        <p>If you are not yet using Monitor UK - but you want to - you can get in touch with <a href="https://www.jisc-collections.ac.uk/">Jisc Collections</a> directly,
-                            or <a href="mailto:lantern@cottagelabs.com?subject=Query about Monitor UK and Lantern">contact us</a> and we'll make sure you get to speak to the right person.</p>
-                    </div></div>
-                </div>
-
-                <div id="part-4">
-                    <div class="row">
-                        <div class="col-md-11">
-                            <a name="monitorlocal"  data-trigger="part-4-body"></a>
-                            <strong style="font-size: 200%">Using Monitor Local</strong>
-                        </div>
-                        <div class="col-md-1"><a href="#" class="expander" data-expand="part-4-body" data-state="closed">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </a></div>
-                    </div>
-                </div>
-
-                <div id="part-4-body" style="display:none">
-                    <div class="row"><div class="col-md-12">
-                        <p>Monitor Local is a service provided by Jisc to UK education and research for managing an organisations Open Access publications and associated costs.</p>
-
-                        <p>If you represent a UK educational organisation or funder, you may be eligible to use Monitor Local, and to sign up to Lantern through your Jisc membership.</p>
-
-                        <p>Monitor Local is due for release towards the end of 2016, and we'll provide more details here when that happens.</p>
-
-                    </div></div>
-                </div>
 
 
-            </div>
-        </div>
-    </div>
-
-    <div class="lightrow">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <a name="howdoesitwork"></a>
-                    <h2>How does it work?</h2>
-                    <p>Lantern takes a list of article identifiers (DOI, PMID and PMCID are supported), via a CSV upload,
-                        submission via the API, or from an integrated third-party such as Monitor UK and Monitor Local.</p>
-
-                    <p>Each identifier supplied is used to query multiple websites and data sources in order to locate
-                        information relevant to the item's Open Access status; for example, the re-use licence, whether
-                        it has been archived in an open repository, what embargo policies the journal has in place, etc.</p>
-
-                    <p>Once all identifiers have been queried, the results can be retrieved as a CSV, via the API, or
-                        imported back into an integrated third-party.</p>
-
-                    <h3>Lantern aggregates data from a variety of sources</h3>
-                    <table class="darktable">
-                        <thead>
-                        <tr>
-                            <td><strong class="heading">Where</strong></td>
-                            <td><strong class="heading">What you get from it</strong></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><a href="https://core.ac.uk/">CORE</a></td>
-                            <td>Core aggregates items from digital repositories all over the world, so here we can find out whether your items are archived somewhere.</td>
-                        <tr>
-                        <tr>
-                            <td><a href="http://crossref.org/">CrossRef</a></td>
-                            <td>CrossRef is a canonical source of bibliographic data, provided directly by publishers, and holds key metadata and in some cases rights
-                                information.</td>
-                        <tr>
-                        <tr>
-                            <td style="text-align: left">Direct from the publisher's website</td>
-                            <td>Where information is not available in the usual databases, we go direct to the article on the publisher's website to extract as much information as possible.</td>
-                        <tr>
-                        <tr>
-                            <td><a href="http://doaj.org">DOAJ</a></td>
-                            <td>DOAJ is the premier registry of Pure OA journals in the world, so we can use it to learn about the journals in which your researchers are publishing.</td>
-                        <tr>
-                        <tr>
-                            <td><a href="http://europepmc.org/">Europe PMC</a></td>
-                            <td>EuropePMC aggregates open and closed access bibliographic metadata for the life-sciences, and holds full-texts for OA publications that we can
-                                mine for useful information, especially re-use licences.</td>
-                        <tr>
-                        <tr>
-                            <td><a href="https://europepmc.org/GristAPI">Grist</a></td>
-                            <td>Grist, operated by EuropePMC, aggregates information about grants, P.I.s and publications associated with life-sciences funders.</td>
-                        <tr>
-                        <tr>
-                            <td><a href="http://www.sherpa.ac.uk/romeo">Sherpa Romeo</a></td>
-                            <td>Sherpa Romeo is a key resource for information on journal embargo and self-archiving policies.</td>
-                        <tr>
-                        </tbody>
-                    </table>
-
-                    <p>In addition to these external services, we are constantly looking for new sources that
-                        could enhance your results, either through increased confidence in existing fields or the addition of new ones.
-                        We also monitor existing services for any new data they publish which we can take advantage of.</p>
-
-                    <p>As Lantern is a labour-saving device which pulls information from a variety of sources for you, just remember that some of these sources
-                    assert re-use rights over the data we gather.  We strive to only include sources with permissive terms, and you should check our <a href="https://lantern.cottagelabs.com/sources">sources documentation</a>
-                    for more information.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -495,37 +372,66 @@ body {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Ok, so how do I get started?</h2>
-                    <h3>Do you already have a Lantern account?</h3>
+                    <a name="howdoesitwork"></a>
+                    <h2>How does it work?</h2>
+                    <p>Lantern takes a list of article identifiers (DOI, PMID and PMCID are supported), via a web form, a CSV upload, or through our API.</p>
 
-                    <table class="lighttable">
+                    <p>Each identifier is used to query multiple websites and data sources to locate information relevant to the item's Open Access status;
+                        for example, the re-use licence, whether it has been archived in an open repository, what embargo policies the journal has in place, etc.</p>
+
+                    <p>Once all identifiers have been queried, the results can be retrieved via our website, as a CSV, or via the API.</p>
+
+                    <p>Lantern aggregates data from a variety of sources:</p>
+
+                    <table class="infotable">
+                        <thead>
+                        <tr>
+                            <th>
+                                Where
+                            </th>
+                            <th>
+                                What you get from it
+                            </th>
+                        </tr>
+                        </thead>
                         <tbody>
                         <tr>
-                            <td>No!</td>
-                            <td>Just <a href="https://lantern.cottagelabs.com">head on over and sign-up</a>.  It's free and easy, and you can send us 100 articles per month.  If that doesn't
-                                sound like enough, you can upgrade to <a href="#premium">Premium</a> straight away.</td>
+                            <td><strong>CORE</strong></td>
+                            <td>Core aggregates items from digital repositories all over the world, so here we can find out whether your items are archived somewhere.</td>
+                        </tr>
                         <tr>
+                            <td><strong>CrossRef</strong></td>
+                            <td>CrossRef is a canonical source of bibliographic data, provided directly by publishers, and holds key metadata and, in some cases, rights information.</td>
+                        </tr>
                         <tr>
-                            <td style="white-space: nowrap">Yes!<br>I have a free account.</td>
-                            <td>You can <a href="https://lantern.cottagelabs.com">head over</a> and continue using your free allowance.  If your free allowance isn't enough, you can upgrade to <a href="#premium">Premium</a>.</td>
+                            <td><strong>Direct from the publisher's website</strong></td>
+                            <td>Where information is not available in the usual databases, we go direct to the article on the publisher's website to extract as much information as possible.</td>
+                        </tr>
                         <tr>
+                            <td><strong>DOAJ</strong></td>
+                            <td>DOAJ is the premier registry of Pure OA journals in the world, so we can use it to learn about the journals in which your researchers are publishing.</td>
+                        </tr>
                         <tr>
-                            <td style="white-space: nowrap">Yes!<br>I have a Premium Account.</td>
-                            <td><a href="https://lantern.cottagelabs.com/">Carry on using Lantern</a>, enjoying a huge monthly quota and email support.  If your allowance still isn't big enough, or you have a backlog
-                                of articles you'd like to process, <a href="mailto:lantern@cottagelabs.com?subject=Question about Lantern allowance and backlog">contact us</a> and we can help.</td>
+                            <td><strong>Europe PMC</strong></td>
+                            <td>EuropePMC aggregates open and closed access bibliographic metadata for the life-sciences, and holds full-texts for OA publications that we can mine for useful information, especially re-use licences.</td>
+                        </tr>
                         <tr>
+                            <td><strong>Grist</strong></td>
+                            <td>Grist, operated by EuropePMC, aggregates information about grants, P.I.s and publications associated with life-sciences funders.</td>
+                        </tr>
                         <tr>
-                            <td style="white-space: nowrap">I don't know!</td>
-                            <td>No problem - just <a href="https://lantern.cottagelabs.com">head on over and sign-up</a>. If you already have an account we'll log you back in to it, otherwise we'll make you a new one.</td>
-                        <tr>
+                            <td><strong>Sherpa Romeo</strong></td>
+                            <td>Sherpa Romeo is a key resource for information on journal embargo and self-archiving policies.</td>
+                        </tr>
                         </tbody>
                     </table>
 
-                    <h3>Are you a Jisc member?</h3>
-                    <p>If you are a UK educational organisation or funder, you may qualify to register for a Premium Account via <a href="https://www.jisc-collections.ac.uk/">Jisc Collections</a>.  You can contact them
-                    directly, or <a href="mailto:lantern@cottagelabs.com?subject=Upgrading to Premium as a Jisc Member">drop us an email</a> and we'll put you in touch with the right person</a>.</p>
+                    <p>In addition to these, we are constantly looking for new sources that could enhance your results.  We also monitor existing services
+                        for any new data they publish which we can take advantage of.</p>
 
-                    <p>Even if you are a Jisc member, you don't have to wait to get a free account, you can <a href="https://lantern.cottagelabs.com/">sign up straight away</a>, and we can upgrade you to Premium later.</p>
+                    <p>As Lantern is a labour-saving device which pulls information from a variety of sources, just remember that some
+                        of these sources assert re-use rights over the data we gather. We strive to only include sources with permissive terms,
+                        and you should check our <a href="https://lantern.cottagelabs.com/sources">sources documentation</a> for more information.</p>
                 </div>
             </div>
         </div>
@@ -535,21 +441,33 @@ body {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <a name="premium"></a>
-                    <h2>Get a Premium Account</h2>
+                    <h2>Ok, so how do I get started?</h2>
+                    <h3>Do you already have a Lantern account?</h3>
 
-                    <p>Premium Accounts give you the capacity you require to fully embed Lantern into your organisation's workflows. By upgrading you will get:</p>
+                    <table class="infotable">
+                        <tbody>
+                        <tr>
+                            <td width="30%"><strong>No!</strong></td>
+                            <td>That's ok, you can still use Lantern without an account.  You can enter single identifiers via <a href="https://lantern.cottagelabs.com">our web form</a>, and retrieve the results via our website.  If you want more features, just sign-up. You'll get a load of other features for free
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Yes!</strong></td>
+                            <td>You can continue using the free features of Lantern! Take advantage of the ability to upload spreadsheets of multiple identifiers.  If you have any special requests, such as support with very large backlog jobs, just <a href="https://lantern.cottagelabs.com/feedback">contact us</a> and we can help.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>I don't know!</strong></td>
+                            <td>No problem - just head on over to the <a href="https://lantern.cottagelabs.com">front page</a> and try it out.  If you like it, sign-up to get more features. If you already have an account we'll log you back in to it, otherwise we'll make you a new one.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                    <ul>
-                        <li>Ability to run 5,000 identifiers per month through the system via the UI, API or any external service such as Monitor UK.  If you require a bigger allowance, just ask us.</li>
-                        <li>Office-hours email support</li>
-                        <li>Access to our one-off backlog processing service, in case you want to run several years worth of articles in one go (additional costs apply, depending on scale of backlog)</li>
-                    </ul>
+                    <p>If you represent an organisation, and you want your own custom version of Lantern, we can arrange that for you.  You
+                        can have it branded, appearing within your organisation's web domain, customised to gather specific data, and to
+                        automatically calculate compliance to your policies and any other relevant policies.</p>
 
-                    <p>If you want to upgrade to a Premium Account, or just want more details, <a href="mailto:lantern@cottagelabs.com?subject=Upgrading to Premium">contact us</a>, and we'll get back to you with the pricing and next steps.</p>
-
-                    <p style="text-align:center;"><a class="btn btn-cl" href="mailto:lantern@cottagelabs.com?subject=Upgrading to Premium">Upgrade to Premium</a></p>
-
+                    <p><a href="https://lantern.cottagelabs.com/organisations">Read more about organisation accounts here</a></p>
                 </div>
             </div>
         </div>
@@ -562,10 +480,9 @@ body {
                     <h2>Want to know even more?</h2>
 
                     <a href="https://lantern.cottagelabs.com/docs">Full Documentation</a><br>
-                    <a href="https://lantern.cottagelabs.com/api">Our API</a><br>
                     <a href="https://lantern.cottagelabs.com/terms">Terms & Conditions</a><br>
                     <a href="/presentations/lanternOR16.html">Our presentation from OR2016</a><br>
-
+                    <a href="/presentations/CottageLabsLanternOR17Poster.pdf">Our poster from OR2017</a><br>
                 </div>
             </div>
         </div>
@@ -595,16 +512,6 @@ body {
 
 <script type="text/javascript" src="//static.cottagelabs.com/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="//static.cottagelabs.com/bootstrap-3.0.3/js/bootstrap.min.js"></script>
-<!--
-<script type="text/javascript" src="//static.cottagelabs.com/marked.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/getter/getter.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/fingerprint2.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/jquery.slabtext.min.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/mousetrap.min.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/d3/d3.v3.min.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/d3/topojson.v1.min.js"></script>
-<script type="text/javascript" src="//static.cottagelabs.com/loginstate.js"></script>
-<script type="text/javascript" src="/static/clmenu.js"></script> -->
 
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -637,11 +544,11 @@ body {
             var expand = $(this).attr("data-expand");
             var state = $(this).attr("data-state");
             if (state === "closed") {
-                $(this).html('<i class="glyphicon glyphicon-minus"></i>');
+                $(this).html('Less <i class="glyphicon glyphicon-chevron-up"></i>');
                 $("#" + expand).slideDown();
                 $(this).attr("data-state", "open");
             } else if (state === "open") {
-                $(this).html('<i class="glyphicon glyphicon-plus"></i>');
+                $(this).html('Tell me more <i class="glyphicon glyphicon-chevron-down"></i>');
                 $("#" + expand).slideUp();
                 $(this).attr("data-state", "closed");
             }
