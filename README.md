@@ -1,3 +1,5 @@
+THIS IS PROBABLY OUT OF DATE - WHOLE SITE DUE A REFRESH
+
 This is the Cottage Labs website.
 
 It is a simple static website that uses getter to allow for sort-of templating by using dynamic content loading.
