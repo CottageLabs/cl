@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cottage Labs: Lantern</title>
+    <meta name="author" content="Cottage Labs">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="//static.cottagelabs.com/bootstrap-3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href='//fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>
+    <link href='/static/cl.css' rel='stylesheet' type='text/css'>
+
+    <style>
+
+body {
+    margin-top: 0px;
+    text-align: justify;
+}
+
+#maincontent {
+    padding-top: 30px;
+    margin-top: 0px;
+}
+
+#footer {
+    margin-top: 0px;
+}
+
+.introduction {
+    text-align: justify
+}
+
+#maincontent h1 {
+    font-size: 80px;
+}
+
+.section-expansion {
+    border-bottom: 1px dashed #252e2b;
+}
+
+.section-expansion h3 {
+    font-weight: bold;
+}
+
+.container-expander-link {
+    text-align: right;
+}
+
+.expander {
+    /* font-size: 200%; */
+    color: #000000;
+}
+
+.expander:hover {
+    color: #000000;
+}
+
+.expander i {
+    color: #000000;
+}
+
+.examplecsv {
+    background: #ffffff;
+    border: 1px solid #000000;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.examplecsv thead {
+    font-weight: bold;
+}
+
+.examplecsv td {
+    border: 1px solid #000000;
+    padding: 10px;
+}
+
+.darktable, .lighttable {
+    margin-bottom: 30px;
+}
+
+.darktable tr {
+    border-bottom: 1px solid #000000;
+}
+
+.lighttable tr {
+    border-bottom: 1px solid #c9d2d4;
+}
+
+.darktable td,  .lighttable td {
+    vertical-align: top;
+    padding: 10px;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="header">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1><a href="/">Cottage Labs</a></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="maincontent">
+    <div class="introduction">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-offset-0 col-sm-12">
+                    <div style="border-bottom: 1px solid #333; padding-bottom: 30px;">
+                        <h1>LANTERN</h1>
+                        <p id="tagline">shining a light on open access</p>
+                    </div>
+
+                    <p>
+                        Lantern gives you a quick way to gather all your Open Access compliance measures to help you meet
+                        institutional, funder and government mandates.</p>
+
+                    <p>For your papers we can find information like the
+                        publisher's re-use licence, whether it is in a repository (and which ones), its status in
+                        <a href="http://europepmc.org">EuropePMC</a>, embargo and self-archiving policies, as well as grant and P.I. information.</p>
+
+                    <p>Use it for free for individual articles, or sign-up to upload spreadsheets and generate reports.  You can
+                        <a href="https://lantern.cottagelabs.com">try it now</a> or <a href="mailto:lantern@cottagelabs.com?subject=More information about Lantern">contact us</a>
+                        if you want more information.</p>
+
+                    <p style="text-align:center;"><a class="btn btn-cl" href="https://lantern.cottagelabs.com">Go To Lantern <i class="glyphicon glyphicon-circle-arrow-right"></i></a></p>
+
+
+                    <div id="readmore" style="display: none">
+                        <div class="row" style="padding-top: 20px;"><div class="col-md-6">
+                            <p>Using Lantern is incredibly easy:</p>
+                            <p><strong>Step 1</strong>: Make a list of your identifiers. This can be as a comma-separated list, or as a CSV.</p>
+                            <p><strong>Step 2</strong>: Copy your identifier list into the input box or use the "upload a file" link on our <a href="https://lantern.cottagelabs.com">front page</a>.</p>
+                            <p><strong>Step 3</strong>: Take a break, put your feet up and let us do all the work.</p>
+                            <p><strong>Step 4</strong>: Go to your finished report page. Here you can view a summary of the results, and download the full report as a CSV</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p>For each article we can find:</p>
+                            <ul>
+                                <li>The publisher's re-use licence</li>
+                                <li>Is it in a repository (and which ones)?</li>
+                                <li>Information from EuropePMC</li>
+                                <li>Journal embargo and self-archiving policies</li>
+                                <li>Grant and PI information</li>
+                                <li>Some basic bibliographic data</li>
+                                <li>and more ...</li>
+                            </ul>
+                            <p>Find out more with our <a href="https://lantern.cottagelabs.com/docs">full documentation</a></p>
+                        </div></div>
+
+                    </div>
+
+                    <a href="#" id="more_button" style="text-decoration:none">More <i class="glyphicon glyphicon-chevron-down"></i></a>
+                    <a href="#" id="less_button" style="text-decoration:none; display:none">Less <i class="glyphicon glyphicon-chevron-up"></i></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="darkrow" style="text-align: left;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Some of our users</h2>
+                </div>
+                <div class="col-md-8">
+                    <a href="http://brunel.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/brunel.png" alt="Brunel University" title="Brunel University"></a>
+                    <a href="http://cam.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/cambridge.jpg" alt="University of Cambridge" title="University of Cambridge"></a>
+                    <a href="http://wellcome.ac.uk"><img class="logos img img-thumbnail" src="/static/logos/wellcome2.jpg" alt="Wellcome Trust" title="Wellcome Trust"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightrow" style="padding-bottom: 30px;">
+        <div class="container">
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a name="ways"></a>
+                        <h2>There are several ways you can use Lantern</h2>
+                    </div>
+                </div>
+
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h3>By entering identifiers into our web form</h3>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="web_form" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="web_form" style="display:none">
+                        <p>If you have a small number of identifiers to check, you can just type or paste them into the web form on the <a href="https://lantern.cottagelabs.com">front page</a>.</p>
+
+                        <p>Once you've submitted the form, we'll start working on the
+                            report straight away.  We'll take you to the report page on our site, and you can watch the progress live, and we'll also send you an email with a link to the page.</p>
+
+                        <p>When it's finished
+                            we'll send you another email.  If you've only uploaded a few identifiers, it won't take very long!</p>
+
+                    </div>
+                </div>
+
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h3>By Uploading a Spreadsheet</h3>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="csv_upload" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="csv_upload" style="display: none">
+                        <p>If you want to upload spreadsheets from your computer, you can use our file upload option on the <a href="https://lantern.cottagelabs.com">front page</a> (when you are logged in).</p>
+
+                        <p>Just export a CSV from your favourite spreadsheet program, such as Excel, and then upload it to be processed.</p>
+
+                        <p>The content of your CSVs will need to look something like this, with up to 3 columns, one for each identifier type we accept:</p>
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <table class="examplecsv">
+                                    <thead>
+                                    <tr>
+                                        <td><strong>DOI</strong></td>
+                                        <td><strong>PMID</strong></td>
+                                        <td><strong>PMCID</strong></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>10.abc/123</td>
+                                        <td>78543277</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10.jkl/8999/1</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>78024443</td>
+                                        <td>PMC75220165</td>
+                                    </tr>
+                                    <tr>
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td>...</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p>Once you've uploaded it, you'll get an email with a link for you to check our process with. Then when we're done
+                            (which could take a few hours if you've given us a lot of rows) we'll email you with a link to download the results.</p>
+
+                        <p>Full details of the content of the results can be found in our <a href="https://lantern.cottagelabs.com/docs">documentation</a>.</p>
+                    </div>
+                </div>
+
+                <div class="section-expansion">
+                    <div class="header-expansion">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h3>Via our API</h3>
+                            </div>
+                            <div class="col-md-2 container-expander-link">
+                                <a href="#" class="expander" data-expand="api" data-state="closed">Tell me more <i class="glyphicon glyphicon-chevron-down"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="api" style="display:none">
+
+                        <p>For organisations who want to see Lantern integrated into existing systems, such as your repository, CRIS or other publications or
+                            compliance management system, we offer a fully-featured API option. With it you are able to:</p>
+
+                        <ul>
+                            <li>Send batches of article identifiers for processing</li>
+                            <li>Monitor existing jobs that you created</li>
+                            <li>Download partial or complete result sets</li>
+                            <li>Check information about your user account, such as your credit amount</li>
+                            <li>Get more granular access to the data that Lantern gathers than the spreadsheet upload does. Full information about it is available in our API documentation</li>
+                        </ul>
+
+                        <p>Access to the API is provided with our organisational account, which you can read more about <a href="https://lantern.cottagelabs.com/organisations">here</a></p>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="darkrow">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <a name="howdoesitwork"></a>
+                    <h2>How does it work?</h2>
+                    <p>Lantern takes a list of article identifiers (DOI, PMID and PMCID are supported), via a web form, a CSV upload, or through our API.</p>
+
+                    <p>Each identifier is used to query multiple websites and data sources to locate information relevant to the item's Open Access status;
+                        for example, the re-use licence, whether it has been archived in an open repository, what embargo policies the journal has in place, etc.</p>
+
+                    <p>Once all identifiers have been queried, the results can be retrieved via our website, as a CSV, or via the API.</p>
+
+                    <p>Lantern aggregates data from a variety of sources:</p>
+
+                    <table class="infotable lighttable">
+                        <thead>
+                        <tr>
+                            <th width="20%">
+                                Where
+                            </th>
+                            <th>
+                                What you get from it
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><strong>CORE</strong></td>
+                            <td>Core aggregates items from digital repositories all over the world, so here we can find out whether your items are archived somewhere.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CrossRef</strong></td>
+                            <td>CrossRef is a canonical source of bibliographic data, provided directly by publishers, and holds key metadata and, in some cases, rights information.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Direct from the publisher's website</strong></td>
+                            <td>Where information is not available in the usual databases, we go direct to the article on the publisher's website to extract as much information as possible.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DOAJ</strong></td>
+                            <td>DOAJ is the premier registry of Pure OA journals in the world, so we can use it to learn about the journals in which your researchers are publishing.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Europe PMC</strong></td>
+                            <td>EuropePMC aggregates open and closed access bibliographic metadata for the life-sciences, and holds full-texts for OA publications that we can mine for useful information, especially re-use licences.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Grist</strong></td>
+                            <td>Grist, operated by EuropePMC, aggregates information about grants, P.I.s and publications associated with life-sciences funders.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sherpa Romeo</strong></td>
+                            <td>Sherpa Romeo is a key resource for information on journal embargo and self-archiving policies.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p>In addition to these, we are constantly looking for new sources that could enhance your results.  We also monitor existing services
+                        for any new data they publish which we can take advantage of.</p>
+
+                    <p>As Lantern is a labour-saving device which pulls information from a variety of sources, just remember that some
+                        of these sources assert re-use rights over the data we gather. We strive to only include sources with permissive terms,
+                        and you should check our <a href="https://lantern.cottagelabs.com/sources">sources documentation</a> for more information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightrow">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Ok, so how do I get started?</h2>
+                    <h3>Do you already have a Lantern account?</h3>
+
+                    <table class="infotable darktable">
+                        <tbody>
+                        <tr>
+                            <td width="20%"><strong>No!</strong></td>
+                            <td>That's ok, you can still use Lantern without an account.  You can enter single identifiers via <a href="https://lantern.cottagelabs.com">our web form</a>, and retrieve the results via our website.  If you want more features, just sign-up. You'll get a load of other features for free.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Yes!</strong></td>
+                            <td>You can continue using the free features of Lantern! Take advantage of the ability to upload spreadsheets of multiple identifiers.  If you have any special requests, such as support with very large backlog jobs, just <a href="https://lantern.cottagelabs.com/feedback">contact us</a> and we can help.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>I don't know!</strong></td>
+                            <td>No problem - just head on over to the <a href="https://lantern.cottagelabs.com">front page</a> and try it out.  If you like it, sign-up to get more features. If you already have an account we'll log you back in to it, otherwise we'll make you a new one.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p>If you represent an organisation, and you want your own custom version of Lantern, we can arrange that for you.  You
+                        can have it branded, appearing within your organisation's web domain, customised to gather specific data, and to
+                        automatically calculate compliance to your policies and any other relevant policies.</p>
+
+                    <p><a href="https://lantern.cottagelabs.com/organisations">Read more about organisation accounts here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lastrow">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Want to know even more?</h2>
+
+                    <a href="https://lantern.cottagelabs.com/docs">Full Documentation</a><br>
+                    <a href="https://lantern.cottagelabs.com/terms">Terms & Conditions</a><br>
+                    <a href="/presentations/lanternOR16.html">Our presentation from OR2016</a><br>
+                    <a href="/presentations/CottageLabsLanternOR17Poster.pdf">Our poster from OR2017</a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-5">
+                <p>email: <a href="mailto:us@cottagelabs.com">us@cottagelabs.com</a></p>
+                <p>twitter: <a href="http://twitter.com/cottagelabs">@cottagelabs</a></p>
+                <p>&copy; Cottage Labs LLP 2011 - 2016.  All site content <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
+            </div>
+
+            <div class="col-md-5">
+                <p class="pull-right">
+                    Cottage Labs LLP is a software development consultancy partnership registered in Scotland with the number SO303454<br>
+                    Our VAT Registration number is 127710036<br>
+                    Our DUNS number is 21-736-0418
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="//static.cottagelabs.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="//static.cottagelabs.com/bootstrap-3.0.3/js/bootstrap.min.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-20871671-1', 'cottagelabs.com');
+    ga('require', 'linkid', 'linkid.js');
+    ga('send', 'pageview');
+</script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $("#more_button").on("click", function(event) {
+            event.preventDefault();
+            $("#readmore").slideDown();
+            $(this).hide();
+            $("#less_button").show();
+        });
+        $("#less_button").on("click", function(event) {
+            event.preventDefault();
+            $("#readmore").slideUp();
+            $(this).hide();
+            $("#more_button").show();
+        });
+
+        $(".expander").click(function(event) {
+            event.preventDefault();
+            var expand = $(this).attr("data-expand");
+            var state = $(this).attr("data-state");
+            if (state === "closed") {
+                $(this).html('Less <i class="glyphicon glyphicon-chevron-up"></i>');
+                $("#" + expand).slideDown();
+                $(this).attr("data-state", "open");
+            } else if (state === "open") {
+                $(this).html('Tell me more <i class="glyphicon glyphicon-chevron-down"></i>');
+                $("#" + expand).slideUp();
+                $(this).attr("data-state", "closed");
+            }
+        });
+
+        if (window.location.hash) {
+            var anchor = window.location.hash.substring(1);
+            var section = $("a[name=" + anchor + "]").attr("data-trigger");
+            if (section) {
+                $("a[data-expand=" + section +"]").trigger("click");
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
