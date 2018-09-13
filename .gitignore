@@ -8,7 +8,6 @@ dist/*
 
 app.cfg
 
-media/*
 portality/default_templates/pagemanager/content/*
 
 # PyCharm
