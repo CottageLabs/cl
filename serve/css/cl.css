@@ -1,0 +1,111 @@
+html{
+    font-size:12px;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    margin:0;
+    padding:0;
+}
+
+body {
+    font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:1.5em;
+    line-height:1.846;
+    color:#555;
+    padding:0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family:"Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color:#555;
+    font-weight: bold;
+}
+
+header {
+    padding-top: 90px;
+}
+
+header h1 {
+    text-align: center;
+    font-size: 5em;
+}
+
+nav {
+    padding-top:10px;
+    border-bottom: 5px solid #040100bb;
+    font-weight: bold;
+}
+
+nav img {
+    vertical-align: bottom;
+}
+
+.navlink {
+    color: #555;
+    text-decoration: none;
+}
+
+.navlink:hover {
+    color: #555;
+    text-decoration: none;
+}
+
+.navigation li {
+    list-style: none;
+    display: inline;
+    padding-right: 10px;
+}
+
+.tagline {
+    text-align: center;
+    font-size: 2em;
+}
+
+.brief {
+    text-align: center;
+}
+
+#data-services {
+    margin-top: 80px;
+    text-align: center;
+    padding-bottom: 40px;
+    border-bottom: 5px solid #040100bb;
+}
+
+#data-services img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+#clients {
+    text-align: center;
+    padding-bottom: 40px;
+    border-bottom: 5px solid #040100bb;
+}
+
+.logos {
+    height:80px;
+    margin:30px 30px 30px 30px;
+}
+
+#partners {
+    text-align: center;
+    padding-bottom: 40px
+}
+
+#partners h2 {
+    margin-bottom: 30px;
+}
+
+footer #info {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    color: #ffffff;
+    background: #040100bb;
+}
+
+footer #info a {
+    color: #ffffff;
+}
+
+footer #info a:hover {
+    color: #ffffff;
+}
