@@ -48,6 +48,10 @@ nav img {
     text-decoration: none;
 }
 
+.navigation ul {
+    margin-bottom: 0px;
+}
+
 .navigation li {
     list-style: none;
     display: inline;
