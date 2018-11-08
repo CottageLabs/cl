@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-    padding-top: 90px;
+    padding-top: 145px;
 }
 
 header h1 {
@@ -30,8 +30,9 @@ header h1 {
 
 nav {
     padding-top:10px;
-    border-bottom: 5px solid #040100bb;
+    border-bottom: 5px solid #040100bb !important;
     font-weight: bold;
+    background: #ffffff;
 }
 
 nav img {
