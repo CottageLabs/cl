@@ -86,10 +86,49 @@ nav img {
     border-bottom: 5px solid #040100bb;
 }
 
+/* LOGOS */
+
 .logos {
-    height:80px;
-    margin:30px 30px 30px 30px;
+    margin:30px 0 30px 0;
 }
+
+.logos.long {
+    width: 100%;
+}
+
+.logos.square {
+    width: 50%;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .logos {
+        margin:30px 30px 30px 30px;
+    }
+
+    .logos.long {
+        width: auto;
+        height:80px;
+    }
+
+    .logos.square {
+        width: auto;
+        height: 120px;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}
+
+/* End LOGOS */
+
 
 .cottage {
     width:63px;
@@ -114,8 +153,13 @@ footer #info {
 
 footer #info a {
     color: #ffffff;
+    font-weight: bold;
 }
 
 footer #info a:hover {
     color: #ffffff;
+}
+
+footer #info .right-side {
+    text-align: right;
 }
