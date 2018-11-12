@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-    padding-top: 145px;
+    padding-top: 95px;
 }
 
 header h1 {
@@ -30,9 +30,12 @@ header h1 {
 
 nav {
     padding-top:10px;
-    border-bottom: 5px solid #040100bb !important;
     font-weight: bold;
     background: #ffffff;
+}
+
+.navbar {
+    border-bottom: 5px solid #040100bb !important;
 }
 
 nav img {
@@ -49,14 +52,44 @@ nav img {
     text-decoration: none;
 }
 
+.narrow-nav {
+    background: #eeeeee;
+    padding-top: 50px;
+}
+
+.narrow-nav a {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .navigation ul {
-    margin-bottom: 0px;
+    display: none;
 }
 
 .navigation li {
-    list-style: none;
-    display: inline;
-    padding-right: 10px;
+
+}
+
+@media (min-width: 768px) {
+    .narrow-nav {
+        display: none;
+        font-weight: normal;
+    }
+
+    header {
+        padding-top: 145px;
+    }
+
+    .navigation ul {
+        display: block;
+        margin-bottom: 0px;
+    }
+
+    .navigation li {
+        list-style: none;
+        display: inline;
+        padding-right: 10px;
+    }
 }
 
 .tagline {
@@ -69,7 +102,7 @@ nav img {
 }
 
 #data-services {
-    margin-top: 80px;
+    margin-top: 40px;
     text-align: center;
     padding-bottom: 40px;
     border-bottom: 5px solid #040100bb;
@@ -78,6 +111,30 @@ nav img {
 #data-services img {
     width: 100px;
     margin-bottom: 20px;
+}
+
+#data-services .service {
+    margin-bottom: 40px;
+}
+
+@media (min-width: 768px) {
+    #data-services {
+        margin-top: 40px;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #data-services {
+        margin-top: 60px;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    #data-services {
+        margin-top: 80px;
+    }
 }
 
 #clients {
@@ -93,7 +150,11 @@ nav img {
 }
 
 .logos.long {
-    width: 100%;
+    width: 90%;
+}
+
+.logos.short {
+    width: 80%;
 }
 
 .logos.square {
@@ -109,6 +170,11 @@ nav img {
     .logos.long {
         width: auto;
         height:80px;
+    }
+
+    .logos.short {
+        width: auto;
+        height: 120px;
     }
 
     .logos.square {
@@ -144,6 +210,10 @@ nav img {
     margin-bottom: 30px;
 }
 
+#partners .partner {
+    margin-bottom: 40px;
+}
+
 footer #info {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -162,4 +232,8 @@ footer #info a:hover {
 
 footer #info .right-side {
     text-align: right;
+}
+
+footer .toe {
+    margin-bottom: 40px;
 }
