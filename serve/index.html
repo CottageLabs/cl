@@ -3,75 +3,171 @@
 <head>
   <meta charset="utf-8">
   <title>Cottage Labs</title>
-  <meta name="description" content="">
   <meta name="author" content="Cottage Labs">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-
-  <script type="text/javascript" src="//static.cottagelabs.com/jquery-1.10.2.min.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/bootstrap-3.0.3/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="//static.cottagelabs.com/bootstrap-3.0.3/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <script type="text/javascript" src="//static.cottagelabs.com/marked.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/getter/getter.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/fingerprint2.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/jquery.slabtext.min.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/mousetrap.min.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/d3/d3.v3.min.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/d3/topojson.v1.min.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/loginstate.js"></script>
-  
-  <script type="text/javascript" src="/static/lantern/dropfile.js"></script>
-  <script type="text/javascript" src="/static/lantern/lantern.js"></script>
-  <script type="text/javascript" src="//static.cottagelabs.com/clogin.js"></script>
-  
-  <script type="text/javascript" src="/static/clmenu.js"></script>
 
-  <link href='//fonts.googleapis.com/css?family=Corben' rel='stylesheet' type='text/css'>
-  <link href='//fonts.googleapis.com/css?family=Raleway:500' rel='stylesheet' type='text/css'>
+  <link href='/css/cl.css' rel='stylesheet' type='text/css'>
 
-  <link href='/static/cl.css' rel='stylesheet' type='text/css'>
-
-  <script>
-  jQuery(document).ready(function() {
-    getter();
-  });
-  </script>
-  
-  <style>
-    markdown {
-      display:none;
-    }
-  </style>
 </head>
 
 <body>
-
-  <getter></getter>
-    
-    <div id="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p>email: <a href="mailto:us@cottagelabs.com">us@cottagelabs.com</a></p>
-                    <p>twitter: <a href="http://twitter.com/cottagelabs">@cottagelabs</a></p>
-                    <p>&copy; Cottage Labs LLP 2011 - 2016.  All site content <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
-                </div>
-                
-                <div class="col-md-6">
-                    <p style="text-align: right">
-                      Cottage Labs LLP is a software development consultancy partnership registered in Scotland with the number SO303454<br>
-                      Our VAT Registration number is 127710036<br>
-                      Our DUNS number is 21-736-0418
-                    </p>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container"><div class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="https://cottagelabs.com" class="navlink"><img src="images/cottage.svg" class="cottage"> Cottage Labs</a>
+                <div class="navigation pull-right">
+                    <ul>
+                        <li><a href="#clients" class="navlink">Clients</a></li>
+                        <li><a href="#partners" class="navlink">Partners</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
+        </div></div>
+    </nav>
+    <nav class="narrow-nav">
+        <div class="container"><div class="content">
+            <a href="#clients" class="navlink">Clients</a>
+            <a href="#partners" class="navlink">Partners</a>
+        </div></div>
+    </nav>
+
+    <header>
+        <div class="container"><div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Cottage Labs</h1>
+                    <p class="tagline">make the most of your data</p>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <p class="brief">Cottage Labs is a partnership of data experts who can help you understand and utilise your data more effectively.
+                                We can build tailored solutions for your needs, from software to processes, across the whole data spectrum...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div></div>
+    </header>
+
+    <a name="data-services"></a>
+    <section id="data-services">
+        <div class="container"><div class="content">
+            <div class="row">
+                <div class="service col-xs-12
+                            col-sm-4
+                            col-lg-2 col-lg-offset-1">
+                    <img src="images/capture4.svg"><br>
+                    <strong>Capture</strong>
+                    <p>Capture your data from anywhere it can be found</p>
+                </div>
+
+                <div class="service col-xs-12 col-sm-4 col-lg-2">
+                    <img src="images/store6.svg"><br>
+                    <strong>Store</strong>
+                    <p>Store your data in the right environment for your needs</p>
+                </div>
+
+                <div class="service col-xs-12 col-sm-4 col-lg-2">
+                    <img src="images/manage3.svg"><br>
+                    <strong>Manage</strong>
+                    <p>Manage your data through custom processes and workflows</p>
+                </div>
+
+                <div class="service col-xs-12 col-sm-4 col-sm-offset-2 col-lg-2 col-lg-offset-0">
+                    <img src="images/analyse3.svg"><br>
+                    <strong>Analyse</strong>
+                    <p>Analyse and visualise your data, gain insights and make decisions</p>
+                </div>
+
+                <div class="service col-xs-12 col-sm-4 col-lg-2">
+                    <img src="images/share4.svg"><br>
+                    <strong>Share</strong>
+                    <p>Share your data via flexible interfaces for humans or machines</p>
+                </div>
+            </div>
+        </div></div>
+    </section>
+
+    <a name="clients"></a>
+    <section id="clients">
+        <div class="container"><div class="content">
+            <h2>Some of our Clients</h2>
+            <a href="http://cam.ac.uk"><img class="logos long" src="/images/logos/cambridge.jpg" alt="University of Cambridge" title="University of Cambridge"></a>
+            <a href="http://doaj.org"><img class="logos long" src="/images/logos/doaj.jpg" alt="Directory of Open Access Journals" title="Directory of Open Access Journals"></a>
+            <a href="http://www2.hull.ac.uk/"><img class="logos long" src="/images/logos/hull.svg" alt="University of Hull" title="University of Hull"></a>
+            <a href="http://ox.ac.uk"><img class="logos long" src="/images/logos/oxford.gif" alt="University of Oxford" title="University of Oxford"></a>
+            <a href="http://plos.org"><img class="logos long" src="/images/logos/plos.svg" alt="PLOS" title="Public Library of Science"></a>
+            <a href="http://world-nuclear.org"><img class="logos short" src="/images/logos/wna2.png" alt="World Nuclear Association" title="World Nuclear Association"></a>
+            <a href="http://jisc.ac.uk"><img class="logos square" src="/images/logos/jisc-logo.svg" alt="Jisc" title="Jisc"></a>
+            <a href="http://uio.no"><img class="logos square" src="/images/logos/oslo.svg" alt="Univeristy of Oslo" title="University of Oslo"></a>
+            <a href="http://wellcome.ac.uk"><img class="logos square" src="/images/logos/wellcome.svg" alt="Wellcome Trust" title="Wellcome Trust"></a>
+        </div></div>
+    </section>
+
+    <a name="partners"></a>
+    <section id="partners">
+        <div class="container"><div class="content">
+            <h2>The Partners</h2>
+            <div class="partner col-sm-6 col-lg-3">
+                <img src="images/people/richard.jpg"><br>
+                <strong>Richard Jones</strong>
+                <p>Richard is an experienced software engineer who works comfortably both on back-end data management systems, and front-end data visualisations</p>
+            </div>
+
+            <div class="partner col-sm-6 col-lg-3">
+                <img src="images/people/mark.jpg"><br>
+                <strong>Mark MacGillivray</strong>
+                <p>Mark has a background in informatics research, and a strong focus on advanced data analysis and visualisation, and use of machine learning and collective intelligence</p>
+            </div>
+
+            <div class="partner col-sm-6 col-lg-3">
+                <img src="images/people/anusha.jpg"><br>
+                <strong>Anusha Ranganathan</strong>
+                <p>Anusha is an expert software engineer in repositories and research information and research data management, and is a long-term member of those communities</p>
+            </div>
+
+            <div class="partner col-sm-6 col-lg-3">
+                <img src="images/people/steve.jpg"><br>
+                <strong>Steve Eardley</strong>
+                <p>Steve is a skilled developer and DevOps engineer, with additional specialist interests in text mining and natural language processing</p>
+            </div>
+        </div></div>
+    </section>
+
+    <footer>
+        <div class="container"><div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="images/cottage.svg" class="cottage pull-right">
+                </div>
+            </div>
+        </div></div>
+
+        <div id="info">
+            <div class="container"><div class="content">
+                <div class="row">
+                    <div class="toe col-md-6">
+                        <p>email: <a href="mailto:us@cottagelabs.com">us@cottagelabs.com</a></p>
+                        <p>twitter: <a href="http://twitter.com/cottagelabs">@cottagelabs</a></p>
+                        <p>&copy; Cottage Labs LLP 2011 - 2018.  All site content <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
+                    </div>
+
+                    <div class="toe col-md-6">
+                        <p class="right-side">
+                          Cottage Labs LLP is a partnership registered in Scotland<br>
+                          Company Number: SO303454<br>
+                          VAT Registration: 127710036<br>
+                          DUNS: 21-736-0418
+                        </p>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+    </footer>
 
 </body>
 </html>
