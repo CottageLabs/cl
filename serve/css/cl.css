@@ -117,6 +117,18 @@ nav img {
     margin-bottom: 40px;
 }
 
+.btn-read-more {
+    color: #ffffff;
+    background-color: #58819F;
+    border: 1px solid #33658a;
+    font-weight: bold;
+}
+
+.btn-read-more:hover {
+    color: #000000;
+    background-color: #D9E3E9;
+}
+
 @media (min-width: 768px) {
     #data-services {
         margin-top: 40px;
@@ -236,4 +248,24 @@ footer #info .right-side {
 
 footer .toe {
     margin-bottom: 40px;
+}
+
+.orange {
+    background: #d88913;
+}
+
+.purple {
+    background: #7b287d;
+}
+
+.green {
+    background: #5e6c38;
+}
+
+.red {
+    background: #d64550;
+}
+
+.blue {
+    background: #33658a;
 }
