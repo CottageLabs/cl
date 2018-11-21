@@ -1,0 +1,5 @@
+{
+    "src_dir" : "source",
+    "out_dir" : "serve",
+    "build_dir" : "build"
+}
