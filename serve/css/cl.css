@@ -52,6 +52,11 @@ nav img {
     text-decoration: none;
 }
 
+.navlink:focus {
+    color: #555;
+    text-decoration: none;
+}
+
 .narrow-nav {
     background: #eeeeee;
     padding-top: 50px;
@@ -127,6 +132,12 @@ nav img {
 .btn-read-more:hover {
     color: #000000;
     background-color: #D9E3E9;
+    border: 1px solid #D9E3E9;
+}
+
+.btn-read-more:focus {
+    color: #ffffff;
+    background-color: #58819F;
 }
 
 @media (min-width: 768px) {
