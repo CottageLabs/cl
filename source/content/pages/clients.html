@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_title %}<title>Cottage Labs Clients</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="Clients">{% endblock %}
+
+{% block content %}
+
+    <header>
+        <h1>Our Clients</h1>
+        <p>We've tackled challenges with data for a large number of clients over the years.</p>
+    </header>
+
+    {% for record in data.get("people").shape("dict") %}
+    <section class="clients">
+    <div class="container"><div class="content">
+        {{ record.get("Icon") }}
+    </div></div>
+    </section>
+    {% endfor %}
+
+{% endblock %}

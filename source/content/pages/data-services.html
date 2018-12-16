@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+{% block page_title %}<title>Cottage Labs Data Services</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="Data Services">{% endblock %}
+
 {% block content %}
 
     <header><h1>Data Services</h1></header>
@@ -11,7 +14,10 @@
             <div class="col-xs-12"><h2>{{ record.get("Name") }}</h2></div>
         </div>
         <div class="row">
-            <div class="col-lg-2 col-lg-offset-5">
+            <div class="col-lg-2 col-lg-offset-5
+                        col-md-2 col-md-offset-5
+                        col-sm-4 col-sm-offset-4
+                        col-xs-4 col-xs-offset-4">
                 <img src="{{ record.get("Icon") }}">
             </div>
         </div>
