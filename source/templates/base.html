@@ -17,13 +17,9 @@
         <div class="container"><div class="content">
         <div class="row">
             <div class="col-xs-12">
-                <a href="https://cottagelabs.com" class="navlink"><img src="/assets/images/cottage.svg" class="cottage"> Cottage Labs</a>
+                <a href="/" class="navlink"><img src="/assets/images/cottage.svg" class="cottage"> Cottage Labs</a>
                 <div class="navigation pull-right">
-                    <ul>
-                        <li><a href="#clients" class="navlink">Clients</a></li>
-                        <li><a href="#partners" class="navlink">Partners</a></li>
-                        <li><a href="/data-services" class="navlink">Data Services</a></li>
-                    </ul>
+                    {% include "nav.html" %}
                 </div>
             </div>
         </div>
@@ -31,8 +27,7 @@
     </nav>
     <nav class="narrow-nav">
         <div class="container"><div class="content">
-            <a href="#clients" class="navlink">Clients</a>
-            <a href="#partners" class="navlink">Partners</a>
+            {% include "nav.html" %}
         </div></div>
     </nav>
 

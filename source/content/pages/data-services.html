@@ -2,4 +2,28 @@
 
 {% block content %}
 
+    <header><h1>Data Services</h1></header>
+
+    {% for record in data.get("data-services").shape("dict") %}
+    <section class="data-service">
+    <div class="container"><div class="content">
+        <div class="row">
+            <div class="col-xs-12"><h2>{{ record.get("Name") }}</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+                <img src="{{ record.get("Icon") }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <p class="tagline">{{ record.get("Short Description") }}</p>
+                <p class="justified">{{ record.get("Long Description" )}}</p>
+            </div>
+            </div>
+        </div>
+    </div></div>
+    </section>
+    {% endfor %}
+
 {% endblock %}
