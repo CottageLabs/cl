@@ -1,21 +1,41 @@
 {% extends "base.html" %}
 
-{% block page_title %}<title>Cottage Labs Clients</title>{% endblock %}
-{% block page_desc %}<meta name="description" content="Clients">{% endblock %}
+{% block page_title %}<title>Cottage Labs Clients and Partners</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="Clients and Partners">{% endblock %}
 
 {% block content %}
 
     <header>
-        <h1>Our Clients</h1>
-        <p>We've tackled challenges with data for a large number of clients over the years.</p>
+        <div class="container"><div class="content">
+            <h1>Our Clients</h1>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <p class="brief">We've tacked challenges with data for a large number of great clients and partners over the
+                    years.  We have worked as the sole supplier delivering analysis and software, we have worked as part of large
+                    and small consortia collaborating to deliver projects or services, and we can find a model to work with you
+                        however you need.</p>
+                </div>
+            </div>
+
+        </div></div>
     </header>
 
-    {% for record in data.get("people").shape("dict") %}
     <section class="clients">
-    <div class="container"><div class="content">
-        {{ record.get("Icon") }}
-    </div></div>
+
+        <div class="container"><div class="content">
+            {% for client in data.get("clients").shape("dict").sort({"Name" : "desc"}) %}
+            <a href="{{ client.get("URL") }}"><img
+                class="logos {{ client.get("Logo Size") }}"
+                src="/assets/images/logos/{{ client.get("Logo") }}"
+                alt="{{ client.get("Name") }}"
+                title="{{ client.get("Name") }}"
+                {% if client.get("Logo Background") != "" %}
+                    style="background: {{ client.get("Logo Background") }}"
+                {% endif %}
+            ></a>
+            {% endfor %}
+        </div></div>
+
     </section>
-    {% endfor %}
 
 {% endblock %}

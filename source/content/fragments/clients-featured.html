@@ -1,0 +1,11 @@
+<h2>Some of our Clients</h2>
+
+{% for client in data.get("clients").shape("dict").filter({"Featured" : "true"}).sort({"Featured Order" : "asc"}) %}
+
+    <a href="{{ client.get("URL") }}"><img
+            class="logos {{ client.get("Logo Size") }}"
+            src="/assets/images/logos/{{ client.get("Logo") }}"
+            alt="{{ client.get("Name") }}"
+            title="{{ client.get("Name") }}"></a>
+
+{% endfor %}
