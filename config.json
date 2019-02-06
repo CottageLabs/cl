@@ -1,17 +1,3 @@
 {
-    "src_dir" : "source",
-    "out_dir" : "serve",
-    "build_dir" : "build",
-
-    "plugins" : {
-        "data" : {
-            "csv" : {
-                "shapes" : {
-                    "table" : "compost.datasources.csvsources.TableCSVDataSource",
-                    "dict" : "compost.datasources.csvsources.DictCSVDataSource"
-                },
-                "default" : "table"
-            }
-        }
-    }
+    "base_url" : "https://cottagelabs.com/"
 }

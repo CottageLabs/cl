@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block page_title %}<title>Cottage Labs People</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="People">{% endblock %}
+
+{% block content %}
+
+    <header>
+        <div class="container"><div class="content">
+            <h1>Partners</h1>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <p class="brief"></p>
+                </div>
+            </div>
+
+        </div></div>
+    </header>
+
+    <section class="partners">
+
+        {% for partner in data.get("people").shape("dict") %}
+        <div class="partner"><div class="container"><div class="content">
+            <div class="row">
+                <div class="col-xs-3">
+                    <img src="{{ partner.get("Image") }}" alt="{{ partner.get("Name") }}" style="width: 100%"><br>
+                    <div class="social">
+                    {% if partner.get("Twitter") != "" %}
+                        <strong>Twitter</strong>: <a href="https://twitter.com/{{ partner.get("Twitter") }}">@{{ partner.get("Twitter") }}</a><br>
+                    {% endif %}
+                    {% if partner.get("LinkedIn") != "" %}
+                        <strong>LinkedIn</strong>: <a href="https://www.linkedin.com/in/{{ partner.get("LinkedIn") }}">{{ partner.get("LinkedIn") }}</a><br>
+                    {% endif %}
+                    {% if partner.get("GitHub") != "" %}
+                        <strong>GitHub</strong>: <a href="https://github.com/{{ partner.get("GitHub") }}">{{ partner.get("GitHub") }}</a><br>
+                    {% endif %}
+                    {% if partner.get("Blog") != "" %}
+                        <strong>Blog</strong>: <a href="{{ partner.get("Blog") }}">{{ partner.get("Blog") }}</a><br>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    <h2>{{ partner.get("Name") }}</h2>
+                    <p class="brief">{{ partner.get("Short Bio") }}</p>
+                    <p>{[md]}{{ partner.get("Long Bio") }}{[/md]}</p>
+                </div>
+            </div>
+        </div></div></div>
+        {% endfor %}
+
+    </section>
+
+{% endblock %}

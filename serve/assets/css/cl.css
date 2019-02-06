@@ -309,3 +309,26 @@ footer .toe {
     text-align: justify;
 }
 
+.partners h2 {
+    text-align: left;
+    font-size: 2em;
+    margin-top: 0;
+}
+
+.partners .brief {
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.partners .partner:not(:last-child) {
+    border-bottom: 5px solid #040100bb;
+}
+
+.partners .partner {
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+}
+
+.partners .social {
+    font-size: 0.8em;
+}
