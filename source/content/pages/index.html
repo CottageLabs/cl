@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <header>
+        <div class="container"><div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Cottage Labs</h1>
+                    <p class="tagline">make the most of your data</p>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <p class="brief">Cottage Labs is a partnership of data experts who can help you understand and utilise your data more effectively.
+                                We can build tailored solutions for your needs, from software to processes, across the whole data spectrum...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div></div>
+    </header>
+
+    <a name="data-services"></a>
+    <section id="data-services">
+        <div class="container"><div class="content">
+
+            {% include "fragments/data-services-horizontal.html" %}
+
+            {#
+            <div class="row">
+                <a href="{{ url_for("data-services.html") }}" class="btn btn-read-more">Read more about our data services</a>
+            </div> #}
+        </div></div>
+    </section>
+
+    <a name="clients"></a>
+    <section id="clients">
+        <div class="container"><div class="content">
+
+            {% include "fragments/clients-featured.html" %}
+
+            {#
+            <div class="row">
+                <a href="{{ url_for("clients.html") }}" class="btn btn-read-more">See more of our clients and partners</a>
+            </div> #}
+        </div></div>
+    </section>
+
+    <a name="partners"></a>
+    <section id="partners">
+        <div class="container"><div class="content">
+            <h2>The Partners</h2>
+
+            {%  include "fragments/people-horizontal.html" %}
+
+            {#
+            <div class="row">
+                <a href="{{ url_for("partners.html") }}" class="btn btn-read-more">Get to know the partners</a>
+            </div> #}
+        </div></div>
+    </section>
+
+{% endblock %}

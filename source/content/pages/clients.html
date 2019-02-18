@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block page_title %}<title>Cottage Labs Clients</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="Clients">{% endblock %}
+
+{% block content %}
+
+    <header>
+        <div class="container"><div class="content">
+            <h1>Our Clients</h1>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <p class="brief">We've tacked challenges with data for a large number of great clients and partners over the
+                    years.  We have worked as the sole supplier delivering analysis and software, we have worked as part of large
+                    and small consortia collaborating to deliver projects or services, and we can find a model to work with you
+                        however you need.</p>
+                </div>
+            </div>
+
+        </div></div>
+    </header>
+
+    <section class="clients">
+
+        <div class="container"><div class="content">
+            {% for client in data.get("clients").shape("dict").sort({"Name" : "desc"}) %}
+            <a href="{{ client.get("URL") }}"><img
+                class="logos {{ client.get("Logo Size") }}"
+                src="/assets/images/logos/{{ client.get("Logo") }}"
+                alt="{{ client.get("Name") }}"
+                title="{{ client.get("Name") }}"
+                {% if client.get("Logo Background") != "" %}
+                    style="background: {{ client.get("Logo Background") }}"
+                {% endif %}
+            ></a>
+            {% endfor %}
+        </div></div>
+
+    </section>
+
+{% endblock %}

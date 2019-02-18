@@ -1,0 +1,11 @@
+<div class="row">
+    {% for record in data.get("data-services").shape("dict") %}
+    <div class="service col-xs-12
+                col-sm-4
+                col-lg-2 {% if loop.first %}col-lg-offset-1{% elif loop.index == 4 %}col-sm-offset-2 col-lg-offset-0{% endif %}">
+        <img src="{{ record.get("Icon") }}"><br>
+        <strong>{{ record.get("Name") }}</strong>
+        <p>{{ record.get("Short Description") }}</p>
+    </div>
+    {% endfor %}
+</div>

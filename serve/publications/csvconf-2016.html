@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+	
+    <!-- bootstrap styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <title>CSV as the Master Dataset - and approaches to web publishing</title>
+    
+    <style>
+body {
+    font-family: sans-serif;
+    background: #eaeded;
+    font-size: 14pt;
+}
+
+h1 {
+    font-family: sans-serif;
+    font-size: 500%;
+    color: #AAA;
+}
+
+h2 {
+    font-family: sans-serif;
+    font-size: 250%;
+    color: #252e2b;
+}
+
+#topstrap {
+    background: #252e2b;
+}
+
+#firstslide {
+	display:table-cell;
+	vertical-align: middle;
+}
+
+#firstslide h1 {
+	text-align: center;
+}
+
+#firstslide p {
+	text-align: center;
+	color: #aaa;
+}
+
+#bottomstrap {
+    background: #252e2b;
+}
+
+#lastslide {
+	width: 100%;
+	display:table-cell;
+	vertical-align: middle;
+}
+
+#lastslide h1 {
+	text-align: center;
+}
+
+#lastslide p {
+	text-align: center;
+	color: #aaa;
+}
+
+#tagline {
+    font-size: 200%;
+    color: #aaa;
+	text-align: center;
+}
+
+.evenslide {
+	padding-top: 60px;
+	padding-bottom: 60px;
+	background: #eaeded;
+}
+
+.oddslide {
+	padding-top: 60px;
+	padding-bottom: 60px;
+	background: #ddd;
+}
+
+.sheetmock {
+	border: 1px solid #000000; 
+	width: 100%; 
+	background: #ffffff
+}
+
+.sheetmock td {
+	padding: 5px;
+	border: 1px solid #000000;
+}
+
+#part-1 {
+	padding: 10px;
+	background: #80a6ff;
+}
+
+#part-1-body {
+	padding: 10px;
+	background: #80a6ff;
+}
+
+#part-2 {
+	padding: 10px;
+	background: #79c3c1;
+}
+
+#part-2-body {
+	padding: 10px;
+	background: #79c3c1;
+}
+
+#part-3 {
+	padding: 10px;
+	background: #72e184;
+}
+
+#part-3-body {
+	padding: 10px;
+	background: #72e184;
+}
+
+#part-4 {
+	padding: 10px;
+	background: #6bff47;
+}
+
+#part-4-body {
+	padding: 10px;
+	background: #6bff47;
+}
+
+.expander {
+	font-size: 200%;
+	color: #000000;
+}
+
+.expander:hover {
+	color: #000000;
+}
+    </style>
+</head>
+<body>
+
+<div id="topstrap">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+					<div id="firstslide">
+		                <h1>CSV as the Master Dataset</h1>
+						<p id="tagline">and approaches to web publishing</p>
+						<p>Richard Jones, Founder, Cottage Labs</p>
+						<p>richard@cottagelabs.com</p>
+                        <p>Presented at: <p><a href="https://csvconf.com/2016/">csv,conf Berlin 2016</a></p></p>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="evenslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+					<h2>What are we trying to <strong>do</strong>?</h2>
+					
+					<p>Build bespoke information systems quickly and cost-effectively.  By ...</p>
+					<p><img class="img img-thumbnail" src="/assets/images/csvconf/Overview.png" style="width: 70%; display: block; margin-left: auto; margin-right: auto"></p>
+					<p>...publication of information on the web without the admin-area overhead.</p>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="oddslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+<h2>Why?</h2>
+
+<p><strong style="font-size: 130%">1. Humans love spreadsheets.</strong><br>Tabular data is easy to work with, and the desktop tool-chain is excellent, and huge numbers of non-technical users use them every day.  We could <strong><em>never</em></strong> do better with our budgets and skills.</p>
+
+<p>
+<img class="img img-thumbnail" src="/assets/images/csvconf/numbers.jpg" style="width: 50px; height: 50px" title="Numbers">
+<img class="img img-thumbnail" src="/assets/images/csvconf/Calc.png" style="width: 50px; height: 50px" title="LibreOffice Calc">
+<img class="img img-thumbnail" src="/assets/images/csvconf/Excel.png" style="width: 50px; height: 50px" title="Excel">
+<img class="img img-thumbnail" src="/assets/images/csvconf/oocalc.jpg" style="width: 50px; height: 50px" title="OpenOffice Calc">
+</p>
+
+<p><strong style="font-size: 130%">2. Lots of information systems are basically the same.</strong><br>Mostly they differ by the kind of data that is being worked on.  There are workflows too, but many of them happen in the admin area, and if we do away with that people can manage them as they choose outside the system.</p>
+
+<p><strong style="font-size: 130%">3. Admin areas are expensive and boring to build.</strong></p>
+
+<p><strong style="font-size: 130%">4. Data visualisation, data science, data journalism are all <em>in</em></strong>,<br>but also the domain of specialists.  We wanted to make at least some of that world accessible to smaller agencies</p>
+
+<br><br>
+<p><strong>As a consequence...</strong></p>
+
+<div class="row"><div class="col-md-offset-3 col-md-6" style="background: #ffffff; font-size: 120%">
+<p>We found ourselves doing much the same thing over and over for different clients, with slight variations in the theme. We wondered if we could make <strong>our</strong> lives easier and <strong>our client's</strong> costs lower</p>
+</div></div>
+
+<br><br>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="evenslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<table class="sheetmock">
+	<tr>
+		<td colspan="3">
+			<h2>The weird things humans do with spreadsheets</h2>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			Something about a 2D tabular format fits well into the human brain.
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			They're also good at having multiple sheets in a single (xls, say) document.
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="width: 40%"><strong>Weird thing</strong></td>
+		<td style="width: 40%"><strong>Why</strong></td>
+		<td style="width: 20%"><strong>Example</strong></td>
+	</tr>
+	<tr>
+		<td>They put all kinds of blurb above their header rows</td>
+		<td>It's a document not a dataset</td>
+		<td>see above!</td>
+	</tr>
+	<tr>
+		<td>They colour cells in, with the colour imbuing meaning</td>
+		<td>Because form and function are the same</td>
+		<td style="background: #cccc00">like this</td>
+	</tr>
+	<tr>
+		<td>They are sloppy with hard formats (like numbers)</td>
+		<td>Because humans are amazing at normalising</td>
+		<td>-£1,00,0000.0</td>
+	</tr>
+	<tr>
+		<td>They break the boundaries of acceptable use for typed fields</td>
+		<td>Because data models (especially 2D ones) are brittle, and humans are flexible</td>
+		<td>$100 to about 200</td>
+	</tr>
+</table>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="oddslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<h2>So how should we read them?</h2>
+
+<div id="part-1">
+	<div class="row">
+		<div class="col-md-11">
+			<strong style="font-size: 200%">Decode the bits</strong>
+		</div>
+		<div class="col-md-1"><a href="#" class="expander" data-expand="part-1-body" data-state="closed">
+			<i class="glyphicon glyphicon-plus"></i>		
+		</a></div>
+	</div>
+</div>
+
+<div id="part-1-body" style="display:none">
+	<div class="row"><div class="col-md-10">
+		<p>When working specifically with CSVs...</p>
+		<ul>
+			<li>Excel might give you <strong>cp1252</strong> or <strong>Windows-1252</strong>, on Windows</li>
+			<li>Excel and Numbers might give you <strong>MacRoman</strong> on OSX</li>
+			<li>Calc will hopefully give you <strong>UTF-8</strong></li>
+			<li>Any of them could do any one of <strong>hundreds</strong> of encodings</li>
+		</ul>
+		
+		<p>You also can't trust that you have the right encoding, even if you can parse the bits</p>
+
+		<p>Some encodings are virtually interchangeable, but the <strong>newline character is not a common link!</strong>  We actually have to check that we get a rectangular dataset to be sure.</p>
+		
+		</div>
+		<div class="col-md-2" style="text-align: center">
+			<img src="/assets/images/csvconf/demon.png" style="width: 100%">
+			<strong>Welcome to encoding hell!</strong>
+		</div>
+	</div>
+</div>
+
+<div id="part-2">
+	<div class="row">
+		<div class="col-md-11">
+			<strong style="font-size: 200%">Read the data</strong>
+		</div>
+		<div class="col-md-1"><a href="#" class="expander" data-expand="part-2-body" data-state="closed">
+			<i class="glyphicon glyphicon-plus"></i>		
+		</a></div>
+	</div>
+</div>
+
+<div id="part-2-body" style="display:none">
+	<div class="row"><div class="col-md-8">
+		<ul>
+		<li>Ignore all the unnecessary supporting documentation</li>
+		<li>Translate the header rows for use as object properties</li>
+		<li>Trim contentand ignore empty values, and values that mean "ignore me" (like "N/A")</li>
+		<li>Coerce the data into something cleaner (like "£1,000" -> 1000)</li>
+		</ul>
+
+		<p>We're not scrubbing data here, we're just allowing for the humanity in the book-keeping</p>
+		</div>
+
+		<div class="col-md-4">
+		Before
+		<table class="sheetmock">
+			<tr><td colspan="2">Here is some great data!</td></tr>
+			<tr><td><strong>Col A</strong></td><td><strong>Col B</strong></td></tr>
+			<tr><td>N/A</td><td>£1,000</td></tr>
+		</table>
+		
+		After
+		<pre>
+{
+	"col_a" : null,
+	"col_b" : 1000
+}
+</pre>
+
+	</div></div>
+</div>
+
+<div id="part-3">
+	<div class="row">
+		<div class="col-md-11">
+			<strong style="font-size: 200%">Make it queryable</strong>
+		</div>
+		<div class="col-md-1"><a href="#" class="expander" data-expand="part-3-body" data-state="closed">
+			<i class="glyphicon glyphicon-plus"></i>		
+		</a></div>
+	</div>
+</div>
+
+<div id="part-3-body" style="display:none">
+	<div class="row"><div class="col-md-10">
+		<p>For us, this basically means stick the <strong>JSON</strong> objects we just made into <strong>Elasticsearch</strong></p>
+
+		<p>It also means analysing some of the common fields so that we can query them in common ways.  For example, <strong>unpunctuating</strong> and <strong>ascii-folding</strong> text strings, so they can be used for <strong>free-text search</strong> and <strong>sorting</strong></p>
+		</div>
+		<div class="col-md-2">
+			<img src="/assets/images/csvconf/elasticsearch-logo.png" style="width: 100%">
+		</div>
+	</div>
+</div>
+
+<div id="part-4">
+	<div class="row">
+		<div class="col-md-11">
+			<strong style="font-size: 200%">Publish interactive interfaces</strong>
+		</div>
+		<div class="col-md-1"><a href="#" class="expander" data-expand="part-4-body" data-state="closed">
+			<i class="glyphicon glyphicon-plus"></i>		
+		</a></div>
+	</div>
+</div>
+
+<div id="part-4-body" style="display:none">
+	<div class="row"><div class="col-md-12">
+		<p>Using pluggable javascript (jQuery) front-end and an Elasticsearch query engine...</p>
+		
+		<div class="row" style="text-align:center">
+			<div class="col-md-4">
+				<img src="/assets/images/csvconf/facet.png" style="height: 200px; display:block; margin-left:auto; margin-right:auto">
+				<strong>Facets</strong>
+			</div>
+			<div class="col-md-4">
+				<img src="/assets/images/csvconf/map.png" style="height: 200px; display:block; margin-left:auto; margin-right:auto">
+				<strong>Maps</strong>
+			</div>
+			<div class="col-md-4">
+				<img src="/assets/images/csvconf/graph.png" style="height: 200px; display:block; margin-left:auto; margin-right:auto">
+				<strong>Graphs</strong>
+			</div>
+		</div>
+		
+		<div class="row"><div class="col-md-offset-3 col-md-6" style="background: #ffffff; font-size: 120%; margin-top:50px">
+<p>We can also make the whole lot available under a Lucene-like search API for public re-use</p>
+</div></div>
+		
+	</div></div>
+</div>
+
+<br><br>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="evenslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<h2>WNA Reactor Search</h2>
+
+	<img src="/assets/images/csvconf/wna-search.png" style="width: 100%">
+	<br><br>
+<p>Built from 3 sheets</p>
+
+<ol>
+	<li>Reactor records from IAEA</li>
+	<li>Operational history data from IAEA</li>
+	<li>Additional reactor data from WNA</li>
+</ol>
+
+<a href="http://www.world-nuclear.org/information-library/facts-and-figures/reactor-database.aspx">World Nuclear Association Reactor Search</a>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="oddslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<h2>WNA Reactor View</h2>
+
+<img src="/assets/images/csvconf/wna-reactor.png" style="width: 100%">
+	<br><br>
+
+<a href="http://www.world-nuclear.org/reactor/default.aspx/ALMARAZ-1">World Nuclear Association Reactor Page - Almaraz-1</a>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="evenslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+					<h2>Open Access Spectrum</h2>
+<a href="http://oaspectrum.org/">Open Access Spectrum</a>
+
+<p>A directory of journals and their Open Access credentials</p>
+
+<p>The sheet upload also supports edit-in-place and delete of records in the index, though we are moving away from that model, as it dilutes the "CSV as Master Dataset" approach</p>
+
+				</div>
+				<div class="col-md-6">
+					<h2>Lantern</h2>
+<a href="http://lantern.cottagelabs.com/">Lantern</a>
+
+<p>An application which searches the web for information related to Open Access articles</p>
+
+<p>The only interface in this system is a public-facing CSV upload.  Users provide CSVs of academic article identifiers, we return them a CSV with information about the Open Access status of those articles.</p>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="oddslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<h2>What are the difficult bits?</h2>
+
+<p><strong style="font-size: 130%">1. Some data is hard to represent in spreadsheets</strong><br>stuff that is hierarchical, or stuff that is highly relational.  There's a danger that - as programmers - we try to make people use spreadsheets like we would use a database.  That way lies madness!</p>
+
+<p><strong style="font-size: 130%">2. Consistent use of dictionary terms</strong><br>if the spreadsheet maintainers can use consistent names for things, like Countries, it makes things much easier.</p>
+
+<p><strong style="font-size: 130%">3. Teaching people to be just a little more strict about how they use spreadsheets</strong><br> many people use spreadsheets like note-pads, but our approach requires them to be a little more organised than that.</p>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="evenslide">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+<h2>Technology Roll Call</h2>
+
+<h3>Technology we are not</h3>
+
+<p>There's lots of data manipulation tooling out there.  We are not trying to do their job.</p>
+
+<ul>
+<li><a href="http://openrefine.org/">Open Refine</a> - good for exploring and cleaning data.  We want the data after it has been cleaned.  We'll cope with a bit of humanity in the expression, though.</li>
+
+<li><a href="https://www.trifacta.com/">Trifacta</a> - enterprise "data wrangling" tool.  We're not aiming at big enterprise, we're interested in the people who don't have those kinds of resources.</li>
+
+<li><a href="http://www.tableau.com/">Tableau</a> - Business intelligence tool good for exploring your data.  We're more interested in publishing your data interactively than management reporting.</li>
+</ul>
+
+<img src="/assets/images/csvconf/openrefine.png" style="height: 50px;">
+<img src="/assets/images/csvconf/trifacta.png" style="height: 50px;">
+<img src="/assets/images/csvconf/tableau.png" style="height: 50px;">
+
+<h3>The things we use</h3>
+
+<ul>
+<li><a href="https://d3js.org/">D3</a> + <a href="http://nvd3.org/">NVD3</a> - javascript SVG visualisation and graphing libraries</li>
+<li><a href="https://www.elastic.co/">Elasticsearch</a> - high scale search and data analysis</li>
+<li><a href="http://objectpath.org/">objectpath</a> - XPath-like language for JSON, in Python and Javascript</li>
+</ul>
+
+<img src="/assets/images/csvconf/d3.png" style="height: 100px;">
+<img src="/assets/images/csvconf/elasticsearch-logo.png" style="height: 50px;">
+<img src="/assets/images/csvconf/objectpath.png" style="height: 50px;">
+
+<h3>The things we tried, but don't use right now</h3>
+
+<ul>
+<li><a href="http://www.highcharts.com/">Highcharts</a> - javascript graphing library; very good, but expensive for commercial implementations</li>
+<li><a href="http://docs.python-tablib.org/en/latest/">tablib</a> - tabular data reader for Python; looked promising, but didn't offer us anything new initially.  May come back to it</li>
+</ul>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="bottomstrap">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div id="lastslide" class="col-md-12">
+					
+		                <h1>Thanks for listening</h1>
+						<p>Richard Jones, Founder, Cottage Labs</p>
+						<p>richard@cottagelabs.com</p>
+					
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    function bigSlide() {
+		var vpw = $(window).width();
+		var vph = $(window).height();
+		$('#firstslide').css({'height': vph + 'px'});
+		$('#lastslide').css({'height': vph + 'px'});
+	}
+
+	bigSlide();
+
+	$(".expander").click(function(event) {
+		event.preventDefault();
+		var expand = $(this).attr("data-expand");
+		var state = $(this).attr("data-state");
+		if (state === "closed") {
+			$(this).html('<i class="glyphicon glyphicon-minus"></i>');
+			$("#" + expand).show();
+			$(this).attr("data-state", "open");
+		} else if (state === "open") {
+			$(this).html('<i class="glyphicon glyphicon-plus"></i>');
+			$("#" + expand).hide();
+			$(this).attr("data-state", "closed");
+		}
+	});
+});
+</script>
+
+</body>
+</html>
