@@ -7,6 +7,7 @@
 
     <header><h1>Data Services</h1></header>
 
+<section class="data-services">
     {% for record in data.get("data-services").shape("dict") %}
     <section class="data-service">
     <div class="container"><div class="content">
@@ -26,10 +27,9 @@
                 <p class="tagline">{{ record.get("Short Description") }}</p>
                 <p class="justified">{{ record.get("Long Description" )}}</p>
             </div>
-            </div>
         </div>
     </div></div>
     </section>
     {% endfor %}
-
+</section>
 {% endblock %}
