@@ -136,6 +136,22 @@ nav img {
     margin-bottom: 40px;
 }
 
+.data-service {
+    margin-top: 40px;
+}
+
+.data-service:first-child {
+    margin-top: 100px;
+}
+
+.data-service:last-child {
+    margin-bottom: 140px;
+}
+
+.jobs {
+    margin-bottom: 140px;
+}
+
 .btn-read-more {
     color: #ffffff;
     background-color: #58819F;
