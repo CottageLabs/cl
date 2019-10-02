@@ -1,0 +1,61 @@
+{% set cs = data.get("short-case-studies").shape("dict").filter({"ID" : casestudy_id}).next() %}
+
+{% block page_title %}<title>Cottage Labs Case Study - {{ cs.get("Title") }}</title>{% endblock %}
+{% block page_desc %}<meta name="description" content="{{ cs.get("Highlight") }}">{% endblock %}
+
+<section class="casestudy">
+
+    <header>
+        <div class="container">
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 header-primary">
+                        <h1>{{ cs.get("Title") }}</h1>
+                        <a href="{{ cs.get("Client Link") }}"><img class="client-logo" src="/assets/images/logos/{{ cs.get("Image") }}"></a>
+                        <h2>Case Study</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="intro">{{ cs.get("Highlight") }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 summary">
+                        <strong>Why</strong>
+                        <p>{{ cs.get("Why") }}</p>
+                    </div>
+                    <div class="col-md-4 summary">
+                        <strong>How</strong>
+                        <p>{{ cs.get("How") }}</p>
+                    </div>
+                    <div class="col-md-4 summary">
+                        <strong>Impact</strong>
+                        <p>{{ cs.get("Impact") }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="main">
+        <div class="container">
+            <div class="content">
+                <p class="inline-quote">"{[mdin]}{{ cs.get("Opening Quote") }}"{[/mdin]}</p>
+                <p class="quote-attribution">{[mdin]}{{ cs.get("Quote By") }}{[/mdin]}</p>
+
+                {% for i in range(1, 5) %}
+                    {% set q = cs.get("Section {i} Quote".format(i=i)) %}
+                    {% if q != None and q != "" %}
+                        <p class="pullout-quote">"{{ q }}"</p>
+                    {% endif %}
+                    {[mdin]}{{ cs.get("Section {i}".format(i=i)) }}{[/mdin]}
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+</section>

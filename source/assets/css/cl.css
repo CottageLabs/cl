@@ -349,3 +349,85 @@ footer .toe {
     font-size: 0.8em;
 }
 
+
+.casestudy {
+    margin-bottom: 100px;
+}
+
+.casestudy header {
+    background: #040100bb;
+    color: #fcfcfc;
+}
+
+.casestudy .header-primary {
+    text-align: center;
+}
+
+.casestudy .client-logo {
+    width: 20%;
+}
+
+.casestudy header h1 {
+    text-align: center;
+    font-size: 3em;
+    color: #fcfcfc;
+}
+
+.casestudy header h2 {
+    font-size: 2.5em;
+    color: #fcfcfc;
+}
+
+.casestudy .intro {
+    font-size: 1.4em;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 991px) {
+    .casestudy .summary {
+        border-top: 2px solid #fcfcfc;
+        border-bottom: 2px solid #fcfcfc;
+        text-align: center;
+    }
+}
+
+@media (min-width: 992px) {
+    .casestudy .summary {
+        border-left: 1px solid #fcfcfc;
+        border-right: 1px solid #fcfcfc;
+        text-align: center;
+        height: 200px;
+    }
+
+    .casestudy .summary:first-child {
+        border-left: 2px solid #fcfcfc;
+    }
+
+    .casestudy .summary:last-child {
+        border-right: 2px solid #fcfcfc;
+    }
+}
+
+.casestudy .main {
+    padding-top: 60px;
+}
+
+.casestudy .main .inline-quote {
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.casestudy .main .quote-attribution {
+    text-align: right;
+}
+
+.casestudy .main .pullout-quote {
+    float: right;
+    width: 40%;
+    border-top: 10px solid #d88913;
+    border-bottom: 10px solid #d88913;
+    padding: 20px;
+    margin: 20px;
+    color: #d88913;
+    font-size: 1.5em;
+}
