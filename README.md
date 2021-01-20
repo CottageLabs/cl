@@ -12,8 +12,20 @@ https://cottagelabs.com
 
 1. Install compost from https://github.com/CottageLabs/compost
 
-2. Compile the site with
+2. Compile the site for production with
 
 ```
-compost -c config.json
+compost build config.json
+```
+
+or to build specifically for the CL dev server
+
+```
+compost build dev.config.json
+```
+
+or to build to run locally with the python web server
+
+```
+compost build local.config.json
 ```
