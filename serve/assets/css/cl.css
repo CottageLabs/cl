@@ -359,6 +359,12 @@ footer .toe {
     color: #fcfcfc;
 }
 
+@media (max-width: 991px) {
+    .casestudy header {
+        padding-bottom: 60px;
+    }
+}
+
 .casestudy .header-primary {
     text-align: center;
 }
@@ -385,9 +391,17 @@ footer .toe {
 
 @media (max-width: 991px) {
     .casestudy .summary {
-        border-top: 2px solid #fcfcfc;
-        border-bottom: 2px solid #fcfcfc;
+        border-top: 1px solid #fcfcfc;
+        border-bottom: 1px solid #fcfcfc;
         text-align: center;
+    }
+
+    .casestudy .summary:first-child {
+        border-top: 2px solid #fcfcfc;
+    }
+
+    .casestudy .summary:last-child {
+        border-bottom: 2px solid #fcfcfc;
     }
 }
 
