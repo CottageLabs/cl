@@ -28,4 +28,5 @@ or to build to run locally with the python web server
 
 ```
 compost build local.config.json
+cd serve && python3 -m http.server
 ```
