@@ -28,7 +28,7 @@
                 alt="{{ client.get("Name") }}"
                 title="{{ client.get("Name") }}"
                 {% if client.get("Logo Background") != "" %}
-                    style="background: {{ client.get("Logo Background") }}"
+                    style="background: {{ client.get("Logo Background") }}; padding:0.5em"
                 {% endif %}></a>
             {% endfor %}
         </div></div>
