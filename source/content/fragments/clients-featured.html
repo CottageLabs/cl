@@ -6,6 +6,9 @@
             class="logos {{ client.get("Logo Size") }}"
             src="/assets/images/logos/{{ client.get("Logo") }}"
             alt="{{ client.get("Name") }}"
-            title="{{ client.get("Name") }}"></a>
+            title="{{ client.get("Name") }}">
+            {% if client.get("Logo Background") != "" %}
+                style="background: {{ client.get("Logo Background") }}"
+            {% endif %}></a>
 
 {% endfor %}
