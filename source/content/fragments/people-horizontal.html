@@ -1,6 +1,6 @@
 <div class="row">
     {% for partner in data.get("people").shape("dict") %}
-    <div class="partner col-sm-6 col-lg-3">
+    <div class="partner col-sm-6 col-lg-4">
         <img src="{{ partner.get("Image") }}"><br>
         <strong>{{ partner.get("Name") }}</strong>
         <p>{{ partner.get("Short Bio") }}</p>
